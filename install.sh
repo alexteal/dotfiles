@@ -17,6 +17,6 @@ esac
 
 done
 
-#cp -f ./zshrc/zshrc ~/.zshrc
+cp -f ./zsh/zshrc ~/.zshrc
 cp -f ./nvim/init.vim ~/.config/nvim/init.vim
 cp -f ./tmux/tmux.conf ~/.tmux.conf
