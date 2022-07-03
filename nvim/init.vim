@@ -1,7 +1,6 @@
 set nocompatible            " disable compatibility to old-time vi
 set showmatch               " show matching
 set ignorecase              " case insensitive
-set mouse=v                 " middle-click paste with
 set hlsearch                " highlight search
 set incsearch               " incremental search
 set tabstop=4               " number of columns occupied by a tab
@@ -18,19 +17,183 @@ set mouse=a                 " enable mouse click
 set clipboard=unnamedplus   " using system clipboard
 filetype plugin on
 set ttyfast                 " Speed up scrolling in Vim
-
-
+let g:python3_host_prog = '/Library/Developer/CommandLineTools/usr/bin/python3'
+"let g:ruby_host_prog ='/Users/AT185301/.rbenv/versions/3.1.2/bin/ruby'
 set encoding=UTF-8
+
+
+"GRUVBOX
+"Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
+"If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
+"(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
+if (empty($TMUX)) 
+  if (has("nvim"))
+    "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
+    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+  endif
+  "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
+  "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
+  " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
+  if (has("termguicolors"))
+    "set termguicolors
+  endif
+endif
+" END GRUVBOX
+
+colorscheme gruvbox
+
+
+call plug#begin('~/.config/nvim/plugged')
+
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+let g:deoplete#enable_at_startup = 1
+autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+
+" Track the engine.
+Plug 'SirVer/ultisnips'
+
+" Snippets are separated from the engine. Add this if you want them:
+Plug 'honza/vim-snippets'
+
+" Nerd tree setup
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+" Toggle nerdtree with \t
+" Close the tab if NERDTree is the only window remaining in it.
+autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+
+Plug 'https://github.com/junegunn/vim-github-dashboard.git'
+
+let g:github_dashboard = { 'username': $GIT_USER, 'password': $GIT_SECRET}
+" set 
+
+" Plugin options
+" Plug 'nsf/gocode', { 'tag': 'v.20150303', 'rtp': 'vim' }
+
+" Plugin outside ~/.vim/plugged with post-update hook
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
+" Initialize plugin system
+Plug 'mfussenegger/nvim-jdtls'
+" better command completion
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+
+" Scala support
+Plug 'scalameta/nvim-metals'
+
+lua << EOF
+local nvim_metals_group = vim.api.nvim_create_augroup("nvim-metals", { clear = true })
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "scala", "sbt", "java" },
+  callback = function()
+    require("metals").initialize_or_attach({})
+  end,
+  group = nvim_metals_group,
+})
+EOF
+
+Plug 'derekwyatt/vim-scala'
+Plug 'kevinhwang91/nvim-bqf'
+" better parser
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
+Plug 'dracula/vim'
+Plug 'preservim/nerdcommenter'
+Plug 'mhinz/vim-startify'
+Plug 'dense-analysis/ale'
+
+Plug 'rickhowe/diffchar.vim'
+Plug 'vimwiki/vimwiki'
+"let g:vimwiki_autowriteall = 1
+"better python highlighting
+Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }
+
+command! -bang -nargs=* PRg
+  \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'dir': expand('%:p:h')}, <bang>0)
+
+" HTML autocompletion. 
+" use > to cycle through auto completes with tags
+Plug 'alvan/vim-closetag'
+"define which file extensions the plugin is enabled on
+let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.vue,*.tsx'
+
+
+" ESLinter setup
+Plug 'neovim/nvim-lspconfig'
+Plug 'jose-elias-alvarez/null-ls.nvim'
+Plug 'MunifTanjim/eslint.nvim'
+
+" uses eslint.vim
+" Prettier
+" post install (yarn install | npm install) then load plugin only for editing supported files
+Plug 'prettier/vim-prettier', {
+  \ 'do': 'yarn install --frozen-lockfile --production',
+  \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html', 'tsx', 'jsx', 'typescriptreact'] }
+
+let g:prettier#quickfix_enabled = 0
+let g:prettier#exec_cmd_async = 1
+autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.svelte,*.yaml,*.html PrettierAsync
+"vim checklist
+Plug 'evansalter/vim-checklist'
+" Debugger. Can attach to a running program and set breakpoints to debug. 
+Plug 'mfussenegger/nvim-dap'
+" Must install adapters for each language. This is not setup yet, so this
+" debugger will not work. Once you have a good reason to dive into this, 
+" here's some documentation
+"https://github.com/mfussenegger/nvim-dap/wiki/Debug-Adapter-installation
+
+" Scala linting with Neomake
+"Linting with neomake
+Plug 'neomake/neomake'
+let g:neomake_sbt_maker = {
+      \ 'exe': 'sbt',
+      \ 'args': ['-Dsbt.log.noformat=true', 'compile'],
+      \ 'append_file': 0,
+      \ 'auto_enabled': 1,
+      \ 'output_stream': 'stdout',
+      \ 'errorformat':
+          \ '%E[%trror]\ %f:%l:\ %m,' .
+            \ '%-Z[error]\ %p^,' .
+            \ '%-C%.%#,' .
+            \ '%-G%.%#'
+     \ }
+let g:neomake_enabled_makers = ['sbt']
+""let g:neomake_verbose=3
+""let g:neomake_open_list = 2
+" Neomake on text change
+autocmd InsertLeave,TextChanged *.scala update | Neomake! sbt
+call plug#end()
+
+nnoremap <leader>ct :ChecklistToggleCheckbox<cr>
+nnoremap <leader>ce :ChecklistEnableCheckbox<cr>
+nnoremap <leader>cd :ChecklistDisableCheckbox<cr>
+vnoremap <leader>ct :ChecklistToggleCheckbox<cr>
+vnoremap <leader>ce :ChecklistEnableCheckbox<cr>
+vnoremap <leader>cd :ChecklistDisableCheckbox<cr>
+
+
+nmap <Leader>wp :Files ~/vimwiki/<CR>
+nmap <Leader>sf :PRg<CR>
+
+nmap <Leader>gd <Esc>:GHDashboard<CR>
+nmap <Leader>gh <Esc>:GHActivity<CR>
+
+nmap <Leader>t <Esc>:NERDTreeToggle<CR>
 
 "Put date time with equals on either side
 nmap <Leader>da <Esc>:put =strftime('%c')<CR>i==<Esc><S-a>==
 " vertical split vimwiki link
 nmap <Leader>vs <Esc>:VimwikiVSplitLink<CR>
-nmap <Leader>ex <Esc>:!tmux detach <CR>
 " Set hybrid line numbers
 " set number relativenumber
 " Smart toggle line number display depending on viewed buffer
-set number
 
 augroup numbertoggle
   autocmd!
@@ -39,11 +202,14 @@ augroup numbertoggle
 augroup END
 
 imap jj <Esc>
-inoremap {<CR> {<CR>}<Esc>ko
-inoremap [<CR> [<CR>]<Esc>ko
-inoremap (<CR> (<CR>)<Esc>ko
 
-au BufEnter,BufNew *.wiki call AutoCorrect()
+inoremap " ""<left>
+inoremap ' ''<left>
+inoremap ( ()<left>
+inoremap [ []<left>
+inoremap { {}<left>
+inoremap {<CR> {<CR>}<ESC>O
+inoremap {;<CR> {<CR>};<ESC>O
 
 execute "digraphs as " . 0x2090
 execute "digraphs es " . 0x2091
@@ -110,162 +276,3 @@ execute "digraphs VS " . 0x2C7D
 execute "digraphs WS " . 0x1D42
 execute "digraphs 0D " . 0x03F4
  
-" set noswapfile            " disable creating swap file
-"set backupdir=~/.cache/vim " Directory to store backup files.
-
-
-"GRUVBOX
-"Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
-"If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
-"(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
-if (empty($TMUX)) 
-  if (has("nvim"))
-    "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
-    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-  endif
-  "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
-  "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
-  " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
-  if (has("termguicolors"))
-    "set termguicolors
-  endif
-endif
-" END GRUVBOX
-
-colorscheme gruvbox
-
-" Start NERDTree. If a file is specified, move the cursor to its window.
-" autocmd StdinReadPre * let s:std_in=1
-" autocmd VimEnter * NERDTree | if argc() > 0 || exists("s:std_in") | wincmd p | endif
-
-" Exit Vim if NERDTree is the only window remaining in the only tab.
-autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
-" Close the tab if NERDTree is the only window remaining in it.
-autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
-
-nmap <Leader>t <Esc><cmd>NERDTree<CR>
-call plug#begin('~/.config/nvim/plugged')
-
-Plug 'panozzaj/vim-autocorrect'
-
-"LATEX editing setup
-
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
-let g:deoplete#enable_at_startup = 1
-" Track the engine.
-Plug 'SirVer/ultisnips'
-
-" Snippets are separated from the engine. Add this if you want them:
-Plug 'honza/vim-snippets'
-
-" Trigger configuration. You need to change this to something other than <tab> if you use one of the following:
-" - https://github.com/Valloric/YouCompleteMe
-" - https://github.com/nvim-lua/completion-nvim
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-
-
-Plug 'lervag/vimtex'
-
-" This is necessary for VimTeX to load properly. The "indent" is optional.
-" Note that most plugin managers will do this automatically.
-filetype plugin indent on
-
-" This enables Vim's and neovim's syntax-related features. Without this, some
-" VimTeX features will not work (see ":help vimtex-requirements" for more
-" info).
-syntax enable
-
-" Viewer options: One may configure the viewer either by specifying a built-in
-" viewer method:
-let g:vimtex_view_method = 'zathura'
-
-" Or with a generic interface:
-let g:vimtex_view_general_viewer = 'okular'
-let g:vimtex_view_general_options = '--unique file:@pdf\#src:@line@tex'
-
-" VimTeX uses latexmk as the default compiler backend. If you use it, which is
-" strongly recommended, you probably don't need to configure anything. If you
-" want another compiler backend, you can change it as follows. The list of
-" supported backends and further explanation is provided in the documentation,
-" see ":help vimtex-compiler".
-let g:vimtex_compiler_method = 'latexrun'
-
-" Most VimTeX mappings rely on localleader and this can be changed with the
-" following line. The default is usually fine and is the symbol "\".
-let maplocalleader = ","
-
-" This is new style
-" call deoplete#custom#option('omni', 'input_patterns', { 'tex': g:vimtex#re#deoplete })
-"autocomplete setup ^
-" latex previewer! 
-"Plug 'xuhdev/vim-latex-live-preview', { 'for': 'tex' } End LATEX editing setup
-
-" Make sure you use single quotes
-
-" Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
-Plug 'junegunn/vim-easy-align'
-
-" Any valid git URL is allowed
-Plug 'https://github.com/junegunn/vim-github-dashboard.git'
-
-" Multiple Plug commands can be written in a single line using | separators
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-
-" On-demand loading
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
-
-" Using a non-default branch
-Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
-
-" Using a tagged release; wildcard allowed (requires git 1.9.2 or above)
-Plug 'fatih/vim-go', { 'tag': '*' }
-
-" Plugin options
-" Plug 'nsf/gocode', { 'tag': 'v.20150303', 'rtp': 'vim' }
-
-" Plugin outside ~/.vim/plugged with post-update hook
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-
-" Unmanaged plugin (manually installed and updated)
-Plug '~/my-prototype-plugin'
-
-" Initialize plugin system
-Plug 'mfussenegger/nvim-jdtls'
-
-Plug 'dracula/vim'
-"Plug 'ryanoasis/vim-devicons'
-Plug 'honza/vim-snippets'
-Plug 'preservim/nerdcommenter'
-Plug 'mhinz/vim-startify'
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'kyazdani42/nvim-web-devicons' " for file icons
-Plug 'kyazdani42/nvim-tree.lua'
-Plug 'dense-analysis/ale'
-Plug 'rickhowe/diffchar.vim'
-Plug 'vimwiki/vimwiki'
-
-Plug 'junegunn/fzf.vim'
-nmap <Leader>wp :Files ~/vimwiki/<CR>
-nmap <Leader>sf :PRg<CR>
-command! -bang -nargs=* PRg
-  \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'dir': expand('%:p:h')}, <bang>0)
-
-" HTML autocompletion. 
-" use > to cycle through auto completes with tags
-Plug 'alvan/vim-closetag'
-"define which file extensions the plugin is enabled on
-let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.vue'
-
-"Latex support
-"Plug 'vim-latex/vim-latex'
-call plug#end()
-
