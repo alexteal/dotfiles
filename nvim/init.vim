@@ -115,9 +115,6 @@ Plug 'vimwiki/vimwiki'
 "better python highlighting
 Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }
 
-command! -bang -nargs=* PRg
-  \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'dir': expand('%:p:h')}, <bang>0)
-
 " HTML autocompletion. 
 " use > to cycle through auto completes with tags
 Plug 'alvan/vim-closetag'
@@ -181,6 +178,9 @@ vnoremap <leader>cd :ChecklistDisableCheckbox<cr>
 
 nmap <Leader>wp :Files ~/vimwiki/<CR>
 nmap <Leader>sf :PRg<CR>
+command! -bang -nargs=* PRg
+  \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'dir': expand('%:p:h')}, <bang>0)
+
 
 nmap <Leader>gd <Esc>:GHDashboard<CR>
 nmap <Leader>gh <Esc>:GHActivity<CR>
