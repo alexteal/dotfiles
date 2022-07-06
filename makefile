@@ -9,6 +9,7 @@ test:
 	cp ~/.tmux.conf tmux.conf
 	cp ~/.zshrc zshrc
 	sh install.sh
+	source ~/.zshrc
 revert:
 	mv init.vim ~/.config/nvim/init.vim 
 	mv tmux.conf ~/.tmux.conf 
