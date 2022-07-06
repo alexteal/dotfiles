@@ -1,3 +1,4 @@
+SHELL=/bin/zsh
 update: 
 	cp ~/.config/nvim/init.vim nvim/init.vim
 	cp ~/.tmux.conf tmux/tmux.conf
@@ -14,4 +15,4 @@ revert:
 	mv init.vim ~/.config/nvim/init.vim 
 	mv tmux.conf ~/.tmux.conf 
 	mv zshrc ~/.zshrc 
-
+	source ~/.zshrc
