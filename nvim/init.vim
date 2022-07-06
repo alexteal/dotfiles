@@ -17,7 +17,7 @@ set mouse=a                 " enable mouse click
 set clipboard=unnamedplus   " using system clipboard
 filetype plugin on
 set ttyfast                 " Speed up scrolling in Vim
-let g:python3_host_prog = '/Library/Developer/CommandLineTools/usr/bin/python3'
+"let g:python3_host_prog = '/Library/Developer/CommandLineTools/usr/bin/python3'
 "let g:ruby_host_prog ='/Users/AT185301/.rbenv/versions/3.1.2/bin/ruby'
 set encoding=UTF-8
 
@@ -115,6 +115,9 @@ Plug 'vimwiki/vimwiki'
 "better python highlighting
 Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }
 
+command! -bang -nargs=* PRg
+  \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'dir': expand('%:p:h')}, <bang>0)
+
 " HTML autocompletion. 
 " use > to cycle through auto completes with tags
 Plug 'alvan/vim-closetag'
@@ -178,14 +181,14 @@ vnoremap <leader>cd :ChecklistDisableCheckbox<cr>
 
 nmap <Leader>wp :Files ~/vimwiki/<CR>
 nmap <Leader>sf :PRg<CR>
-command! -bang -nargs=* PRg
-  \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'dir': expand('%:p:h')}, <bang>0)
-
 
 nmap <Leader>gd <Esc>:GHDashboard<CR>
 nmap <Leader>gh <Esc>:GHActivity<CR>
 
 nmap <Leader>t <Esc>:NERDTreeToggle<CR>
+" Search for command
+nmap <Leader>fc :Telescope commands<CR> 
+
 
 "Put date time with equals on either side
 nmap <Leader>da <Esc>:put =strftime('%c')<CR>i==<Esc><S-a>==

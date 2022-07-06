@@ -23,6 +23,7 @@ bindkey -r "^L"
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 #ZSH_THEME="robbyrussell"
 ZSH_THEME="powerlevel10k/powerlevel10k"
+
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
 # a theme from this variable instead of looking in $ZSH/themes/
@@ -118,3 +119,11 @@ source $ZSH/oh-my-zsh.sh
 # custom path and alias
 source ~/.config/zsh/alias.zsh
 source ~/.config/zsh/path.zsh
+
+# Custom path completion and LS colors
+export LSCOLORS="exfxcxdxbxegedabagacad"
+export LS_COLORS="exfxcxdxbxegedabagacad"
+# Use ls-colors for path completions
+zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
+
+
