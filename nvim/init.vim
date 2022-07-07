@@ -171,6 +171,10 @@ let g:neomake_enabled_makers = ['sbt']
 autocmd InsertLeave,TextChanged *.scala update | Neomake! sbt
 call plug#end()
 
+
+map <2-LeftMouse> <Esc> i
+map! <2-LeftMouse> <Esc> i
+
 nnoremap <leader>ct :ChecklistToggleCheckbox<cr>
 nnoremap <leader>ce :ChecklistEnableCheckbox<cr>
 nnoremap <leader>cd :ChecklistDisableCheckbox<cr>
