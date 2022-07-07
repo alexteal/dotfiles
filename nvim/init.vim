@@ -193,6 +193,8 @@ nmap <Leader>t <Esc>:NERDTreeToggle<CR>
 " Search for command
 nmap <Leader>fc :Telescope commands<CR> 
 
+map <LeftMouse> <LeftMouse>i
+map! <LeftMouse> <LeftMouse><Esc>i<Right>
 
 "Put date time with equals on either side
 nmap <Leader>da <Esc>:put =strftime('%c')<CR>i==<Esc><S-a>==
