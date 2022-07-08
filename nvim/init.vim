@@ -181,9 +181,11 @@ nnoremap <leader>cd :ChecklistDisableCheckbox<cr>
 vnoremap <leader>ct :ChecklistToggleCheckbox<cr>
 vnoremap <leader>ce :ChecklistEnableCheckbox<cr>
 vnoremap <leader>cd :ChecklistDisableCheckbox<cr>
-
-
+" find files
+nmap <Leader>ff :FZF<CR>
+" wiki page
 nmap <Leader>wp :Files ~/vimwiki/<CR>
+" search files
 nmap <Leader>sf :PRg<CR>
 
 nmap <Leader>gd <Esc>:GHDashboard<CR>
