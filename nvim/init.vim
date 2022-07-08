@@ -172,9 +172,6 @@ autocmd InsertLeave,TextChanged *.scala update | Neomake! sbt
 call plug#end()
 
 
-map <2-LeftMouse> <Esc> i
-map! <2-LeftMouse> <Esc> i
-
 nnoremap <leader>ct :ChecklistToggleCheckbox<cr>
 nnoremap <leader>ce :ChecklistEnableCheckbox<cr>
 nnoremap <leader>cd :ChecklistDisableCheckbox<cr>
@@ -195,8 +192,9 @@ nmap <Leader>t <Esc>:NERDTreeToggle<CR>
 " Search for command
 nmap <Leader>fc :Telescope commands<CR> 
 
+" VSCode mouse mode
 map <LeftMouse> <LeftMouse>i
-map! <LeftMouse> <LeftMouse><Esc>i<Right>
+map! <LeftMouse> <LeftMouse><Esc>i<Right><Right>
 
 "Put date time with equals on either side
 nmap <Leader>da <Esc>:put =strftime('%c')<CR>i==<Esc><S-a>==
