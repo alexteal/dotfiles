@@ -11,12 +11,6 @@ fi
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
 
-#unbind zsh keys to override with tmux
-bindkey -r "^H"
-bindkey -r "^J"
-bindkey -r "^K"
-bindkey -r "^L"
-
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
@@ -125,6 +119,11 @@ source $ZSH/oh-my-zsh.sh
 # Custom path completion and LS colors
 export LSCOLORS="exfxcxdxbxegedabagacad"
 export LS_COLORS="di=34:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43"
+
+# quick edit config files
+alias editnvim="nvim ~/.config/nvim/init.vim"
+alias editzsh="nvim ~/.zshrc"
+alias edittmux="nvim ~/.tmux.conf"
 # Use ls-colors for path completions
 zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
 

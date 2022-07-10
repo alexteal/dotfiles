@@ -169,46 +169,98 @@ let g:neomake_enabled_makers = ['sbt']
 ""let g:neomake_open_list = 2
 " Neomake on text change
 autocmd InsertLeave,TextChanged *.scala update | Neomake! sbt
+
+" Lua Dev setup
+" completions, etc. has more config in lua format available
+Plug 'tjdevries/nlua.nvim'"
+" better syntax
+Plug 'euclidianAce/BetterLua.vim'
+" 
 call plug#end()
 
+lua << snippet
+--format_diary_newline = function()
+--    local path = vim.api.nvim_buf_get_name(0)
+--    if string.match(path, "vimwiki/diary.*.wiki") then
+--        local content = vim.api.nvim_buf_get_lines(0, 0, vim.api.nvim_buf_line_count(0), false)
+--        content = table.concat(content, "\n")
+--        local count = 1
+--        local whitespace = 0
+--        for i = 1, #content do 
+--            local c = content:sub(i,i)
+--            if c == ' ' then
+--                whitespace = i - count
+--            end
+--            if count >= 80 then
+--                while c != '\n' do
+--                    i = i + 1
+--                    c = content:sub(i,i)
+--                end 
+--                
+--            end
+--            if count > 80 and c == ' ' then
+--               whitespace = i-count  -- most recent whitespace after char 80
+--            elseif count > 80 and c == '\n' then 
+--                -- remove the linebreak here, then reformat the line by placing
+--                -- a linebreak at step, 
+--                count = 0 
+--                -- go to 80th char of line, then 
+--                -- search backwards for most recent whitespace. use that 
+--                -- whitespace as location for new linebreak. remove old linebreak of that
+--                -- line, and place new linebreak down then restart loop from index
+--                -- of new linebreak. 
+--            end
+--            count = count + 1
+--        end 
+--        return 
+--    end
+--    return
+--end
+--local Diary = vim.api.nvim_create_augroup("Diary", { clear = true })
+--local format_diary = vim.api.nvim_create_autocmd(
+--    { "BufEnter", "InsertLeave" },
+--    { pattern = "*.wiki", 
+--        command = "lua format_diary_newline()", group = Diary })
+snippet
 
-nnoremap <leader>ct :ChecklistToggleCheckbox<cr>
-nnoremap <leader>ce :ChecklistEnableCheckbox<cr>
-nnoremap <leader>cd :ChecklistDisableCheckbox<cr>
-vnoremap <leader>ct :ChecklistToggleCheckbox<cr>
-vnoremap <leader>ce :ChecklistEnableCheckbox<cr>
-vnoremap <leader>cd :ChecklistDisableCheckbox<cr>
+
+nnoremap <leader>ct <cmd>ChecklistToggleCheckbox<cr>
+nnoremap <leader>ce <cmd>ChecklistEnableCheckbox<cr>
+nnoremap <leader>cd <cmd>ChecklistDisableCheckbox<cr>
 " find files
-nmap <Leader>ff :FZF<CR>
-" wiki page
-nmap <Leader>wp :Files ~/vimwiki/<CR>
-" search files
-nmap <Leader>sf :PRg<CR>
-
-nmap <Leader>gd <Esc>:GHDashboard<CR>
-nmap <Leader>gh <Esc>:GHActivity<CR>
-
-nmap <Leader>t <Esc>:NERDTreeToggle<CR>
+nmap <Leader>ff <cmd>FZF<CR>
+" Search for function documentation
+nmap <Leader>fh <cmd>Telescope help_tags<CR>
 " Search for command
-nmap <Leader>fc :Telescope commands<CR> 
+nmap <Leader>fc <cmd>Telescope commands<CR> 
+" wiki page
+nmap <Leader>wp <cmd>Files ~/vimwiki/<CR>
+" search in files
+nmap <Leader>sf <cmd>PRg<CR>
+" telescope search command
+nmap <Leader>gd <cmd>GHDashboard<CR>
+nmap <Leader>gh <cmd>GHActivity<CR>
+
+nmap <Leader>t <cmd>NERDTreeToggle<CR>
 
 " VSCode mouse mode
 map <LeftMouse> <LeftMouse>i
 
 "Put date time with equals on either side
-nmap <Leader>da <Esc>:put =strftime('%c')<CR>i==<Esc><S-a>==
+nmap <Leader>da <cmd>put =strftime('%c')<CR>i==<Esc><S-a>==
 " vertical split vimwiki link
-nmap <Leader>vs <Esc>:VimwikiVSplitLink<CR>
+nmap <Leader>vs <cmd>VimwikiVSplitLink<CR>
+
 " Set hybrid line numbers
 " set number relativenumber
 " Smart toggle line number display depending on viewed buffer
-
 augroup numbertoggle
-  autocmd!
-  autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set rnu   | endif
-  autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set nornu | endif
+    autocmd!
+    autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set rnu   | endif
+    autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set nornu | endif
 augroup END
 
+imap jk <Esc>
 imap jj <Esc>
 
 inoremap " ""<left>
@@ -218,7 +270,6 @@ inoremap [ []<left>
 inoremap { {}<left>
 inoremap {<CR> {<CR>}<ESC>O
 inoremap {;<CR> {<CR>};<ESC>O
-
 execute "digraphs as " . 0x2090
 execute "digraphs es " . 0x2091
 execute "digraphs hs " . 0x2095
@@ -251,7 +302,7 @@ execute "digraphs kS " . 0x1d4f
 execute "digraphs lS " . 0x02e1
 execute "digraphs mS " . 0x1d50
 execute "digraphs nS " . 0x207f
-execute "digraphs oS ". 0x1d52
+execute "digraphs oS " . 0x1d52
 execute "digraphs pS " . 0x1d56
 execute "digraphs rS " . 0x02b3
 execute "digraphs sS " . 0x02e2
@@ -283,4 +334,3 @@ execute "digraphs US " . 0x1D41
 execute "digraphs VS " . 0x2C7D
 execute "digraphs WS " . 0x1D42
 execute "digraphs 0D " . 0x03F4
- 
