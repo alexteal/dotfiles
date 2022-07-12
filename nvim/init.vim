@@ -78,6 +78,7 @@ let g:github_dashboard = { 'username': $GIT_USER, 'password': $GIT_SECRET}
 
 " Plugin outside ~/.vim/plugged with post-update hook
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 
 " Initialize plugin system
 Plug 'mfussenegger/nvim-jdtls'
