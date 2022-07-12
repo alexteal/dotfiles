@@ -77,14 +77,15 @@ let g:github_dashboard = { 'username': $GIT_USER, 'password': $GIT_SECRET}
 " Plug 'nsf/gocode', { 'tag': 'v.20150303', 'rtp': 'vim' }
 
 " Plugin outside ~/.vim/plugged with post-update hook
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+
 " Initialize plugin system
 Plug 'mfussenegger/nvim-jdtls'
 " better command completion
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
-
+" fuzzy finder
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do' : 'make' }
 " Scala support
 Plug 'scalameta/nvim-metals'
 
@@ -178,6 +179,20 @@ Plug 'euclidianAce/BetterLua.vim'
 " 
 call plug#end()
 
+lua << telescope
+require('telescope').setup {
+  extensions = {
+    fzf = {
+      fuzzy = true,                    -- false will only do exact matching
+      override_generic_sorter = true,  -- override the generic sorter
+      override_file_sorter = true,     -- override the file sorter
+      case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+                                       -- the default case_mode is "smart_case"
+    }
+  }
+}
+require('telescope').load_extension('fzf')
+telescope
 lua << snippet
 --format_diary_newline = function()
 --    local path = vim.api.nvim_buf_get_name(0)
@@ -240,7 +255,9 @@ nmap <Leader>fc <cmd>Telescope commands<CR>
 " wiki page
 nmap <Leader>wp <cmd>Files ~/vimwiki/<CR>
 " search in files
-nmap <Leader>sf <cmd>PRg<CR>
+nmap <Leader>sf <cmd>Telescope live_grep<CR>
+" ripgrep alternative if slow
+nmap <Leader>fs <cmd>PRg<CR>
 " telescope search command
 nmap <Leader>gd <cmd>GHDashboard<CR>
 nmap <Leader>gh <cmd>GHActivity<CR>
