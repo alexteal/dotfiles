@@ -223,6 +223,10 @@ lua << snippet
 --        command = "lua format_diary_newline()", group = Diary })
 snippet
 
+" close terminal easier
+tnoremap jj  <C-\><C-n>
+" open shell with 15 lines of height on bottom
+nnoremap <Leader>sh <cmd>belowright 15split term://zsh<CR>
 
 nnoremap <leader>ct <cmd>ChecklistToggleCheckbox<cr>
 nnoremap <leader>ce <cmd>ChecklistEnableCheckbox<cr>
@@ -260,7 +264,6 @@ augroup numbertoggle
     autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set nornu | endif
 augroup END
 
-imap jk <Esc>
 imap jj <Esc>
 
 inoremap " ""<left>
