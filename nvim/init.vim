@@ -80,6 +80,10 @@ let g:github_dashboard = { 'username': $GIT_USER, 'password': $GIT_SECRET}
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
+" tab bar
+Plug 'kyazdani42/nvim-web-devicons'
+Plug 'romgrk/barbar.nvim'
+
 " Initialize plugin system
 Plug 'mfussenegger/nvim-jdtls'
 " better command completion
