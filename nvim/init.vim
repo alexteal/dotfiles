@@ -273,7 +273,7 @@ nmap <Leader>t <cmd>NERDTreeToggle<CR>
 map <LeftMouse> <LeftMouse>i
 
 "Put date time with equals on either side
-nmap <Leader>da <cmd>put =strftime('%c')<CR>i==<Esc><S-a>==
+nmap <Leader>da i<return><esc><up><cmd>put =strftime('%c')<CR>i<backspace>==<Esc><S-a>==<esc><S-a><return>
 " vertical split vimwiki link
 nmap <Leader>vs <cmd>VimwikiVSplitLink<CR>
 
