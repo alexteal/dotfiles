@@ -22,7 +22,6 @@ cp -f ./nvim/init.vim ~/.config/nvim/init.vim
 cp -f ./tmux/tmux.conf ~/.tmux.conf
 cp -f ./tmux/p10k.zsh ~/.p10k.zsh
 
-sleep 2
 # ensure brew
 which brew &> /dev/null
 if [[ $? != 0 ]] ; then
