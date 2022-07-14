@@ -24,13 +24,13 @@ cp -f ./tmux/p10k.zsh ~/.p10k.zsh
 
 sleep 2
 # ensure brew
-which -s brew
+which brew &> /dev/null
 if [[ $? != 0 ]] ; then
     # Install Homebrew
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 # ensure neovim
-which -s nvim
+which nvim &> /dev/null
 if [[ $? != 0 ]] ; then
     #install nvim
     brew install neovim
@@ -41,7 +41,7 @@ if [[ $? != 0 ]]; then
     pip install neovim
 fi
 
-which -s tmux 
+which tmux &> /dev/null
 if [[ $? != 0 ]] ; then
     brew install tmux
 fi
@@ -49,6 +49,12 @@ fi
 if [ ! -d $HOME/.oh-my-zsh/custom/themes/powerlevel10k ] ; then
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 fi
+
+which fzf &> /dev/null
+if [[ $? != 0 ]] ; then
+    brew install fzf
+fi
+
 echo
 echo "    ██╗ ██████╗ ███████╗███╗   ██╗███████╗                                  
    ██╔╝██╔════╝ ██╔════╝████╗  ██║╚══███╔╝                                  
