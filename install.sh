@@ -95,11 +95,13 @@ if [[ $? != 0 ]]; then
         "yarn not found, installing..."
         npm install --location=global yarn
     fi
-    yarn global list neovim &> /dev/null
+    yarn global list neovim | grep "neovim" &> /dev/null
     if [[ $? != 0 ]]; then
         echo "neovim node module not found using yarn"
         echo "installing module with npm..."
         npm install --location=global neovim
+    else 
+        echo "neovim module found in yarn"
     fi
 fi
 
