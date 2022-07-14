@@ -69,16 +69,19 @@ fi
 
 which pip &> /dev/null
 if [[ $? != 0 ]] ; then
+    echo "pip not found, installing..."
     python3 -m ensurepip --upgrade
 fi
 
 pip show neovim &> /dev/null
 if [[ $? != 0 ]]; then
+    echo "neovim python package not found, installing..."
     pip install neovim
 fi
 
 which node &> /dev/null
 if [[ $? != 0 ]]; then
+    "node not found, installing..."
     brew install node
 fi
 
@@ -86,29 +89,42 @@ fi
 # Install neovim using npm, just for compatiblity
 npm list --location=global neovim &> /dev/null
 if [[ $? != 0 ]]; then
+    echo "neovim node module not found using npm"
     which yarn &> /dev/null
     if [[ $? != 0 ]]; then
+        "yarn not found, installing..."
         npm install --location=global yarn
     fi
-    yarn global list neovim
+    yarn global list neovim &> /dev/null
     if [[ $? != 0 ]]; then
+        echo "neovim node module not found using yarn"
+        echo "installing module with npm..."
         npm install --location=global neovim
     fi
 fi
 
 which ruby &> /dev/null
 if [[ $? != 0 ]]; then
+    echo "ruby not found, checking ruby-install..."
     which ruby-install &> /dev/null
     if [[ $? != 0 ]]; then
+        echo "ruby-install not found, installing..."
         brew install ruby-install --HEAD
     fi
+    echo "installing latest ruby using ruby-install..."
     ruby-install --latest
-    [[ ! -f ~/bin ]] || source ~/bin
     echo 
+fi
+
+gem list neovim | grep "neovim" &> /dev/null
+if [[ $? != 0 ]]; then
+    "neovim gem not found, installing..."
+    gem install neovim
 fi
 
 if [[ ! $PATH == *"$HOME/bin"* ]]; then
     if [ -d $HOME/bin ]; then
+        echo "$HOME/bin not found in path, adding to ~/.path.zsh"
         echo 'if [[ ! $PATH == *"$HOME/bin"* ]]; then
     export PATH=$PATH:$HOME/bin
 fi
@@ -116,10 +132,6 @@ fi
     fi
 fi
 
-gem list neovim | grep "neovim" &> /dev/null
-if [[ $? != 0 ]]; then
-    gem install neovim
-fi
 
 echo
 echo "    ██╗ ██████╗ ███████╗███╗   ██╗███████╗                                  
