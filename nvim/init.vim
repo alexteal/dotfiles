@@ -35,15 +35,17 @@ if (empty($TMUX))
   "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
   " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
   if (has("termguicolors"))
-    "set termguicolors
+    set termguicolors
   endif
 endif
 " END GRUVBOX
 
-colorscheme gruvbox
 
 
 call plug#begin('~/.config/nvim/plugged')
+
+" dracula theme
+Plug 'Mofiqul/dracula.nvim'
 
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -183,6 +185,10 @@ Plug 'tjdevries/nlua.nvim'"
 Plug 'euclidianAce/BetterLua.vim'
 " 
 call plug#end()
+
+" Themes 
+" colorscheme gruvbox
+colorscheme dracula
 
 lua << telescope
 require('telescope').setup {
