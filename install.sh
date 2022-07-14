@@ -29,17 +29,6 @@ if [[ $? != 0 ]] ; then
     # Install Homebrew
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
-# ensure neovim
-which nvim &> /dev/null
-if [[ $? != 0 ]] ; then
-    #install nvim
-    brew install neovim
-fi
-# ensure neovim pip
-pip list | grep 'neovim' &> /dev/null
-if [[ $? != 0 ]]; then
-    pip install neovim
-fi
 
 which tmux &> /dev/null
 if [[ $? != 0 ]] ; then
@@ -53,6 +42,31 @@ fi
 which fzf &> /dev/null
 if [[ $? != 0 ]] ; then
     brew install fzf
+fi
+
+which python3 &> /dev/null
+if [[ $? != 0 ]] ; then
+    brew install python3
+fi
+
+which pip &> /dev/null
+if [[ $? != 0 ]] ; then
+    python3 -m ensurepip --upgrade
+fi
+
+pip show neovim &> /dev/null
+if [[ $? != 0 ]]; then
+    pip install neovim
+fi
+
+which node &> /dev/null
+if [[ $? != 0 ]]; then
+    brew install node
+fi
+
+npm list -g neovim &> /dev/null
+if [[ $? != 0 ]]; then
+    node install -g neovim
 fi
 
 echo
