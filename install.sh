@@ -69,6 +69,29 @@ if [[ $? != 0 ]]; then
     node install -g neovim
 fi
 
+which ruby &> /dev/null
+if [[ $? != 0 ]]; then
+    which ruby-install &> /dev/null
+    if [[ $? != 0 ]]; then
+        brew install ruby-install --HEAD
+    fi
+    ruby-install --latest
+    [[ ! -f ~/bin ]] || source ~/bin
+    echo 
+fi
+
+echo $PATH | grep $USER/bin
+if [[ $? != 0 ]]; then
+    if [ -d $HOME/bin ]; then
+        echo 'export PATH=$PATH:$HOME/bin' >> ~/.path.zsh
+    fi
+fi
+
+gem list neovim | grep "neovim" &> /dev/null
+if [[ $? != 0 ]]; then
+    gem install neovim
+fi
+
 echo
 echo "    ██╗ ██████╗ ███████╗███╗   ██╗███████╗                                  
    ██╔╝██╔════╝ ██╔════╝████╗  ██║╚══███╔╝                                  
