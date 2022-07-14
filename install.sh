@@ -26,26 +26,45 @@ cp -f ./tmux/p10k.zsh ~/.p10k.zsh
 which brew &> /dev/null
 if [[ $? != 0 ]] ; then
     # Install Homebrew
+    echo "Homebrew not found, installing..."
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
 which tmux &> /dev/null
 if [[ $? != 0 ]] ; then
+    echo "tmux not found, installing..."
     brew install tmux
 fi
 
 if [ ! -d $HOME/.oh-my-zsh/custom/themes/powerlevel10k ] ; then
+    echo "powerline10k not found, installing... ( required for bash line styling )"
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 fi
 
 which fzf &> /dev/null
 if [[ $? != 0 ]] ; then
+    echo "fzf not found, installing... ( required for neovim )"
     brew install fzf
 fi
 
 which python3 &> /dev/null
 if [[ $? != 0 ]] ; then
-    brew install python3
+    while true; do
+    
+        read -p "Python3 not found. This installer assumes you have pip, so this can cause problems.' \n (1) install using brew \n (2) exit installation, my python path is wierd. \n" val
+    
+        case $val in 
+            [1] ) echo installing...;
+                brew install python3
+                break;;
+            [2] ) echo EXITING;
+                exit 1
+                break;;
+            * ) echo invalid response;;
+        esac
+    done
+
+
 fi
 
 which pip &> /dev/null
@@ -63,9 +82,18 @@ if [[ $? != 0 ]]; then
     brew install node
 fi
 
-npm list -g neovim &> /dev/null
+# install yarn/ neovim for node
+# Install neovim using npm, just for compatiblity
+npm list --location=global neovim &> /dev/null
 if [[ $? != 0 ]]; then
-    node install -g neovim
+    which yarn &> /dev/null
+    if [[ $? != 0 ]]; then
+        npm install --location=global yarn
+    fi
+    yarn global list neovim
+    if [[ $? != 0 ]]; then
+        npm install --location=global neovim
+    fi
 fi
 
 which ruby &> /dev/null
@@ -79,10 +107,12 @@ if [[ $? != 0 ]]; then
     echo 
 fi
 
-echo $PATH | grep $USER/bin
-if [[ $? != 0 ]]; then
+if [[ ! $PATH == *"$HOME/bin"* ]]; then
     if [ -d $HOME/bin ]; then
-        echo 'export PATH=$PATH:$HOME/bin' >> ~/.path.zsh
+        echo 'if [[ ! $PATH == *"$HOME/bin"* ]]; then
+    export PATH=$PATH:$HOME/bin
+fi
+        ' >> ~/.path.zsh
     fi
 fi
 
