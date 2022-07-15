@@ -121,7 +121,7 @@ Plug 'rickhowe/diffchar.vim'
 Plug 'vimwiki/vimwiki'
 "let g:vimwiki_autowriteall = 1
 "better python highlighting
-Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }
+"Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }
 
 command! -bang -nargs=* PRg
   \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'dir': expand('%:p:h')}, <bang>0)
@@ -132,6 +132,8 @@ Plug 'alvan/vim-closetag'
 "define which file extensions the plugin is enabled on
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.vue,*.tsx'
 
+" Better syntax highlighting for every language
+Plug 'sheerun/vim-polyglot'
 
 " ESLinter setup
 Plug 'neovim/nvim-lspconfig'
@@ -182,7 +184,7 @@ autocmd InsertLeave,TextChanged *.scala update | Neomake! sbt
 " completions, etc. has more config in lua format available
 Plug 'tjdevries/nlua.nvim'"
 " better syntax
-Plug 'euclidianAce/BetterLua.vim'
+" Plug 'euclidianAce/BetterLua.vim'
 " 
 call plug#end()
 
