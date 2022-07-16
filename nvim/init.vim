@@ -10,7 +10,7 @@ set shiftwidth=4            " width for autoindents
 set autoindent              " indent a new line the same amount as the line just typed
 set number                  " add line numbers
 set wildmode=longest,list   " get bash-like tab completions
-set cc=80                  " set an 80 column border for good coding style
+set colorcolumn=80                  " set an 80 column border for good coding style
 filetype plugin indent on   "allow auto-indenting depending on file type
 syntax on                   " syntax highlighting
 set mouse=a                 " enable mouse click
@@ -191,7 +191,11 @@ call plug#end()
 " Themes 
 " colorscheme gruvbox
 colorscheme dracula
-
+" colorize column
+"highlight ColorColumn ctermbg=1 guibg=1
+"asdffffasdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfs
+"asdffffasdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfs
+"asdffffasdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfs
 lua << telescope
 require('telescope').setup {
   extensions = {
@@ -293,7 +297,7 @@ augroup numbertoggle
     autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set rnu   | endif
     autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set nornu | endif
 augroup END
-
+highlight ColorColumn guibg=#424450
 imap jj <Esc>
 
 inoremap " ""<left>
