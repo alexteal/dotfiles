@@ -297,6 +297,8 @@ augroup END
 
 imap jj <Esc>
 
+highlight ColorColumn guibg=#424450
+
 inoremap " ""<left>
 inoremap ' ''<left>
 inoremap ( ()<left>
