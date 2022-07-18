@@ -10,7 +10,7 @@ set shiftwidth=4            " width for autoindents
 set autoindent              " indent a new line the same amount as the line just typed
 set number                  " add line numbers
 set wildmode=longest,list   " get bash-like tab completions
-set colorcolumn=80                  " set an 80 column border for good coding style
+set cc=80                  " set an 80 column border for good coding style
 filetype plugin indent on   "allow auto-indenting depending on file type
 syntax on                   " syntax highlighting
 set mouse=a                 " enable mouse click
@@ -121,7 +121,7 @@ Plug 'rickhowe/diffchar.vim'
 Plug 'vimwiki/vimwiki'
 "let g:vimwiki_autowriteall = 1
 "better python highlighting
-"Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }
+Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }
 
 command! -bang -nargs=* PRg
   \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'dir': expand('%:p:h')}, <bang>0)
@@ -133,7 +133,7 @@ Plug 'alvan/vim-closetag'
 let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.vue,*.tsx'
 
 " Better syntax highlighting for every language
-Plug 'sheerun/vim-polyglot'
+" Plug 'sheerun/vim-polyglot'
 
 " ESLinter setup
 Plug 'neovim/nvim-lspconfig'
@@ -184,18 +184,14 @@ autocmd InsertLeave,TextChanged *.scala update | Neomake! sbt
 " completions, etc. has more config in lua format available
 Plug 'tjdevries/nlua.nvim'"
 " better syntax
-" Plug 'euclidianAce/BetterLua.vim'
+Plug 'euclidianAce/BetterLua.vim'
 " 
 call plug#end()
 
 " Themes 
 " colorscheme gruvbox
 colorscheme dracula
-" colorize column
-"highlight ColorColumn ctermbg=1 guibg=1
-"asdffffasdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfs
-"asdffffasdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfs
-"asdffffasdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfsdfs
+
 lua << telescope
 require('telescope').setup {
   extensions = {
@@ -254,7 +250,8 @@ lua << snippet
 --    { pattern = "*.wiki", 
 --        command = "lua format_diary_newline()", group = Diary })
 snippet
-
+" quick re-source
+nmap <Leader>rr <cmd>source $MYVIMRC<CR>
 " close terminal easier
 tnoremap jj  <C-\><C-n>
 " open shell with 15 lines of height on bottom
@@ -297,7 +294,7 @@ augroup numbertoggle
     autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set rnu   | endif
     autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set nornu | endif
 augroup END
-highlight ColorColumn guibg=#424450
+
 imap jj <Esc>
 
 inoremap " ""<left>
