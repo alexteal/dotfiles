@@ -44,6 +44,11 @@ endif
 
 call plug#begin('~/.config/nvim/plugged')
 
+" javadoc comment generation
+Plug 'heavenshell/vim-jsdoc', {
+  \ 'for': ['javascript', 'javascript.jsx','typescript'],
+  \ 'do': 'make install'
+\}
 " dracula theme
 Plug 'Mofiqul/dracula.nvim'
 
@@ -285,6 +290,8 @@ map <LeftMouse> <LeftMouse>i
 nmap <Leader>da i<return><esc><up><cmd>put =strftime('%c')<CR>i<backspace>==<Esc><S-a>==<esc><S-a><return>
 " vertical split vimwiki link
 nmap <Leader>vs <cmd>VimwikiVSplitLink<CR>
+
+nmap <Leader>js <cmd>JsDoc<CR>
 
 " Set hybrid line numbers
 " set number relativenumber
