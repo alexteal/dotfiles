@@ -142,6 +142,17 @@ Plug 'prettier/vim-prettier', {
   \ 'do': 'yarn install --frozen-lockfile --production',
   \ 'for': ['javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html', 'tsx', 'jsx', 'typescriptreact'] }
 
+" supposedly fixes erroneous scrolling on save
+let g:ale_fixers = {
+\  'javascript': ['prettier'],
+\  'json': ['prettier'],
+\  'css': ['prettier'],
+\  'scss': ['prettier'],
+\  'html': ['prettier'],
+\  'xml': ['prettier'],
+\}
+
+let g:ale_fix_on_save = 1
 let g:prettier#quickfix_enabled = 0
 let g:prettier#exec_cmd_async = 1
 autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.svelte,*.yaml,*.html PrettierAsync
