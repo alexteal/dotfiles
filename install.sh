@@ -112,7 +112,9 @@ which python3 &> /dev/null
 if [[ $? != 0 ]] ; then
     while true; do
     
-        read -p "Python3 not found. This installer assumes you have pip, so this can cause problems.' \n (1) install using brew \n (2) exit installation, my python path is wierd. \n" val
+        read -p "Python3 not found. This installer assumes you have pip, so this can cause problems." val
+        echo '(1) install using $install_prefix'
+        echo '(2) exit installation, my python path is wierd.' 
     
         case $val in 
             [1] ) echo installing...;
