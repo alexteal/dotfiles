@@ -97,16 +97,18 @@ if [[ $? != 0 ]] ; then
     eval "$install_prefix tmux"
 fi
 
-which nvim &> /dev/null
-if [[ $? != 0 ]] ; then
-    echo "neovim not found, installing..."
-    eval "$install_prefix neovim"
-fi
-
 which curl &> /dev/null
 if [[ $? != 0 ]] ; then
     echo "curl not found, installing..."
     eval "$install_prefix curl"
+fi
+
+which nvim &> /dev/null
+if [[ $? != 0 ]] ; then
+    echo "neovim not found, installing..."
+    eval "$install_prefix neovim"
+    sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 fi
 
 if [ ! -f "~/.oh-my-zsh/oh-my-zsh.sh"  ] ; then
