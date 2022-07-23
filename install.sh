@@ -20,7 +20,7 @@ while true; do
         * ) echo invalid response;;
     esac
 done
-
+mkdir ~/.config/nvim
 cp -f ./zsh/zshrc ~/.zshrc
 cp -f ./nvim/init.vim ~/.config/nvim/init.vim
 cp -f ./tmux/tmux.conf ~/.tmux.conf
@@ -28,10 +28,18 @@ cp -f ./tmux/p10k.zsh ~/.p10k.zsh
 
 install_prefix=('brew' 'install')
 
+user=$( whoami )
+if [[ $user == "root" ]] ; then
+    sudo=""
+else
+    sudo="sudo"
+fi
+
 # Use native package manager
 function fedora () {
     echo "Executing dnf as sudo. Password may be required."
-    install_prefix="sudo dnf install -y "
+    install_prefix="$sudo dnf install -y "
+    eval "$sudo dnf makecache --refresh"
 }
 function osx () {
     install_prefix="brew install "
@@ -46,21 +54,42 @@ fi
 }
 function debian_ubuntu () {
     echo "Executing apt-get as sudo. Password may be required."
-    install_prefix="sudo apt-get install -y "
+    install_prefix="$sudo apt-get install -y "
+    eval "$sudo apt-get update"
+    eval "$sudo apt-get upgrade"
 }
 
 OS=$( uname -a )
+# unsure if first character is capital or not
 case $OS in 
-    *"Debian"*)
+    *"ebian"*)
         debian_ubuntu
         ;;
-    *"Darwin"*)
+    *"buntu"*)
+        debian_ubuntu
+        ;;
+    *"arwin"*)
         osx
         ;;
-    *"Fedora"*)
+    *"edora"*)
         fedora
         ;;
+    *) 
+        debian_ubuntu
+        ;;
 esac
+
+which zsh &> /dev/null
+if [[ $? != 0 ]] ; then
+    echo "zsh not found, installing..."
+    eval "$install_prefix zsh"
+fi
+
+which make &> /dev/null
+if [[ $? != 0 ]] ; then
+    echo "make not found, installing..."
+    eval "$install_prefix tmux"
+fi
 
 which tmux &> /dev/null
 if [[ $? != 0 ]] ; then
