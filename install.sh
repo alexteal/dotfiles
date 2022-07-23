@@ -20,6 +20,8 @@ while true; do
         * ) echo invalid response;;
     esac
 done
+
+mkdir ~/.config
 mkdir ~/.config/nvim
 cp -f ./zsh/zshrc ~/.zshrc
 cp -f ./nvim/init.vim ~/.config/nvim/init.vim
