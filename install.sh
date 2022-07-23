@@ -97,8 +97,24 @@ if [[ $? != 0 ]] ; then
     eval "$install_prefix tmux"
 fi
 
-ls ~/. | grep ".oh-my-zsh" &> /dev/null
+which nvim &> /dev/null
 if [[ $? != 0 ]] ; then
+    echo "neovim not found, installing..."
+    eval "$install_prefix neovim"
+fi
+
+which curl &> /dev/null
+if [[ $? != 0 ]] ; then
+    echo "curl not found, installing..."
+    eval "$install_prefix curl"
+fi
+
+if [ ! -f "~/.oh-my-zsh/oh-my-zsh.sh"  ] ; then
+    echo "oh-my-zsh not found, installing..."
+    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+fi
+
+if [ ! -d $HOME/.oh-my-zsh/custom/themes/powerlevel10k ] ; then
     echo "powerline10k not found, installing... ( required for bash line styling )"
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 fi
