@@ -21,14 +21,12 @@ while true; do
     esac
 done
 
-mkdir ~/.config
-mkdir ~/.config/nvim
+mkdir ~/.config &> /dev/null
+mkdir ~/.config/nvim &> /dev/null
 cp -f ./zsh/zshrc ~/.zshrc
 cp -f ./nvim/init.vim ~/.config/nvim/init.vim
 cp -f ./tmux/tmux.conf ~/.tmux.conf
 cp -f ./tmux/p10k.zsh ~/.p10k.zsh
-
-install_prefix=('brew' 'install')
 
 user=$( whoami )
 if [[ $user == "root" ]] ; then
