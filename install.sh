@@ -97,7 +97,7 @@ if [[ $? != 0 ]] ; then
     eval "$install_prefix tmux"
 fi
 
-if [ ! -d $HOME/.oh-my-zsh/custom/themes/powerlevel10k ] ; then
+if [[ ! -f $HOME/.oh-my-zsh/custom/themes/powerlevel10k/README.md ]] ; then
     echo "powerline10k not found, installing... ( required for bash line styling )"
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
 fi
