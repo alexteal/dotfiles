@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#TODO
+# Use anything other than eval 
+# It's unsafe when using user input, but it ~should~ be fine in this specific case
+
 while true; do
 
     read -p "Do you want to make backups of your current dotfiles? (y/n) " yn
@@ -22,18 +26,46 @@ cp -f ./nvim/init.vim ~/.config/nvim/init.vim
 cp -f ./tmux/tmux.conf ~/.tmux.conf
 cp -f ./tmux/p10k.zsh ~/.p10k.zsh
 
-# ensure brew
-which brew &> /dev/null
-if [[ $? != 0 ]] ; then
-    # Install Homebrew
-    echo "Homebrew not found, installing..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+install_prefix=('brew' 'install')
+
+# Use native package manager
+function fedora () {
+    echo "Executing dnf as sudo. Password may be required."
+    install_prefix="sudo dnf install -y "
+}
+function osx () {
+    install_prefix="brew install "
+    # ensure brew
+    which brew &> /dev/null
+    if [[ $? != 0 ]] ; then
+        # Install Homebrew
+        echo "Homebrew not found, installing..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.\
+            com/Homebrew/install/HEAD/install.sh)"
 fi
+}
+function debian_ubuntu () {
+    echo "Executing apt-get as sudo. Password may be required."
+    install_prefix="sudo apt-get install -y "
+}
+
+OS=$( uname -a )
+case $OS in 
+    *"Debian"*)
+        debian_ubuntu
+        ;;
+    *"Darwin"*)
+        osx
+        ;;
+    *"Fedora"*)
+        fedora
+        ;;
+esac
 
 which tmux &> /dev/null
 if [[ $? != 0 ]] ; then
     echo "tmux not found, installing..."
-    brew install tmux
+    eval "$install_prefix tmux"
 fi
 
 if [ ! -d $HOME/.oh-my-zsh/custom/themes/powerlevel10k ] ; then
@@ -44,7 +76,7 @@ fi
 which fzf &> /dev/null
 if [[ $? != 0 ]] ; then
     echo "fzf not found, installing... ( required for neovim )"
-    brew install fzf
+    eval "$install_prefix fzf"
 fi
 
 which python3 &> /dev/null
@@ -55,7 +87,7 @@ if [[ $? != 0 ]] ; then
     
         case $val in 
             [1] ) echo installing...;
-                brew install python3
+                eval "$install_prefix python3"
                 break;;
             [2] ) echo EXITING;
                 exit 1
@@ -82,14 +114,13 @@ fi
 which node &> /dev/null
 if [[ $? != 0 ]]; then
     "node not found, installing..."
-    brew install node
+    eval "$install_prefix node"
 fi
 
 # install yarn/ neovim for node
 # Install neovim using npm, just for compatiblity
 npm list --location=global neovim &> /dev/null
 if [[ $? != 0 ]]; then
-    echo "neovim node module not found using npm"
     which yarn &> /dev/null
     if [[ $? != 0 ]]; then
         "yarn not found, installing..."
@@ -97,11 +128,8 @@ if [[ $? != 0 ]]; then
     fi
     yarn global list neovim | grep "neovim" &> /dev/null
     if [[ $? != 0 ]]; then
-        echo "neovim node module not found using yarn"
-        echo "installing module with npm..."
+        echo "installing neovim module with npm..."
         npm install --location=global neovim
-    else 
-        echo "neovim module found in yarn"
     fi
 fi
 
@@ -111,7 +139,7 @@ if [[ $? != 0 ]]; then
     which ruby-install &> /dev/null
     if [[ $? != 0 ]]; then
         echo "ruby-install not found, installing..."
-        brew install ruby-install --HEAD
+        eval "$install_prefix ruby-install --HEAD"
     fi
     echo "installing latest ruby using ruby-install..."
     ruby-install --latest
@@ -160,5 +188,3 @@ echo "    ██╗ ██████╗ ███████╗███╗  
 echo 
 echo "Run checkhealth inside of neovim to ensure plugins installed correctly."
 echo
-echo "There may still be some broken things around here, just try sourcing the
-.zshrc and debugging until it seems like it's fine"
