@@ -1,46 +1,99 @@
-set nocompatible            " disable compatibility to old-time vi
-set showmatch               " show matching
-set ignorecase              " case insensitive
-set hlsearch                " highlight search
-set incsearch               " incremental search
-set tabstop=4               " number of columns occupied by a tab
-set softtabstop=4           " see multiple spaces as tabstops so <BS> does the right thing
-set expandtab               " converts tabs to white space
-set shiftwidth=4            " width for autoindents
-set autoindent              " indent a new line the same amount as the line just typed
-set number                  " add line numbers
-set wildmode=longest,list   " get bash-like tab completions
-set cc=80                  " set an 80 column border for good coding style
-filetype plugin indent on   "allow auto-indenting depending on file type
-syntax on                   " syntax highlighting
-set mouse=a                 " enable mouse click
-set clipboard=unnamedplus   " using system clipboard
-filetype plugin on
-set ttyfast                 " Speed up scrolling in Vim
-set encoding=UTF-8
+lua << BASICCONFIG
 
-"GRUVBOX
-"Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
-if (empty($TMUX)) 
-  if (has("nvim"))
-    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-  endif
-endif
-" END GRUVBOX
+local opt = vim.opt
+opt.showmatch = true		-- show matching
+opt.ignorecase = true
+opt.hlsearch = true
+opt.ignorecase = true
+opt.hlsearch = true
+opt.incsearch =  true             -- incremental search
+opt.tabstop = 4             -- number of columns occupied by a tab
+opt.softtabstop = 4         -- see multiple spaces as tabstops so <BS> does the right thing
+opt.expandtab =  true              -- converts tabs to white space
+opt.shiftwidth = 4          -- width for autoindents
+opt.autoindent =  true            -- indent a new line the same amount as the line just typed
+opt.number =  true                -- add line numbers
+opt.wildmode =  'longest,list' -- get bash-like tab completions
+opt.cc = '80'                -- set an 80 column border for good coding style
+opt.syntax =  'on'         -- syntax highlighting
+opt.mouse = 'a'              -- enable mouse click
+opt.clipboard = 'unnamedplus'-- using system clipboard
+opt.ttyfast =  true               -- Speed up scrolling in Vim
+opt.encoding = 'UTF-8'
 
-if (has("termguicolors"))
-    set termguicolors
-endif
+--Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
+if os.getenv('TMUX') then
+    if vim.fn.has('nvim') then
+        vim.env.NVIM_TUI_ENABLE_TRUE_COLOR = '1'
+    end
+end
+
+if vim.fn.has('termguicolors') then
+    opt.termguicolors = true
+end
+require('packer').startup(function()
+    use 'wbthomason/packer.nvim' 
+    use 'dracula/vim'
+    use { 'rafcamlet/nvim-luapad', requires = "antoinemadec/FixCursorHold.nvim" }
+end)
+
+local key = vim.api.nvim_set_keymap
+-- exit insert mode in shell fast  
+key('t', 'jj','<C-\\><C-n>', {silent = true, noremap = true})
+-- quick open terminal
+key('n', '<Leader>sh','<CMD>belowright 15split term://zsh<CR>', {silent = true, noremap = true })
+-- fast reload
+key('n','<Leader>rr','<CMD>source $MYVIMRC<CR>',{silent = true, noremap = true})
+-- checkbox plugin
+key('n','<Leader>ct','<CMD>ChecklistToggleCheckbox<CR>',{silent = true, noremap = true})
+key('n','<Leader>ce','<CMD>ChecklistEnableCheckbox<CR>',{silent = true, noremap = true})
+key('n','<Leader>cd','<CMD>ChecklistDisableCheckbox<CR>',{silent = true, noremap = true})
+-- find files
+key('n','<Leader>ff','<CMD>FZF<CR>',{silent = true, noremap = true})
+-- find help tags
+key('n','<Leader>fh','<cmd>Telescope help_tags<CR>',{silent = true, noremap = true})
+-- find commands
+key('n','<Leader>fc','<cmd>Telescope commands<CR> ',{silent = true, noremap = true})
+-- open wiki page
+key('n','<Leader>wp','<cmd>Files ~/vimwiki/<CR>',{silent = true, noremap = true})
+-- search files
+key('n','<Leader>sf','<cmd>Telescope live_grep<CR>',{silent = true, noremap = true})
+-- search buffers
+key('n','<Leader>fb','<cmd>Telescope buffers<CR>',{silent = true, noremap = true})
+-- rg search in directory
+key('n','<Leader>fs','<cmd>PRg<CR>',{silent = true, noremap = true})
+
+key('n','<Leader>gd','<cmd>GHDashboard<CR>',{silent = true, noremap = true})
+key('n','<Leader>gh','<cmd>GHActivity<CR>',{silent = true, noremap = true})
+
+key('n','<Leader>t','<CMD>NERDTreeToggle<CR>',{silent = true, noremap = true})
+-- VSCode mouse mode
+key('n','<LeftMouse>','<LeftMouse>i',{silent = true, noremap = true})
+-- Put date time with equals on either side
+key('n','<Leader>da','i<return><esc><up><cmd>put =strftime(\'%c\')<CR>i<backspace>==<Esc><S-a>==<esc><S-a><return>',{silent = true, noremap = true})
+-- JSDoc comment generation
+key('n','<Leader>js','<cmd>JsDoc<CR>',{silent = true, noremap = true})
+
+key('i','jj','<Esc>',{silent = true, noremap = true})
+key('n','!shrug','¯\\_(ツ)_/¯',{silent = true, noremap = true})
+key('n','<Leader>+','<CMD>exe "resize " . (winheight(0) * 3/2)<CR>',{silent = true, noremap = true})
+key('n','<Leader>-','<CMD>exe "resize " . (winheight(0) * 2/3)<CR>',{silent = true, noremap = true})
+key('i','"','""<left>',{silent = true, noremap = true})
+key('i','\'','\'\'<left>',{silent = true, noremap = true})
+key('i','(','()<left>',{silent = true, noremap = true})
+key('i','[','[]<left>',{silent = true, noremap = true})
+key('i','{','{}<left>',{silent = true, noremap = true})
+key('i','{<CR>','{<CR>}<ESC>O',{silent = true, noremap = true})
+key('i','{;<CR>','{<CR>};<ESC>O',{silent = true, noremap = true})
+BASICCONFIG
 
 call plug#begin('~/.config/nvim/plugged')
-
+Plug 'dracula/vim'
 " javadoc comment generation
 Plug 'heavenshell/vim-jsdoc', {
   \ 'for': ['javascript', 'javascript.jsx','typescript'],
   \ 'do': 'make install'
 \}
-" dracula theme
-Plug 'Mofiqul/dracula.nvim'
 
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -107,7 +160,6 @@ Plug 'kevinhwang91/nvim-bqf'
 " better parser
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
-Plug 'dracula/vim'
 Plug 'preservim/nerdcommenter'
 Plug 'mhinz/vim-startify'
 Plug 'dense-analysis/ale'
@@ -196,7 +248,6 @@ call plug#end()
 
 " Themes 
 " colorscheme gruvbox
-colorscheme dracula
 
 lua << telescope
 require('telescope').setup {
@@ -257,42 +308,41 @@ lua << snippet
 --        command = "lua format_diary_newline()", group = Diary })
 snippet
 " quick re-source
-nmap <Leader>rr <cmd>source $MYVIMRC<CR>
 " close terminal easier
-tnoremap jj  <C-\><C-n>
 " open shell with 15 lines of height on bottom
-nnoremap <Leader>sh <cmd>belowright 15split term://zsh<CR>
+""nnoremap <Leader>sh <cmd>belowright 15split term://zsh<CR>
 
-nnoremap <leader>ct <cmd>ChecklistToggleCheckbox<cr>
-nnoremap <leader>ce <cmd>ChecklistEnableCheckbox<cr>
-nnoremap <leader>cd <cmd>ChecklistDisableCheckbox<cr>
-" find files
-nmap <Leader>ff <cmd>FZF<CR>
-" Search for function documentation
-nmap <Leader>fh <cmd>Telescope help_tags<CR>
-" Search for command
-nmap <Leader>fc <cmd>Telescope commands<CR> 
-" wiki page
-nmap <Leader>wp <cmd>Files ~/vimwiki/<CR>
-" search in files
-nmap <Leader>sf <cmd>Telescope live_grep<CR>
-" ripgrep alternative if slow
-nmap <Leader>fs <cmd>PRg<CR>
-" telescope search command
-nmap <Leader>gd <cmd>GHDashboard<CR>
-nmap <Leader>gh <cmd>GHActivity<CR>
+" "nnoremap <leader>ct <cmd>ChecklistToggleCheckbox<cr>
+" "nnoremap <leader>ce <cmd>ChecklistEnableCheckbox<cr>
+" "nnoremap <leader>cd <cmd>ChecklistDisableCheckbox<cr>
+" "" find files
+" "nmap <Leader>ff <cmd>FZF<CR>
+" "" Search for function documentation
+" "nmap <Leader>fh <cmd>Telescope help_tags<CR>
+" "" Search for command
+" "nmap <Leader>fc <cmd>Telescope commands<CR> 
+" "" wiki page
+" "nmap <Leader>wp <cmd>Files ~/vimwiki/<CR>
+" "" search in files
+" "nmap <Leader>sf <cmd>Telescope live_grep<CR>
+" "nmap <Leader>fb <cmd>Telescope buffers<CR>
+" "" ripgrep alternative if slow
+" "nmap <Leader>fs <cmd>PRg<CR>
+" "" telescope search command
+" "nmap <Leader>gd <cmd>GHDashboard<CR>
+" "nmap <Leader>gh <cmd>GHActivity<CR>
 
-nmap <Leader>t <cmd>NERDTreeToggle<CR>
-
-" VSCode mouse mode
-map <LeftMouse> <LeftMouse>i
-
-"Put date time with equals on either side
-nmap <Leader>da i<return><esc><up><cmd>put =strftime('%c')<CR>i<backspace>==<Esc><S-a>==<esc><S-a><return>
-" vertical split vimwiki link
-nmap <Leader>vs <cmd>VimwikiVSplitLink<CR>
-
-nmap <Leader>js <cmd>JsDoc<CR>
+""nmap <Leader>t <cmd>NERDTreeToggle<CR>
+""
+""" VSCode mouse mode
+""map <LeftMouse> <LeftMouse>i
+""
+"""Put date time with equals on either side
+""nmap <Leader>da i<return><esc><up><cmd>put =strftime('%c')<CR>i<backspace>==<Esc><S-a>==<esc><S-a><return>
+""" vertical split vimwiki link
+""nmap <Leader>vs <cmd>VimwikiVSplitLink<CR>
+""
+""nmap <Leader>js <cmd>JsDoc<CR>
 
 " Set hybrid line numbers
 " set number relativenumber
@@ -303,19 +353,9 @@ augroup numbertoggle
     autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set nornu | endif
 augroup END
 
-imap jj <Esc>
-inoremap !shrug ¯\_(ツ)_/¯
-nnoremap <silent> <Leader>+ :exe "resize " . (winheight(0) * 3/2)<CR>
-nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 2/3)<CR>
+colorscheme dracula
 highlight ColorColumn guibg=#424450
 
-inoremap " ""<left>
-inoremap ' ''<left>
-inoremap ( ()<left>
-inoremap [ []<left>
-inoremap { {}<left>
-inoremap {<CR> {<CR>}<ESC>O
-inoremap {;<CR> {<CR>};<ESC>O
 execute "digraphs as " . 0x2090
 execute "digraphs es " . 0x2091
 execute "digraphs hs " . 0x2095

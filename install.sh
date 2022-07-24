@@ -88,13 +88,14 @@ fi
 which make &> /dev/null
 if [[ $? != 0 ]] ; then
     echo "make not found, installing..."
-    eval "$install_prefix tmux"
+    eval "$install_prefix make"
 fi
 
 which tmux &> /dev/null
 if [[ $? != 0 ]] ; then
     echo "tmux not found, installing..."
     eval "$install_prefix tmux"
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
 
 which curl &> /dev/null
