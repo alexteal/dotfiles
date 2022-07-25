@@ -55,7 +55,8 @@ This uses
 
 -   Oh-my-zsh
 -   powerline-p10k
-    And sources 3 custom files if they exist.
+
+And sources 3 custom files if they exist.
 
 -   .path.zsh
 -   .alias.zsh
