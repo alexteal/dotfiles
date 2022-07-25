@@ -125,6 +125,7 @@ alias editnvim="nvim ~/.config/nvim/init.vim"
 alias editzsh="nvim ~/.zshrc"
 alias edittmux="nvim ~/.tmux.conf"
 alias dot="cd ~/projects/dotfiles"
+alias lg="lazygit"
 # Use ls-colors for path completions
 zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
 
