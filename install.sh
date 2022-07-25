@@ -200,7 +200,6 @@ if [ ! -d $HOME/.local/share/nvim/site/pack/packer/start ] ; then
     echo "packer.nvim not found, installing..."
 git clone --depth 1 https://github.com/wbthomason/packer.nvim\
  ~/.local/share/nvim/site/pack/packer/start/packer.nvim
-else
 fi
 
 
@@ -276,9 +275,8 @@ if [[ ! $PATH == *"$HOME/bin"* ]]; then
         export PATH=$PATH:$HOME/bin
     fi
     ' >> ~/.path.zsh
+    fi
 fi
-fi
-
 
 echo
 echo
