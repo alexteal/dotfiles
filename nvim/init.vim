@@ -63,9 +63,6 @@ key('n','<Leader>fb','<cmd>Telescope buffers<CR>',{silent = true, noremap = true
 -- rg search in directory
 key('n','<Leader>fs','<cmd>PRg<CR>',{silent = true, noremap = true})
 
-key('n','<Leader>gd','<cmd>GHDashboard<CR>',{silent = true, noremap = true})
-key('n','<Leader>gh','<cmd>GHActivity<CR>',{silent = true, noremap = true})
-
 key('n','<Leader>t','<CMD>NERDTreeToggle<CR>',{silent = true, noremap = true})
 -- VSCode mouse mode
 key('n','<LeftMouse>','<LeftMouse>i',{silent = true, noremap = true})
@@ -126,14 +123,6 @@ Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 " Close the tab if NERDTree is the only window remaining in it.
 autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
 
-
-Plug 'https://github.com/junegunn/vim-github-dashboard.git'
-
-let g:github_dashboard = { 'username': $GIT_USER, 'password': $GIT_SECRET}
-" set 
-
-" Plugin options
-" Plug 'nsf/gocode', { 'tag': 'v.20150303', 'rtp': 'vim' }
 
 " Plugin outside ~/.vim/plugged with post-update hook
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
