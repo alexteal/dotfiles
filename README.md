@@ -70,7 +70,7 @@ secrets is where sensitive environment variables go
 
 ### Lazygit
 
-Lazygit is awesome. Use it in tmux with <Prefix>g
+Lazygit is awesome. Use it in tmux with \<Prefix\>g
 
 ### Tmux
 
