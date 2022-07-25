@@ -302,4 +302,4 @@ echo "   ██║   ███████╗██║  ██║██║ ╚�
 echo "   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝╚═╝    ";
 echo "                                                                        ";
 echo "Run checkhealth inside of neovim to ensure plugins installed correctly."
-echo
+echo $ERRORS
