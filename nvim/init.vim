@@ -87,6 +87,11 @@ key('i','{<CR>','{<CR>}<ESC>O',{silent = true, noremap = true})
 key('i','{;<CR>','{<CR>};<ESC>O',{silent = true, noremap = true})
 BASICCONFIG
 
+let g:python3_host_prog = '~/.config/nvim/venv/bin/python'
+" Not ideal to use absolute path
+" TODO use env variable or virtual path
+let g:ruby_host_prog = '/usr/bin/ruby'
+
 call plug#begin('~/.config/nvim/plugged')
 Plug 'dracula/vim'
 " javadoc comment generation
@@ -102,7 +107,11 @@ else
   Plug 'roxma/nvim-yarp'
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
-let g:deoplete#enable_at_startup = 1
+"let g:deoplete#enable_at_startup = 1
+" load deoplete after start
+let g:deoplete#enable_at_startup = 0
+autocmd InsertEnter * call deoplete#enable()
+
 autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
 
 " Track the engine.

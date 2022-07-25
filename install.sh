@@ -170,7 +170,32 @@ which pip &> /dev/null
 if [[ $? != 0 ]] ; then
     echo "pip not found, installing..."
     python3 -m ensurepip --upgrade
+    case $OS in 
+        *"ebian"*)
+            eval "$install_prefix python3-pip"
+            ;;
+        *"buntu"*)
+            eval "$install_prefix python3-pip"
+            ;;
+        *"arwin"*)
+            python3 -m ensurepip --upgrade
+            ;;
+        *"edora"*)
+            eval "$install_prefix python3-pip"
+            ;;
+        *) 
+            ;;
+    esac
 fi
+
+if [ ! -d $HOME/.config/nvim/venv ] ; then
+    echo "Python3 venv for neovim not found. Generating..."
+    python3 -m venv ~/.config/nvim/venv
+    source ~/.config/nvim/venv/bin/activate
+else
+    source ~/.config/nvim/venv/bin/activate
+fi
+
 
 pip show neovim &> /dev/null
 if [[ $? != 0 ]]; then
