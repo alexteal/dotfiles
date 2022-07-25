@@ -20,9 +20,7 @@ while true; do
         * ) echo invalid response;;
     esac
 done
-
-mkdir ~/.config &> /dev/null
-mkdir ~/.config/nvim &> /dev/null
+mkdir -p ~/.config/nvim
 cp -f ./zsh/zshrc ~/.zshrc
 cp -f ./nvim/init.vim ~/.config/nvim/init.vim
 cp -f ./tmux/tmux.conf ~/.tmux.conf
@@ -58,7 +56,7 @@ function debian_ubuntu () {
     eval "$sudo apt-get update"
     eval "$sudo apt-get upgrade"
 }
-
+ERRORS=""
 OS=$( uname -a )
 # unsure if first character is capital or not
 case $OS in 
@@ -112,7 +110,7 @@ if [[ $? != 0 ]] ; then
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 fi
 
-if [ ! -f "~/.oh-my-zsh/oh-my-zsh.sh"  ] ; then
+if [ ! -f ~/.oh-my-zsh/oh-my-zsh.sh  ] ; then
     echo "oh-my-zsh not found, installing..."
     sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 fi
@@ -128,6 +126,24 @@ if [[ $? != 0 ]] ; then
     eval "$install_prefix fzf"
 fi
 
+which lazygit &> /dev/null
+if [[ $? != 0 ]] ; then
+    case $OS in 
+        *"arwin"*)
+            eval "$install_prefix jesseduffield/lazygit/lazygit"
+            ;;
+        *"edora"*)
+            echo "lazygit not found, installing..."
+            eval "$sudo dnf copr enable atim/lazygit -y"
+            eval "$install_prefix lazygit"
+            ;;
+        *) 
+            ERRORS+="lazygit not available for this distro. Install from source \n"
+            ERRORS+="https://github.com/jesseduffield/lazygit#manual"
+            ;;
+    esac
+fi
+
 which python3 &> /dev/null
 if [[ $? != 0 ]] ; then
     while true; do
@@ -135,7 +151,7 @@ if [[ $? != 0 ]] ; then
         echo '(1) install using $install_prefix'
         echo '(2) exit installation, my python path is wierd.' 
         read val
-    
+
         case $val in 
             [1] ) echo installing...;
                 eval "$install_prefix python3"
@@ -189,11 +205,29 @@ if [[ $? != 0 ]]; then
     echo "ruby not found, checking ruby-install..."
     which ruby-install &> /dev/null
     if [[ $? != 0 ]]; then
-        echo "ruby-install not found, installing..."
-        eval "$install_prefix ruby-install --HEAD"
+        case $OS in 
+            *"ebian"*)
+                echo "ruby-install not available, installing package manager ruby..."
+                eval "$install_prefix ruby-full"
+                ;;
+            *"buntu"*)
+                echo "ruby-install not available, installing package manager ruby..."
+                eval "$install_prefix ruby-full"
+                ;;
+            *"arwin"*)
+                echo "ruby-install not found, installing..."
+                eval "$install_prefix ruby-install --HEAD"
+                echo "installing latest ruby using ruby-install..."
+                ruby-install --latest
+                ;;
+            *"edora"*)
+                echo "ruby-install not available, installing package manager ruby..."
+                eval "$sudo yum install ruby"
+                ;;
+            *) 
+                ;;
+        esac
     fi
-    echo "installing latest ruby using ruby-install..."
-    ruby-install --latest
     echo 
 fi
 
@@ -207,35 +241,36 @@ if [[ ! $PATH == *"$HOME/bin"* ]]; then
     if [ -d $HOME/bin ]; then
         echo "$HOME/bin not found in path, adding to ~/.path.zsh"
         echo 'if [[ ! $PATH == *"$HOME/bin"* ]]; then
-    export PATH=$PATH:$HOME/bin
-fi
-        ' >> ~/.path.zsh
+        export PATH=$PATH:$HOME/bin
     fi
+    ' >> ~/.path.zsh
+fi
 fi
 
 
 echo
-echo "    ██╗ ██████╗ ███████╗███╗   ██╗███████╗                                  
+echo "
+    ██╗ ██████╗ ███████╗███╗   ██╗███████╗                                  
    ██╔╝██╔════╝ ██╔════╝████╗  ██║╚══███╔╝                                  
   ██╔╝ ██║  ███╗█████╗  ██╔██╗ ██║  ███╔╝                                   
  ██╔╝  ██║   ██║██╔══╝  ██║╚██╗██║ ███╔╝                                    
 ██╔╝   ╚██████╔╝███████╗██║ ╚████║███████╗                                  
 ╚═╝     ╚═════╝ ╚══════╝╚═╝  ╚═══╝╚══════╝                                  
-                                                                            
-    ███╗   ███╗███████╗███████╗████████╗███████╗                            
-    ████╗ ████║██╔════╝██╔════╝╚══██╔══╝██╔════╝                            
-    ██╔████╔██║█████╗  █████╗     ██║   ███████╗                            
-    ██║╚██╔╝██║██╔══╝  ██╔══╝     ██║   ╚════██║                            
-    ██║ ╚═╝ ██║███████╗███████╗   ██║   ███████║                            
-    ╚═╝     ╚═╝╚══════╝╚══════╝   ╚═╝   ╚══════╝                            
-                                                                            
-    ████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗         ██╗
-    ╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║        ██╔╝
-       ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║       ██╔╝ 
-       ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║      ██╔╝  
-       ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗██╔╝   
-       ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝╚═╝    
-                                                                            "
+
+███╗   ███╗███████╗███████╗████████╗███████╗                            
+████╗ ████║██╔════╝██╔════╝╚══██╔══╝██╔════╝                            
+██╔████╔██║█████╗  █████╗     ██║   ███████╗                            
+██║╚██╔╝██║██╔══╝  ██╔══╝     ██║   ╚════██║                            
+██║ ╚═╝ ██║███████╗███████╗   ██║   ███████║                            
+╚═╝     ╚═╝╚══════╝╚══════╝   ╚═╝   ╚══════╝                            
+
+████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗         ██╗
+╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║        ██╔╝
+   ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║       ██╔╝ 
+   ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║      ██╔╝  
+   ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗██╔╝   
+   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝╚═╝    
+"
 echo 
 echo "Run checkhealth inside of neovim to ensure plugins installed correctly."
 echo
