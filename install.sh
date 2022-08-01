@@ -11,7 +11,6 @@ while true; do
     case $yn in 
         [yY] ) echo making backups...;
             mv -f ~/.zshrc ~/.zshrc.bak;
-            mv -f ~/.config/nvim/init.vim ~/.config/nvim/init.vim.bak;
             mv -f ~/.tmux.conf ~/.tmux.conf.bak;
             mv -f ~/.p10k.zsh ~/.p10k.zsh.bak;
             break;;
@@ -22,10 +21,13 @@ while true; do
 done
 mkdir -p ~/.config/nvim
 cp -f ./zsh/zshrc ~/.zshrc
-cp -f ./nvim/init.lua ~/.config/nvim/init.lua
+if [ -f ~/.config/nvim/init.vim ] ; then
+    echo "An init.vim was found. Moving it to init.vim.bak"
+    mv  ~/.config/nvim/init.vim  ~/.config/nvim/init.vim.bak
+fi
 cp -f ./tmux/tmux.conf ~/.tmux.conf
 cp -f ./tmux/p10k.zsh ~/.p10k.zsh
-cp -p -f -r ./nvim/lua ~/.config/nvim/lua
+cp -r -f ./nvim/ ~/.config/nvim/
 
 user=$( whoami )
 if [[ $user == "root" ]] ; then
