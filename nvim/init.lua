@@ -1,4 +1,3 @@
-
 vim.g.python_host_prog = os.getenv('NEOVIM_PY_PATH')
 --Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
 if os.getenv('TMUX') then
@@ -10,7 +9,6 @@ end
 if vim.fn.has('termguicolors') then
     vim.opt.termguicolors = true
 end
-
 require('packer').startup(function()
     use 'wbthomason/packer.nvim' 
     use 'dracula/vim' 
@@ -19,7 +17,7 @@ require('packer').startup(function()
     use { 'nvim-telescope/telescope-fzf-native.nvim', cmd="make"}
     use { 'junegunn/fzf', run = './install --bin'}
     use { 'kyazdani42/nvim-web-devicons' }
-    use { 'romgrk/barbar.nvim' }
+    use { 'romgrk/barbar.nvim', disable = true }
     use { 'scrooloose/nerdtree' }
     use { 'vimwiki/vimwiki' }
     use { 'numirias/semshi', run = ":UpdateRemotePlugins" }
@@ -49,7 +47,7 @@ require('packer').startup(function()
 end)
 
 --ultisnips expansion with enter
-vim.g.UltiSnipsExpandTrigger='<CR>'
+--vim.g.UltiSnipsExpandTrigger='<CR>'
 
 vim.api.nvim_create_autocmd("InsertEnter", {
     command = "call deoplete#enable()"
@@ -60,6 +58,10 @@ require 'keymap'
 require 'opts'
 
 vim.g.closetag_filenames='*.html,*.xhtml,*.phtml,*.vue,*.tsx'
+
+require'lspconfig'.pyright.setup{}
+require'lspconfig'.bashls.setup{}
+
 -- TODO convert to lua
 local cmd = vim.api.nvim_command
 cmd("colorscheme dracula")

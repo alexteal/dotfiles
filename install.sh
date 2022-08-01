@@ -3,7 +3,6 @@
 #TODO
 # Use anything other than eval 
 # It's unsafe when using user input, but it ~should~ be fine in this specific case
-
 while true; do
 
     read -p "Do you want to make backups of your current dotfiles? (y/n) " yn
