@@ -209,6 +209,12 @@ if [[ $? != 0 ]]; then
     pip install neovim
 fi
 
+pip show  jedi &> /dev/null
+if [[ $? != 0 ]]; then
+    echo "neovim python package not found, installing..."
+    pip install jedi
+fi
+
 which node &> /dev/null
 if [[ $? != 0 ]]; then
     "node not found, installing..."
