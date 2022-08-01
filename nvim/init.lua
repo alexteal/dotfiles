@@ -13,8 +13,7 @@ end
 
 require('packer').startup(function()
     use 'wbthomason/packer.nvim' 
-    use 'Mofiqul/dracula.nvim'
-
+    use 'dracula/vim' 
     use { 'nvim-lua/plenary.nvim' }
     use { 'nvim-telescope/telescope.nvim' }
     use { 'nvim-telescope/telescope-fzf-native.nvim', cmd="make"}
