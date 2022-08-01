@@ -1,5 +1,3 @@
-require 'keymap'
-require 'opts'
 
 vim.g.python_host_prog = os.getenv('NEOVIM_PY_PATH')
 --Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
@@ -57,6 +55,10 @@ vim.g.UltiSnipsExpandTrigger='<CR>'
 vim.api.nvim_create_autocmd("InsertEnter", {
     command = "call deoplete#enable()"
 })
+
+-- these prevent first time install
+require 'keymap'
+require 'opts'
 
 vim.g.closetag_filenames='*.html,*.xhtml,*.phtml,*.vue,*.tsx'
 -- TODO convert to lua

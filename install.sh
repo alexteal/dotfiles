@@ -27,7 +27,7 @@ if [ -f ~/.config/nvim/init.vim ] ; then
 fi
 cp -f ./tmux/tmux.conf ~/.tmux.conf
 cp -f ./tmux/p10k.zsh ~/.p10k.zsh
-cp -r -f ./nvim/ ~/.config/nvim/
+cp -r -f ./nvim/* ~/.config/nvim/
 
 user=$( whoami )
 if [[ $user == "root" ]] ; then
