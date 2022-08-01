@@ -16,9 +16,10 @@ require('packer').startup(function()
     use { 'nvim-telescope/telescope.nvim' }
     use { 'nvim-telescope/telescope-fzf-native.nvim', cmd="make"}
     use { 'junegunn/fzf', run = './install --bin'}
-    use { 'kyazdani42/nvim-web-devicons' }
+    use { 'kyazdani42/nvim-web-devicons', disable = true }
+    use { 'ryanoasis/vim-devicons' }
     use { 'romgrk/barbar.nvim', disable = true }
-    use { 'scrooloose/nerdtree' }
+    use { 'scrooloose/nerdtree' , requires = {'ryanoasis/vim-devicons', 'Xuyuanp/nerdtree-git-plugin'} }
     use { 'vimwiki/vimwiki' }
     use { 'numirias/semshi', run = ":UpdateRemotePlugins" }
     -- snippets
@@ -26,6 +27,7 @@ require('packer').startup(function()
     -- deoplete completions
     use { 'Shougo/deoplete.nvim' }
     use { 'zchee/deoplete-jedi' }
+    use { 'dense-analysis/ale' }
     use { 'prabirshrestha/vim-lsp' }
     use { 'lighttiger2505/deoplete-vim-lsp' }
     use { 'alvan/vim-closetag' }
@@ -37,8 +39,8 @@ require('packer').startup(function()
     use { 'MunifTanjim/eslint.nvim' }
     -- Prettier Async, also for webdev
     use { 'prettier/vim-prettier', 
-        run = 'yarn install --frozen-lockfile --production',
-        ft={'javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html', 'tsx', 'jsx', 'typescriptreact'}}
+    run = 'yarn install --frozen-lockfile --production',
+    ft={'javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html', 'tsx', 'jsx', 'typescriptreact'}}
     use { 'tjdevries/nlua.nvim' }
     use { 'euclidianAce/BetterLua.vim' }
 
@@ -73,7 +75,7 @@ autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | se
 -- may not need this command, consider removing
 cmd[[
 command! -bang -nargs=* PRg
-  \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'dir': expand('%:p:h')}, <bang>0) ]]
+\ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'dir': expand('%:p:h')}, <bang>0) ]]
 
 cmd[[
 let g:prettier#quickfix_enabled = 0
@@ -82,3 +84,12 @@ autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.gra
 ]]
 
 cmd('hi StatusLine guibg=#424450')
+cmd('highlight ColorColumn guibg=#424450')
+cmd[[
+" Load all plugins now.
+" Plugins need to be added to runtimepath before helptags can be generated.
+packloadall
+" Load all of the helptags now, after plugins have been loaded.
+" All messages and errors will be ignored.
+silent! helptags ALL
+]]
