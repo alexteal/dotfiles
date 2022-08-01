@@ -1,9 +1,10 @@
 SHELL=/bin/zsh
 update: 
-	cp ~/.config/nvim/init.vim nvim/init.vim
+	cp ~/.config/nvim/init.lua nvim/init.lua
 	cp ~/.tmux.conf tmux/tmux.conf
 	cp ~/.zshrc zsh/zshrc
 	cp ~/.p10k.zsh tmux/p10k.zsh
+	cp -r ~/.config/nvim/lua nvim/lua
 install:
 	sh install.sh
 test:

@@ -22,9 +22,10 @@ while true; do
 done
 mkdir -p ~/.config/nvim
 cp -f ./zsh/zshrc ~/.zshrc
-cp -f ./nvim/init.vim ~/.config/nvim/init.vim
+cp -f ./nvim/init.lua ~/.config/nvim/init.lua
 cp -f ./tmux/tmux.conf ~/.tmux.conf
 cp -f ./tmux/p10k.zsh ~/.p10k.zsh
+cp -p -f -r ./nvim/lua ~/.config/nvim/lua
 
 user=$( whoami )
 if [[ $user == "root" ]] ; then
@@ -188,6 +189,7 @@ if [[ $? != 0 ]] ; then
     esac
 fi
 
+
 if [ ! -d $HOME/.config/nvim/venv ] ; then
     echo "Python3 venv for neovim not found. Generating..."
     python3 -m venv ~/.config/nvim/venv
@@ -195,6 +197,38 @@ if [ ! -d $HOME/.config/nvim/venv ] ; then
 else
     source ~/.config/nvim/venv/bin/activate
 fi
+
+if [ -d $HOME/.path.zsh ] ; then 
+    which sed &> /dev/null
+    nvim_py_venv_path=$HOME/.config/nvim/venv/bin/python
+    if [[ $? != 0 ]]; then
+        "gnu-sed not found, installing..."
+    fi
+    case $OS in 
+        *"ebian"*)
+            eval "$install_prefix sed"
+            sed -i "s/NVIM_PY_PATH.*/NVIM_PY_PATH=$nvim_py_venv_path/g" ~/.alias.zsh
+            ;;
+        *"buntu"*)
+            eval "$install_prefix sed"
+            sed -i "s/NVIM_PY_PATH.*/NVIM_PY_PATH=$nvim_py_venv_path/g" ~/.alias.zsh
+            ;;
+        *"arwin"*)
+            eval "$install_prefix gnu-sed"
+            gsed -i "s/NVIM_PY_PATH.*/NVIM_PY_PATH=$nvim_py_venv_path/g" ~/.alias.zsh
+            ;;
+        *"edora"*)
+            eval "$install_prefix sed"
+            sed -i "s/NVIM_PY_PATH.*/NVIM_PY_PATH=$nvim_py_venv_path/g" ~/.alias.zsh
+            ;;
+        *) 
+            ;;
+    esac
+
+fi
+
+
+
 
 if [ ! -d $HOME/.local/share/nvim/site/pack/packer/start ] ; then
     echo "packer.nvim not found, installing..."
@@ -220,6 +254,8 @@ if [[ $? != 0 ]]; then
     "node not found, installing..."
     eval "$install_prefix node"
 fi
+
+
 
 # install yarn/ neovim for node
 # Install neovim using npm, just for compatiblity
