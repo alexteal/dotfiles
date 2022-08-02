@@ -11,17 +11,19 @@ if vim.fn.has('termguicolors') then
 end
 require('packer').startup(function()
     use 'wbthomason/packer.nvim' 
-    use 'dracula/vim' 
+    -- colorschemes
+    use { 'dracula/vim' }
+    use { 'morhetz/gruvbox' }
+    use { 'NLKNguyen/papercolor-theme' }
+    -- IDE style things
     use { 'nvim-lua/plenary.nvim' }
     use { 'nvim-telescope/telescope.nvim' }
     use { 'nvim-telescope/telescope-fzf-native.nvim', cmd="make"}
     use { 'junegunn/fzf', run = './install --bin'}
-    use { 'kyazdani42/nvim-web-devicons', disable = true }
-    use { 'ryanoasis/vim-devicons' }
+    use { 'kyazdani42/nvim-web-devicons', disable = false }
+    use { 'kyazdani42/nvim-tree.lua', requires = { 'kyazdani42/nvim-web-devicons' } }
     use { 'romgrk/barbar.nvim', disable = true }
-    use { 'scrooloose/nerdtree' , requires = {'ryanoasis/vim-devicons', 'Xuyuanp/nerdtree-git-plugin'} }
-    use { 'vimwiki/vimwiki' }
-    use { 'numirias/semshi', run = ":UpdateRemotePlugins" }
+    use { 'scrooloose/nerdtree' , requires = {'ryanoasis/vim-devicons', 'Xuyuanp/nerdtree-git-plugin'}, disable = true }
     -- snippets
     use { 'honza/vim-snippets', requires = 'SirVer/ultisnips' } 
     -- deoplete completions
@@ -43,9 +45,12 @@ require('packer').startup(function()
     ft={'javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html', 'tsx', 'jsx', 'typescriptreact'}}
     use { 'tjdevries/nlua.nvim' }
     use { 'euclidianAce/BetterLua.vim' }
-
-    -- treesitter
+    -- syntax highlighting
     use { 'nvim-treesitter/nvim-treesitter', run = ":TSUpdate" }
+    use { 'numirias/semshi', run = ":UpdateRemotePlugins" }
+    -- random tools
+    use { 'vimwiki/vimwiki' }
+    use { 'ryanoasis/vim-devicons', disable = true }
 end)
 
 --ultisnips expansion with enter
@@ -59,15 +64,22 @@ vim.api.nvim_create_autocmd("InsertEnter", {
 require 'keymap'
 require 'opts'
 
+
 vim.g.closetag_filenames='*.html,*.xhtml,*.phtml,*.vue,*.tsx'
+
+require'nvim-tree-config'
 
 require'lspconfig'.pyright.setup{}
 require'lspconfig'.bashls.setup{}
-
+require'nvim-web-devicons'.setup{}
 -- TODO convert to lua
 local cmd = vim.api.nvim_command
-cmd("colorscheme dracula")
+cmd("colorscheme PaperColor")
+-- close nvim-tree
+cmd("autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif")
+--close telescope 
 cmd("autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif")
+-- close nerdtree automatically
 cmd("autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif")
 cmd[[
 autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set rnu   | endif 
@@ -82,9 +94,9 @@ let g:prettier#quickfix_enabled = 0
 let g:prettier#exec_cmd_async = 1
 autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.svelte,*.yaml,*.html PrettierAsync
 ]]
-
-cmd('hi StatusLine guibg=#424450')
-cmd('highlight ColorColumn guibg=#424450')
+-- for dracula theme
+--cmd('hi StatusLine guibg=#424450')
+--cmd('highlight ColorColumn guibg=#424450')
 cmd[[
 " Load all plugins now.
 " Plugins need to be added to runtimepath before helptags can be generated.

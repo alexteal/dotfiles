@@ -20,7 +20,7 @@ nest.applyKeymaps {
             }},
             {'wp', '<cmd>Files ~/vimwiki/<CR>' },
             {'sf', '<cmd>Telescope live_grep<CR>' },
-            {'t', '<CMD>NERDTreeToggle<CR>'},
+            {'t', '<CMD>NvimTreeToggle<CR>'},
             {'da', 'i<return><esc><up><cmd>put =strftime(\'%c\')<CR>i<backspace>==<Esc><S-a>==<esc><S-a><return>'},
             {'js', '<cmd>JsDoc<CR>'},
         }},
