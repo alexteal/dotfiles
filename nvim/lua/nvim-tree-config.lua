@@ -18,4 +18,10 @@ require("nvim-tree").setup({
   filters = {
     dotfiles = true,
   },
+   update_focused_file = {
+    enable = true,
+    update_cwd = true,
+  },
 })
+
+vim.g.nvim_tree_respect_buf_cwd = 1

@@ -15,6 +15,8 @@ require('packer').startup(function()
     use { 'dracula/vim' }
     use { 'morhetz/gruvbox' }
     use { 'NLKNguyen/papercolor-theme' }
+    -- transparent bg
+    use { 'xiyaowong/nvim-transparent' }
     -- IDE style things
     use { 'nvim-lua/plenary.nvim' }
     use { 'nvim-telescope/telescope.nvim' }
@@ -27,22 +29,22 @@ require('packer').startup(function()
     -- snippets
     use { 'honza/vim-snippets', requires = 'SirVer/ultisnips' } 
     -- deoplete completions
-    use { 'Shougo/deoplete.nvim' }
-    use { 'zchee/deoplete-jedi' }
-    use { 'dense-analysis/ale' }
-    use { 'prabirshrestha/vim-lsp' }
-    use { 'lighttiger2505/deoplete-vim-lsp' }
+    use { 'Shougo/deoplete.nvim'}
+    use { 'zchee/deoplete-jedi'}
+    use { 'dense-analysis/ale' , disable = false}
+    use { 'prabirshrestha/vim-lsp' , disable = false }
+    use { 'lighttiger2505/deoplete-vim-lsp' , disable = false }
     use { 'alvan/vim-closetag' }
     use { 'LionC/nest.nvim' }
     use { 'rafcamlet/nvim-luapad', requires = "antoinemadec/FixCursorHold.nvim" }
     -- ESLinter for webdev
-    use { 'neovim/nvim-lspconfig' }
-    use { 'jose-elias-alvarez/null-ls.nvim' }
-    use { 'MunifTanjim/eslint.nvim' }
+    use { 'neovim/nvim-lspconfig', disable = false}
+    use { 'jose-elias-alvarez/null-ls.nvim', disable = false }
+    use { 'MunifTanjim/eslint.nvim' , disable =false  }
     -- Prettier Async, also for webdev
     use { 'prettier/vim-prettier', 
     run = 'yarn install --frozen-lockfile --production',
-    ft={'javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html', 'tsx', 'jsx', 'typescriptreact'}}
+    ft={'javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html', 'tsx', 'jsx', 'typescriptreact'}, disable = false }
     use { 'tjdevries/nlua.nvim' }
     use { 'euclidianAce/BetterLua.vim' }
     -- syntax highlighting
@@ -67,11 +69,14 @@ require 'opts'
 
 vim.g.closetag_filenames='*.html,*.xhtml,*.phtml,*.vue,*.tsx'
 
-require'nvim-tree-config'
+require 'nvim-tree-config'
+require 'transparent-bg'
 
 require'lspconfig'.pyright.setup{}
 require'lspconfig'.bashls.setup{}
 require'nvim-web-devicons'.setup{}
+require'lspconfig'.tsserver.setup{}
+
 -- TODO convert to lua
 local cmd = vim.api.nvim_command
 cmd("colorscheme PaperColor")

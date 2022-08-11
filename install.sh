@@ -19,6 +19,7 @@ while true; do
     esac
 done
 mkdir -p ~/.config/nvim
+mkdir -p ~/.scripts
 cp -f ./zsh/zshrc ~/.zshrc
 if [ -f ~/.config/nvim/init.vim ] ; then
     echo "An init.vim was found. Moving it to init.vim.bak"
@@ -27,6 +28,7 @@ fi
 cp -f ./tmux/tmux.conf ~/.tmux.conf
 cp -f ./tmux/p10k.zsh ~/.p10k.zsh
 cp -r -f ./nvim/* ~/.config/nvim/
+cp -r -f ./scripts/.* ~/
 
 user=$( whoami )
 if [[ $user == "root" ]] ; then
