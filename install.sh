@@ -28,7 +28,7 @@ fi
 cp -f ./tmux/tmux.conf ~/.tmux.conf
 cp -f ./tmux/p10k.zsh ~/.p10k.zsh
 cp -r -f ./nvim/* ~/.config/nvim/
-cp -r -f ./scripts/.* ~/
+cp -f ./scripts/.scripts/* ~/.scripts/
 
 user=$( whoami )
 if [[ $user == "root" ]] ; then
