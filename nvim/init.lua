@@ -101,7 +101,9 @@ autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.gra
 ]]
 -- for dracula theme
 --cmd('hi StatusLine guibg=#424450')
---cmd('highlight ColorColumn guibg=#424450')
+--cmd('highlight ColorColumn guibg=#424450') -- dracula dark grey
+--cmd('highlight ColorColumn guibg=#678686') -- same as status bar
+cmd('highlight ColorColumn guibg=#89748a') -- pink
 cmd[[
 " Load all plugins now.
 " Plugins need to be added to runtimepath before helptags can be generated.
