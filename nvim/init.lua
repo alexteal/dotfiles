@@ -53,6 +53,7 @@ require('packer').startup(function()
     -- random tools
     use { 'vimwiki/vimwiki' }
     use { 'ryanoasis/vim-devicons', disable = true }
+    use { 'lambdalisue/suda.vim' } -- write to sudo with SudaWrite
 end)
 
 --ultisnips expansion with enter
