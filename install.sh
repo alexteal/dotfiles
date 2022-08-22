@@ -76,6 +76,10 @@ case $OS in
     *"edora"*)
         fedora
         ;;
+    *"Red Hat"*) # testing this for now, not sure if it's a good solution.                                    │
+                   # need better portable os type solution
+        fedora
+        ;;
     *) 
         debian_ubuntu
         ;;
