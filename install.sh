@@ -262,6 +262,11 @@ if [[ $? != 0 ]]; then
     eval "$install_prefix node"
 fi
 
+which npm &> /dev/null
+if [[ $? != 0 ]]; then
+    "npm not found, installing..."
+    eval "$install_prefix npm"
+fi
 
 
 # install yarn/ neovim for node
@@ -271,12 +276,12 @@ if [[ $? != 0 ]]; then
     which yarn &> /dev/null
     if [[ $? != 0 ]]; then
         "yarn not found, installing..."
-        npm install --location=global yarn
+        $sudo npm install -g yarn
     fi
     yarn global list neovim | grep "neovim" &> /dev/null
     if [[ $? != 0 ]]; then
         echo "installing neovim module with npm..."
-        npm install --location=global neovim
+        $sudo npm install -g neovim
     fi
 fi
 
