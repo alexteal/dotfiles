@@ -50,6 +50,7 @@ require('packer').startup(function()
     -- syntax highlighting
     use { 'nvim-treesitter/nvim-treesitter', run = ":TSUpdate" }
     use { 'numirias/semshi', run = ":UpdateRemotePlugins" }
+    use { 'lervag/vimtex' }
     -- random tools
     use { 'vimwiki/vimwiki' }
     use { 'ryanoasis/vim-devicons', disable = true }
@@ -81,6 +82,8 @@ require'lspconfig'.tsserver.setup{}
 -- TODO convert to lua
 local cmd = vim.api.nvim_command
 cmd("colorscheme PaperColor")
+-- spellcheck when in latex or in vimwiki
+cmd("autocmd BufEnter,WinEnter,FocusGained *.wiki,*.tex set spelllang=en_gb spell")
 -- close nvim-tree
 cmd("autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif")
 --close telescope 
