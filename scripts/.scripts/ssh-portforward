@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+# Usage
+#================================================================
+# HEADER
+#================================================================
+#% SYNOPSIS
+#+    ${SCRIPT_NAME} | port | host | [-v] | [ssh compatible opts]
+#%
+#% DESCRIPTION
+#%    This is a script template
+#%    to start any good shell script.
+#%
+#% OPTIONS
+#%    -o [file], --output=[file]    Set log file (default=/dev/null)
+#%                                  use DEFAULT keyword to autoname file
+#%                                  The default value is /dev/null.
+#%    -t, --timelog                 Add timestamp to log ("+%y/%m/%d@%H:%M:%S")
+#%    -x, --ignorelock              Ignore if lock file exists
+#%    -h, --help                    Print this help
+#%    -v, --version                 Print script information
+#%
+#% EXAMPLES
+#%    ${SCRIPT_NAME} 25564 192.168.0.1
+#%
+#================================================================
+#- IMPLEMENTATION
+#-    version         ${SCRIPT_NAME}  0.0.1
+#-    author          Alex Teal
+#-    copyright       (none)
+#-    license         (none)
+#-    script_id       1
+#-
+#================================================================
+#  HISTORY
+#     2022/08/27 : alexteal : Script creation
+# 
+#================================================================
+#  DEBUG OPTION
+#    set -n  # Uncomment to check your syntax, without execution.
+#    set -x  # Uncomment to debug this shell script
+#
+#================================================================
+# END_OF_HEADER
+#================================================================
+  #== needed variables ==#
+SCRIPT_HEADSIZE=$(head -200 ${0} |grep -n "^# END_OF_HEADER" | cut -f1 -d:)
+SCRIPT_NAME="$(basename ${0})"
+
+  #== usage functions ==#
+usage() { printf "Usage: "; head -${SCRIPT_HEADSIZE:-99} ${0} | grep -e "^#+" | sed -e "s/^#+[ ]*//g" -e "s/\${SCRIPT_NAME}/${SCRIPT_NAME}/g" ; }
+usagefull() { head -${SCRIPT_HEADSIZE:-99} ${0} | grep -e "^#[%+-]" | sed -e "s/^#[%+-]//g" -e "s/\${SCRIPT_NAME}/${SCRIPT_NAME}/g" ; }
+scriptinfo() { head -${SCRIPT_HEADSIZE:-99} ${0} | grep -e "^#-" | sed -e "s/^#-//g" -e "s/\${SCRIPT_NAME}/${SCRIPT_NAME}/g"; }
+
+case $1 in
+    h )
+        usagefull
+        ;;
+    ''|*[!0-9]*) 
+        echo "Not a valid port / number" 
+        usage
+        exit 1 
+        ;;
+
+    *) 
+        ssh -o "ServerAliveInterval 10" -o "ServerAliveCountMax 3" -o "ExitOnForwardFailure yes" -R $1:localhost:$1 -N $2 $3 $4 $5 $6 $7 $8
+        ;;
+esac
