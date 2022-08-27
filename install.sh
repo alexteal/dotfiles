@@ -9,26 +9,42 @@ while true; do
 
     case $yn in 
         [yY] ) echo making backups...;
-            mv -f ~/.zshrc ~/.zshrc.bak;
-            mv -f ~/.tmux.conf ~/.tmux.conf.bak;
-            mv -f ~/.p10k.zsh ~/.p10k.zsh.bak;
+            mv -f $HOME/.zshrc $HOME/.zshrc.bak;
+            mv -f $HOME/.tmux.conf $HOME/.tmux.conf.bak;
+            mv -f $HOME/.p10k.zsh $HOME/.p10k.zsh.bak;
             break;;
         [nN] ) echo Proceeding without backups.;
             break;;
         * ) echo invalid response;;
     esac
 done
-mkdir -p ~/.config/nvim
-mkdir -p ~/.scripts
-cp -f ./zsh/zshrc ~/.zshrc
-if [ -f ~/.config/nvim/init.vim ] ; then
+mkdir -p $HOME/.config/nvim
+mkdir -p $HOME/.scripts
+cp -f ./zsh/zshrc $HOME/.zshrc
+if [ -f $HOME/.config/nvim/init.vim ] ; then
     echo "An init.vim was found. Moving it to init.vim.bak"
-    mv  ~/.config/nvim/init.vim  ~/.config/nvim/init.vim.bak
+    mv  $HOME/.config/nvim/init.vim  $HOME/.config/nvim/init.vim.bak
 fi
-cp -f ./tmux/tmux.conf ~/.tmux.conf
-cp -f ./tmux/p10k.zsh ~/.p10k.zsh
-cp -r -f ./nvim/* ~/.config/nvim/
-cp -f ./scripts/.scripts/* ~/.scripts/
+
+
+#ensure scripts are up to date
+for filename in ./scripts/.scripts/*
+do
+    [ -e "$filename" ] || continue
+    file1=$(cksum $filename)
+    file2=$(cksum $HOME${filename:9})
+    file1=${file1:0:10}
+    file2=${file2:0:10}
+    if [ "$file1" != "$file2" ]; then
+        relink=1
+    fi
+done
+
+cp -f ./tmux/tmux.conf $HOME/.tmux.conf
+cp -f ./tmux/p10k.zsh $HOME/.p10k.zsh
+cp -r -f ./nvim/* $HOME/.config/nvim/
+cp -f ./scripts/.scripts/* $HOME/.scripts/
+
 
 user=$( whoami )
 if [[ $user == "root" ]] ; then
@@ -85,6 +101,17 @@ case $OS in
         ;;
 esac
 
+#relink improper files
+if [[ "$relink" == 1 ]]; then
+    echo "Certain custom scripts have changed and require re-linking"
+    for filename in ./scripts/.scripts/*
+    do
+        [ -e "$filename" ] || continue
+        $sudo ln -sf $HOME${filename:19} /usr/local/bin/${filename:19}
+    done
+fi
+
+
 which zsh &> /dev/null
 if [[ $? != 0 ]] ; then
     echo "zsh not found, installing..."
@@ -101,7 +128,7 @@ which tmux &> /dev/null
 if [[ $? != 0 ]] ; then
     echo "tmux not found, installing..."
     eval "$install_prefix tmux"
-    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+    git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
 fi
 
 which curl &> /dev/null
@@ -118,7 +145,7 @@ if [[ $? != 0 ]] ; then
         https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 fi
 
-if [ ! -f ~/.oh-my-zsh/oh-my-zsh.sh  ] ; then
+if [ ! -f $HOME/.oh-my-zsh/oh-my-zsh.sh  ] ; then
     echo "oh-my-zsh not found, installing..."
     sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 fi
@@ -199,10 +226,10 @@ fi
 
 if [ ! -d $HOME/.config/nvim/venv ] ; then
     echo "Python3 venv for neovim not found. Generating..."
-    python3 -m venv ~/.config/nvim/venv
-    source ~/.config/nvim/venv/bin/activate
+    python3 -m venv $HOME/.config/nvim/venv
+    source $HOME/.config/nvim/venv/bin/activate
 else
-    source ~/.config/nvim/venv/bin/activate
+    source $HOME/.config/nvim/venv/bin/activate
 fi
 
 if [ -d $HOME/.path.zsh ] ; then 
@@ -214,19 +241,19 @@ if [ -d $HOME/.path.zsh ] ; then
     case $OS in 
         *"ebian"*)
             eval "$install_prefix sed"
-            sed -i "s/NVIM_PY_PATH.*/NVIM_PY_PATH=$nvim_py_venv_path/g" ~/.alias.zsh
+            sed -i "s/NVIM_PY_PATH.*/NVIM_PY_PATH=$nvim_py_venv_path/g" $HOME/.alias.zsh
             ;;
         *"buntu"*)
             eval "$install_prefix sed"
-            sed -i "s/NVIM_PY_PATH.*/NVIM_PY_PATH=$nvim_py_venv_path/g" ~/.alias.zsh
+            sed -i "s/NVIM_PY_PATH.*/NVIM_PY_PATH=$nvim_py_venv_path/g" $HOME/.alias.zsh
             ;;
         *"arwin"*)
             eval "$install_prefix gnu-sed"
-            gsed -i "s/NVIM_PY_PATH.*/NVIM_PY_PATH=$nvim_py_venv_path/g" ~/.alias.zsh
+            gsed -i "s/NVIM_PY_PATH.*/NVIM_PY_PATH=$nvim_py_venv_path/g" $HOME/.alias.zsh
             ;;
         *"edora"*)
             eval "$install_prefix sed"
-            sed -i "s/NVIM_PY_PATH.*/NVIM_PY_PATH=$nvim_py_venv_path/g" ~/.alias.zsh
+            sed -i "s/NVIM_PY_PATH.*/NVIM_PY_PATH=$nvim_py_venv_path/g" $HOME/.alias.zsh
             ;;
         *) 
             ;;
@@ -240,7 +267,7 @@ fi
 if [ ! -d $HOME/.local/share/nvim/site/pack/packer/start ] ; then
     echo "packer.nvim not found, installing..."
 git clone --depth 1 https://github.com/wbthomason/packer.nvim\
- ~/.local/share/nvim/site/pack/packer/start/packer.nvim
+ $HOME/.local/share/nvim/site/pack/packer/start/packer.nvim
 fi
 
 
@@ -267,7 +294,6 @@ if [[ $? != 0 ]]; then
     "npm not found, installing..."
     eval "$install_prefix npm"
 fi
-
 
 # install yarn/ neovim for node
 # Install neovim using npm, just for compatiblity
@@ -324,11 +350,11 @@ fi
 
 if [[ ! $PATH == *"$HOME/bin"* ]]; then
     if [ -d $HOME/bin ]; then
-        echo "$HOME/bin not found in path, adding to ~/.path.zsh"
+        echo "$HOME/bin not found in path, adding to $HOME/.path.zsh"
         echo 'if [[ ! $PATH == *"$HOME/bin"* ]]; then
         export PATH=$PATH:$HOME/bin
     fi
-    ' >> ~/.path.zsh
+    ' >> $HOME/.path.zsh
     fi
 fi
 
