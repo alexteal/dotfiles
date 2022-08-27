@@ -83,7 +83,7 @@ require'lspconfig'.tsserver.setup{}
 local cmd = vim.api.nvim_command
 cmd("colorscheme PaperColor")
 -- spellcheck when in latex or in vimwiki
-cmd("autocmd BufEnter,WinEnter,FocusGained *.wiki,*.tex set spelllang=en_gb spell")
+cmd("autocmd BufEnter,WinEnter,FocusGained *.tex set spelllang=en_gb spell")
 -- close nvim-tree
 cmd("autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif")
 --close telescope 
