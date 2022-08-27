@@ -31,7 +31,7 @@ fi
 for filename in ./scripts/.scripts/*
 do
     [ -e "$filename" ] || continue
-    file1=$(cksum $filename)
+    file1=$(cksum $filename &> /dev/null)
     file2=$(cksum $HOME${filename:9})
     file1=${file1:0:10}
     file2=${file2:0:10}
