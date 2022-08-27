@@ -129,4 +129,8 @@ alias lg="lazygit"
 # Use ls-colors for path completions
 zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
 
+# Add custom scripts to path
+
+export PATH=$PATH:~/.scripts
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
