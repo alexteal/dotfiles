@@ -55,6 +55,7 @@ require('packer').startup(function()
     use { 'vimwiki/vimwiki' }
     use { 'ryanoasis/vim-devicons', disable = true }
     use { 'lambdalisue/suda.vim' } -- write to sudo with SudaWrite
+    use { 'jamessan/vim-gnupg' }
 end)
 
 --ultisnips expansion with enter
