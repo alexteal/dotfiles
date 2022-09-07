@@ -1,0 +1,23 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+    echo "Usage is "
+    echo "rm2web REMARKABLEHOSTNAME"
+    exit 1
+fi
+
+# Assign IP address on the Remarkable to make xochitl believe
+# the USB cable is attached, such that you can enable the server.
+ssh $1 /sbin/ip addr add 10.11.99.1/32 dev usb0
+
+# Assign same IP locally because the web server wants the proper
+# Host header, so we cannot just use a port forwarding.
+#sudo ip addr add 10.11.99.1/32 dev lo
+
+# Open browser before because ssh will pause execution
+# For some reason only apple Developers would know, this doesn't work in tmux'
+# use a new tty for this line to work
+open http://127.0.0.1:8080
+
+# SSH port forwarding (assumes you have ControlMaster enabled)
+ssh -L 8080:10.11.99.1:80 $1 -vvv -N
