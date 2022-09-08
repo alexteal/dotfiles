@@ -1,11 +1,9 @@
 #!/bin/bash
-wmst="/Users/alexteal/Documents/school/womens_studies/"
-ds="/Users/alexteal/Documents/school/datastructures_and_algorithms/"
-theory="/Users/alexteal/Documents/school/intro_to_theory/"
-stats="/Users/alexteal/Documents/school/stats/"
-echo $0 script
-echo $1 ds
-echo $2 file
+
+wmst="~/projects/school/womens_studies/"
+ds="~/projects/school/datastructures_and_algorithms/"
+theory="~/projects/school/intro_to_theory/"
+stats="~/projects/school/stats/"
 if [ "$2" == "" ]; then
     echo "No file provided"
     exit 1
