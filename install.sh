@@ -111,6 +111,15 @@ if [[ "$relink" == 1 ]]; then
     done
 fi
 
+#relink to ~/bin too
+mkdir -p $HOME/bin
+for filename in $HOME/.scripts/*
+do
+    [ -e "$filename" ] || continue
+    ln -sf $filename $HOME/bin/${filename:25}
+done
+
+
 
 which zsh &> /dev/null
 if [[ $? != 0 ]] ; then
