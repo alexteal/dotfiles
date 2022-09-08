@@ -17,7 +17,7 @@ ssh $1 /sbin/ip addr add 10.11.99.1/32 dev usb0
 # Open browser before because ssh will pause execution
 # For some reason only apple Developers would know, this doesn't work in tmux'
 # use a new tty for this line to work
-open http://127.0.0.1:8080
+open http://127.0.0.1:8689
 
 # SSH port forwarding (assumes you have ControlMaster enabled)
-ssh -L 8080:10.11.99.1:80 $1 -vvv -N
+ssh -L 8689:10.11.99.1:80 $1 -vvv -N
