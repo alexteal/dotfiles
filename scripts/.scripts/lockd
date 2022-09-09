@@ -1,6 +1,6 @@
 #!/bin/bash
 slug=$(date +%s)
-count=$(ls $HOME/vimwiki/diary | wc -l)
+count=$(ls $HOME/vimwiki/diary | wc -l| xargs)
 if [[ "$PWD" == "$HOME/vimwiki/diary" ]]; then
     cd $HOME
 fi
@@ -13,7 +13,6 @@ if [[ $count -gt 5 ]]; then
         echo [Locked]
     fi
 else
-    echo "Folder too small, exiting..."
-    echo $count
+    echo "~/vimwiki/diary Folder contains $count items. Are you sure this is right?"
     exit 1
 fi 
