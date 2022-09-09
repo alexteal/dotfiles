@@ -1,5 +1,5 @@
 #!/bin/bash
-gpgtar --decrypt -r diary -C . $HOME/vimwiki/diary.gpg
+gpgtar --decrypt -r diary -C $HOME/vimwiki/ $HOME/vimwiki/diary.gpg
 if [[ "$?" == "1" ]]; then
     exit 1
 fi
