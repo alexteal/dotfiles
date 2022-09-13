@@ -12,10 +12,10 @@ if [ -z "$1" ]; then
     exit 1
 fi
 # Incase something went wrong, go ahead and destroy the interface
-ssh $1 ip addr flush dev usb0
+ssh $1 /sbin/ip addr flush dev usb0
 # Assign IP address on the Remarkable to make xochitl believe
 # the USB cable is attached, such that you can enable the server.
-ssh $1 /sbin/ip addr add 10.11.99.1/32 dev usb0
+ssh $1 /opt/sbin/ip addr add 10.11.99.1/32 dev usb0
 
 # Assign same IP locally because the web server wants the proper
 # Host header, so we cannot just use a port forwarding.
@@ -27,4 +27,4 @@ ssh $1 /sbin/ip addr add 10.11.99.1/32 dev usb0
 open http://127.0.0.1:8689
 
 # SSH port forwarding (assumes you have ControlMaster enabled)
-ssh -L 8689:10.11.99.1:8080 $1 -vvv -N
+ssh -L 8689:10.11.99.1:80 $1 -vvv -N
