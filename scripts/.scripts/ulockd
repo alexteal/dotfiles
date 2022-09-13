@@ -5,5 +5,3 @@ if [[ "$?" == "1" ]]; then
 fi
 slug=$(ls $HOME/vimwiki/ | grep 'diary\d\d\d'| cut -d 'y' -f 2)
 mkdir -p "$HOME/vimwiki/diary"
-mv $HOME/vimwiki/diary$slug/* $HOME/vimwiki/diary/
-rm -rf "$HOME/vimwiki/diary$slug"

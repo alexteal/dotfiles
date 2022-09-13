@@ -1,18 +1,25 @@
 #!/bin/bash
 slug=$(date +%s)
 count=$(ls $HOME/vimwiki/diary | wc -l| xargs)
+
 if [[ "$PWD" == "$HOME/vimwiki/diary" ]]; then
     cd $HOME
 fi
-if [[ $count -gt 5 ]]; then
-    cp -rf $HOME/vimwiki/diary diary$slug
-    gpgtar -o $HOME/vimwiki/diary.gpg --yes -r $USER -e diary$slug
+
+gpgtar -o $HOME/vimwiki/diary$slug.gpg --yes -r $USER -e diary
+bytes_new=$(wc -c $HOME/vimwiki/diary$slug.gpg)
+bytes_old=$(wc -c $HOME/vimwiki/diary.gpg)
+if [[ $count -gt 9 ]]; then
     if [[ "$?" == "0" ]]; then
-        rm -rf diary$slug
+        mv -f diary$slug.gpg diary.gpg
         rm -rf $HOME/vimwiki/diary
         echo [Locked]
     fi
 else
-    echo "~/vimwiki/diary Folder contains $count items. Are you sure this is right?"
+    echo "[Error] Current diary contains $count items, much less than expected."
+    echo "Check directory, trying to force this might cause file loss."
+    echo "[Bytes]"
+    echo "New archive: $bytes_new"
+    echo "Old archive: $bytes_old"
     exit 1
 fi 
