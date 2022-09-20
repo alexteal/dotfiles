@@ -69,7 +69,6 @@ vim.api.nvim_create_autocmd("InsertEnter", {
 require 'keymap'
 require 'opts'
 
-
 vim.g.closetag_filenames='*.html,*.xhtml,*.phtml,*.vue,*.tsx'
 
 require 'nvim-tree-config'

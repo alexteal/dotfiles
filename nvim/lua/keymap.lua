@@ -1,4 +1,5 @@
 local nest = require('nest')
+local shell = require('shell-split')
 nest.applyKeymaps {
     -- Remove silent from ; : mapping, so that : shows up in command mode
     { ';', ':' , options = { silent = false } },
@@ -10,7 +11,7 @@ nest.applyKeymaps {
             -- rebind jumping back to previous buffer
             {'bb', '<c-6>'},
             -- quick open terminal
-            {'sh', '<CMD>belowright 15split term://zsh<CR>' },
+            {'sh', shell.newshell },
             -- quick resource
             {'rr', '<CMD>source $MYVIMRC<CR>' },
             -- quick edit 
