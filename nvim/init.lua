@@ -41,6 +41,13 @@ require('packer').startup(function()
     use { 'neovim/nvim-lspconfig', disable = false}
     use { 'jose-elias-alvarez/null-ls.nvim', disable = false }
     use { 'MunifTanjim/eslint.nvim' , disable =false  }
+    -- Java linting / completion
+    use { 'hrsh7th/nvim-cmp' }
+    use { 'hrsh7th/cmp-nvim-lsp' }
+    use { 'williamboman/nvim-lsp-installer' }
+    use { 'puremourning/vimspector' }
+    use { 'mfussenegger/nvim-jdtls' }
+    use { 'artur-shaik/jc.nvim' }
     -- Prettier Async, also for webdev
     use { 'prettier/vim-prettier', 
     run = 'yarn install --frozen-lockfile --production',
@@ -78,6 +85,7 @@ require'lspconfig'.pyright.setup{}
 require'lspconfig'.bashls.setup{}
 require'nvim-web-devicons'.setup{}
 require'lspconfig'.tsserver.setup{}
+require('jc').setup{}
 
 -- TODO convert to lua
 local cmd = vim.api.nvim_command
