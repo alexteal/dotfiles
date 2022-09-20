@@ -2,16 +2,14 @@
 slug=$(date +%s)
 count=$(ls $HOME/vimwiki/diary | wc -l| xargs)
 
-if [[ "$PWD" == "$HOME/vimwiki/diary" ]]; then
-    cd $HOME
-fi
+cd $HOME/vimwiki/
 
 gpgtar -o $HOME/vimwiki/diary$slug.gpg --yes -r $USER -e diary
 bytes_new=$(wc -c $HOME/vimwiki/diary$slug.gpg)
 bytes_old=$(wc -c $HOME/vimwiki/diary.gpg)
 if [[ $count -gt 9 ]]; then
     if [[ "$?" == "0" ]]; then
-        mv -f diary$slug.gpg diary.gpg
+        mv -f $HOME/vimwiki/diary$slug.gpg $HOME/vimwiki/diary.gpg
         rm -rf $HOME/vimwiki/diary
         echo [Locked]
     fi
@@ -21,5 +19,6 @@ else
     echo "[Bytes]"
     echo "New archive: $bytes_new"
     echo "Old archive: $bytes_old"
+    rm $HOME/vimwiki/diary$slug.gpg
     exit 1
 fi 
