@@ -33,6 +33,7 @@ nest.applyKeymaps {
             {'t', '<CMD>NvimTreeToggle<CR>'},
             {'da', 'i<return><esc><up><cmd>put =strftime(\'%c\')<CR>i<backspace>==<Esc><S-a>==<esc><S-a><return>'},
             {'js', '<cmd>JsDoc<CR>'},
+            {'x', '<cmd>file %.hexdump<CR><cmd>%!xxd<CR><cmd>set syntax=xxd<CR>'}
         }},
     }},
     {mode = 'i', {
@@ -47,8 +48,9 @@ nest.applyKeymaps {
         {'{;<CR>', '{<CR>};<ESC>O' },
     }},
     {mode = 't', {
-        {'//', '<C-\\><C-n>' }, 
-        {'jj', '<C-\\><C-n>' }, 
+        {'??', '<C-\\><C-n>' }, 
+        {'<C-w>', '<C-\\><C-n><C-w>' }, 
+        {'<leader>sh', shell.newshell},
     }}, 
     {mode = 'v', {
         {'//', '<Esc>'},

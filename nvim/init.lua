@@ -16,7 +16,7 @@ require('packer').startup(function()
     use { 'morhetz/gruvbox' }
     use { 'NLKNguyen/papercolor-theme' }
     -- transparent bg
-    use { 'xiyaowong/nvim-transparent' }
+    use { 'xiyaowong/nvim-transparent', disable = false }
     -- IDE style things
     use { 'nvim-lua/plenary.nvim' }
     use { 'nvim-telescope/telescope.nvim' }
@@ -48,6 +48,8 @@ require('packer').startup(function()
     use { 'puremourning/vimspector' }
     use { 'mfussenegger/nvim-jdtls' }
     use { 'artur-shaik/jc.nvim' }
+    -- debugger
+    use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
     -- Prettier Async, also for webdev
     use { 'prettier/vim-prettier', 
     run = 'yarn install --frozen-lockfile --production',
@@ -63,6 +65,8 @@ require('packer').startup(function()
     use { 'ryanoasis/vim-devicons', disable = true }
     use { 'lambdalisue/suda.vim' } -- write to sudo with SudaWrite
     use { 'jamessan/vim-gnupg' }
+    -- colorizer for hex 
+    use { 'norcalli/nvim-colorizer.lua' }
 end)
 
 --ultisnips expansion with enter
@@ -86,9 +90,13 @@ require'lspconfig'.bashls.setup{}
 require'nvim-web-devicons'.setup{}
 require'lspconfig'.tsserver.setup{}
 require('jc').setup{}
+require('colorizer').setup()
 
 -- TODO convert to lua
 local cmd = vim.api.nvim_command
+-- set background and transparent color
+-- autocmd fixes flicker on start
+cmd("autocmd! ColorScheme * highlight Normal ctermbg=NONE guibg=NONE") 
 cmd("colorscheme PaperColor")
 -- spellcheck when in latex or in vimwiki
 cmd("autocmd BufEnter,WinEnter,FocusGained *.tex set spelllang=en_gb spell")
@@ -98,6 +106,13 @@ cmd("autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTree_' 
 cmd("autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif")
 -- close nerdtree automatically
 cmd("autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif")
+-- enter insert mode when tabbing into a shell
+cmd("autocmd BufEnter term://* startinsert")
+-- don't close tags if in vimwiki
+cmd[[ 
+autocmd FileType vimwiki inoremap <buffer> ' '| inoremap <buffer> " "| inoremap <buffer> ( (| inoremap <buffer> { {| inoremap <buffer> [ [| inoremap <buffer> ?? ??
+]]
+--relative line numbers depending on insert / normal mode 
 cmd[[
 autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set rnu   | endif 
 autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set nornu | endif ]]
