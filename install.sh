@@ -20,7 +20,7 @@ while true; do
 done
 mkdir -p $HOME/.config/nvim
 mkdir -p $HOME/.scripts
-cp -f ./zsh/zshrc $HOME/.zshrc
+
 if [ -f $HOME/.config/nvim/init.vim ] ; then
     echo "An init.vim was found. Moving it to init.vim.bak"
     mv  $HOME/.config/nvim/init.vim  $HOME/.config/nvim/init.vim.bak
@@ -40,6 +40,8 @@ do
     fi
 done
 
+cp -f ./zsh/zshrc $HOME/.zshrc
+cp -f ./zsh/alias.sh $HOME/.alias.sh
 cp -f ./tmux/tmux.conf $HOME/.tmux.conf
 cp -f ./tmux/p10k.zsh $HOME/.p10k.zsh
 cp -r -f ./nvim/* $HOME/.config/nvim/

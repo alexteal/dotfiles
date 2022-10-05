@@ -5,6 +5,7 @@ update:
 	cp -R ~/.scripts ./scripts
 	cp ~/.tmux.conf tmux/tmux.conf
 	cp ~/.zshrc zsh/zshrc
+	cp ~/.alias.sh zsh/alias.sh
 	cp ~/.p10k.zsh tmux/p10k.zsh
 install:
 	sh install.sh
