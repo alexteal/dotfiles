@@ -5,12 +5,11 @@ if os.getenv('TMUX') then
         vim.env.NVIM_TUI_ENABLE_TRUE_COLOR = '1'
     end
 end
-
 if vim.fn.has('termguicolors') then
     vim.opt.termguicolors = true
 end
-require('packer').startup(function()
-    use 'wbthomason/packer.nvim' 
+require('packer').startup(function(use)
+    use 'wbthomason/packer.nvim'
     -- colorschemes
     use { 'dracula/vim' }
     use { 'morhetz/gruvbox' }
@@ -19,21 +18,30 @@ require('packer').startup(function()
     use { 'xiyaowong/nvim-transparent', disable = false }
     -- IDE style things
     use { 'nvim-lua/plenary.nvim' }
-    use { 'nvim-telescope/telescope.nvim' }
-    use { 'nvim-telescope/telescope-fzf-native.nvim', cmd="make"}
+    use({
+        "nvim-telescope/telescope.nvim",
+        requires = { { "nvim-lua/plenary.nvim" },
+        { 'nvim-telescope/telescope-fzf-native.nvim', cmd="make"},
+        { "kdheepak/lazygit.nvim" } },
+            config = function()
+               require("telescope").load_extension("lazygit")
+           end,
+        })
     use { 'junegunn/fzf', run = './install --bin'}
     use { 'kyazdani42/nvim-web-devicons', disable = false }
     use { 'kyazdani42/nvim-tree.lua', requires = { 'kyazdani42/nvim-web-devicons' } }
-    use { 'romgrk/barbar.nvim', disable = true }
+    use { 'romgrk/barbar.nvim', disable = true } -- is nice, but dead buffers stay on bar
     use { 'scrooloose/nerdtree' , requires = {'ryanoasis/vim-devicons', 'Xuyuanp/nerdtree-git-plugin'}, disable = true }
     -- snippets
-    use { 'honza/vim-snippets', requires = 'SirVer/ultisnips' } 
+    use { 'honza/vim-snippets', requires = 'SirVer/ultisnips' }
     -- deoplete completions
-    use { 'Shougo/deoplete.nvim'}
-    use { 'zchee/deoplete-jedi'}
-    use { 'dense-analysis/ale' , disable = false}
+    use { 'Shougo/deoplete.nvim', disable = true}
+    use { 'zchee/deoplete-jedi', disable = true}
+    -- syntax / code completion
+    use { 'neoclide/coc.nvim', branch='release', disable = false }
+    use { 'dense-analysis/ale' , disable = true }
     use { 'prabirshrestha/vim-lsp' , disable = false }
-    use { 'lighttiger2505/deoplete-vim-lsp' , disable = false }
+    use { 'lighttiger2505/deoplete-vim-lsp' , disable = true }
     use { 'alvan/vim-closetag' }
     use { 'LionC/nest.nvim' }
     use { 'rafcamlet/nvim-luapad', requires = "antoinemadec/FixCursorHold.nvim" }
@@ -51,7 +59,7 @@ require('packer').startup(function()
     -- debugger
     use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"} }
     -- Prettier Async, also for webdev
-    use { 'prettier/vim-prettier', 
+    use { 'prettier/vim-prettier',
     run = 'yarn install --frozen-lockfile --production',
     ft={'javascript', 'typescript', 'css', 'less', 'scss', 'json', 'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html', 'tsx', 'jsx', 'typescriptreact'}, disable = false }
     use { 'tjdevries/nlua.nvim' }
@@ -63,18 +71,19 @@ require('packer').startup(function()
     -- random tools
     use { 'vimwiki/vimwiki' }
     use { 'ryanoasis/vim-devicons', disable = true }
-    use { 'lambdalisue/suda.vim' } -- write to sudo with SudaWrite
+    use { 'lambdalisue/suda.vim' } -- write using sudo with SudaWrite
     use { 'jamessan/vim-gnupg' }
-    -- colorizer for hex 
+    -- colorizer for hex
     use { 'norcalli/nvim-colorizer.lua' }
 end)
 
 --ultisnips expansion with enter
+-- default is tab
 --vim.g.UltiSnipsExpandTrigger='<CR>'
 
-vim.api.nvim_create_autocmd("InsertEnter", {
-    command = "call deoplete#enable()"
-})
+--vim.api.nvim_create_autocmd("InsertEnter", {
+--    command = "call deoplete#enable()"
+--})
 
 -- these prevent first time install
 require 'keymap'
@@ -85,10 +94,10 @@ vim.g.closetag_filenames='*.html,*.xhtml,*.phtml,*.vue,*.tsx'
 require 'nvim-tree-config'
 require 'transparent-bg'
 
-require'lspconfig'.pyright.setup{}
-require'lspconfig'.bashls.setup{}
+--require'lspconfig'.pyright.setup{}
+--require'lspconfig'.bashls.setup{}
 require'nvim-web-devicons'.setup{}
-require'lspconfig'.tsserver.setup{}
+--require'lspconfig'.tsserver.setup{}
 require('jc').setup{}
 require('colorizer').setup()
 
@@ -96,13 +105,13 @@ require('colorizer').setup()
 local cmd = vim.api.nvim_command
 -- set background and transparent color
 -- autocmd fixes flicker on start
-cmd("autocmd! ColorScheme * highlight Normal ctermbg=NONE guibg=NONE") 
+cmd("autocmd! ColorScheme * highlight Normal ctermbg=NONE guibg=NONE")
 cmd("colorscheme PaperColor")
 -- spellcheck when in latex or in vimwiki
 cmd("autocmd BufEnter,WinEnter,FocusGained *.tex set spelllang=en_gb spell")
 -- close nvim-tree
 cmd("autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif")
---close telescope 
+--close telescope
 cmd("autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif")
 -- close nerdtree automatically
 cmd("autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif")
@@ -112,7 +121,7 @@ cmd("autocmd BufEnter term://* startinsert")
 cmd[[ 
 autocmd FileType vimwiki inoremap <buffer> ' '| inoremap <buffer> " "| inoremap <buffer> ( (| inoremap <buffer> { {| inoremap <buffer> [ [| inoremap <buffer> ?? ??
 ]]
---relative line numbers depending on insert / normal mode 
+--relative line numbers depending on insert / normal mode
 cmd[[
 autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set rnu   | endif 
 autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set nornu | endif ]]
