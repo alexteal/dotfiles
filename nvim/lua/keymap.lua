@@ -10,30 +10,32 @@ nest.applyKeymaps {
         {'<leader>', {
             -- rebind jumping back to previous buffer
             {'bb', '<c-6>'},
-            -- quick open terminal
-            {'sh', shell.newshell },
-            -- quick resource
-            {'rr', '<CMD>source $MYVIMRC<CR>' },
-            -- quick edit 
-            {'qe', '<CMD>tabnew ~/.config/nvim/init.lua | cd ~/.config/nvim<CR>'},
+            --datetime
+            {'da', 'i<return><esc><up><cmd>put =strftime(\'%c\')<CR>i<backspace>==<Esc><S-a>==<esc><S-a><return>'},
 
             -- leader f
             {'f', {
                 {'f', '<CMD>FZF<CR>' },
-                {'h', '<cmd>Telescope help_tags<CR>' }, 
+                {'h', '<cmd>Telescope help_tags<CR>' },
                 {'c', '<cmd>Telescope commands<CR> ' },
-                {'b', '<cmd>Telescope buffers<CR>' },
+                {'b', '<cmd>Telescope buffers<CR>jj' },
                 {'s', '<cmd>PRg<CR>' },
             }},
+            {'hex', '<cmd>file %.hexdump<CR><cmd>%!xxd<CR><cmd>set syntax=xxd<CR>'},
+            {'js', '<cmd>JsDoc<CR>'},
+            {'lg', '<cmd>LazyGit<CR>'},
             {'wp', '<cmd>Files ~/vimwiki/<CR>' },
             -- search folder (uses pwd)
             {'sf', '<cmd>Telescope live_grep<CR>' },
+            -- quick open terminal
+            {'sh', shell.newshell },
             --search THIS folder ( uses current buffer directory )
             {'stf','<cmd>lua require"telescope.builtin".live_grep{ search_dirs={"%:p:h"} }<CR>'},
             {'t', '<CMD>NvimTreeToggle<CR>'},
-            {'da', 'i<return><esc><up><cmd>put =strftime(\'%c\')<CR>i<backspace>==<Esc><S-a>==<esc><S-a><return>'},
-            {'js', '<cmd>JsDoc<CR>'},
-            {'x', '<cmd>file %.hexdump<CR><cmd>%!xxd<CR><cmd>set syntax=xxd<CR>'}
+            -- quick resource
+            {'rr', '<CMD>source $MYVIMRC<CR>' },
+            -- quick edit
+            {'qe', '<CMD>tabnew ~/.config/nvim/init.lua | cd ~/.config/nvim<CR>'},
         }},
     }},
     {mode = 'i', {
@@ -48,10 +50,10 @@ nest.applyKeymaps {
         {'{;<CR>', '{<CR>};<ESC>O' },
     }},
     {mode = 't', {
-        {'??', '<C-\\><C-n>' }, 
-        {'<C-w>', '<C-\\><C-n><C-w>' }, 
+        {'??', '<C-\\><C-n>' },
+        {'<C-w>', '<C-\\><C-n><C-w>' },
         {'<leader>sh', shell.newshell},
-    }}, 
+    }},
     {mode = 'v', {
         {'//', '<Esc>'},
     }},
