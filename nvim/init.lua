@@ -101,6 +101,24 @@ require'nvim-web-devicons'.setup{}
 require('jc').setup{}
 require('colorizer').setup()
 
+--debugger setup, required for each language
+local dap = require('dap')
+    dap.configurations.python = {
+      {
+        type = 'python';
+        request = 'launch';
+        name = "Launch file";
+        program = "${file}";
+        pythonPath = function()
+          return '/usr/bin/python'
+        end;
+      },
+    }
+    dap.configurations.java = {
+        type = 'java';
+        request = "launch";
+        vmArgs = "-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=5005,suspend=y"
+    }
 -- TODO convert to lua
 local cmd = vim.api.nvim_command
 -- set background and transparent color

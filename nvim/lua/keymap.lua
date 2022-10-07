@@ -22,6 +22,7 @@ nest.applyKeymaps {
                 {'s', '<cmd>PRg<CR>' },
             }},
             {'hex', '<cmd>file %.hexdump<CR><cmd>%!xxd<CR><cmd>set syntax=xxd<CR>'},
+            { 'jd','<cmd>CocCommand java.debug.vimspector.start<CR>'},
             {'js', '<cmd>JsDoc<CR>'},
             {'lg', '<cmd>LazyGit<CR>'},
             {'wp', '<cmd>Files ~/vimwiki/<CR>' },
@@ -34,6 +35,22 @@ nest.applyKeymaps {
             {'t', '<CMD>NvimTreeToggle<CR>'},
             -- quick resource
             {'rr', '<CMD>source $MYVIMRC<CR>' },
+            -- vimspector commands
+            { 'v', { --<leader>v
+                {'b', '<cmd>call vimspector#ToggleBreakpoint()<CR>'},
+                {'c', '<cmd>call vimspector#Continue()<CR>'},
+                {'p', '<cmd>call vimspector#Pause()<CR>'},
+                {'s', { --<leader>vs
+                    {'i', '<cmd>call vimspector#StepInto()<CR>'},
+                    {'o', '<cmd>call vimspector#StepOver()<CR>'},
+                    {'O', '<cmd>call vimspector#StepOut()<CR>'},
+                    }
+                },
+                {'C', '<cmd>call vimspector#ClearBreakpoints()<CR>'},
+                {'x', '<cmd>VimspectorReset<CR>'},
+                }
+            },
+
             -- quick edit
             {'qe', '<CMD>tabnew ~/.config/nvim/init.lua | cd ~/.config/nvim<CR>'},
         }},
