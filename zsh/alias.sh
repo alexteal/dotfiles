@@ -1,3 +1,26 @@
+OS=$( uname -a )
+# unsure if first character is capital or not
+case $OS in 
+    *"ebian"*)
+        ;;
+    *"buntu"*)
+        ;;
+    *"arwin"*)
+        export LS_COLORS=exfxcxdxbxegedabagacad
+        export LSCOLORS=exfxcxdxbxegedabagacad
+        ;;
+    *"edora"*)
+        ;;
+    *"fc36"*) # testing this for now, not sure if it's a good solution.                                    │
+                   # need better portable os type solution
+        ;;
+    *) 
+        export LS_COLORS=exfxcxdxbxegedabagacad
+        export LSCOLORS=exfxcxdxbxegedabagacad
+        ;;
+esac
+
+
 #alias ls="ls -G"
 alias snooze="osascript -e 'tell application \"System Events\" to sleep'"
 #set LS colors
@@ -7,7 +30,7 @@ alias rmpdf='rm2pdf -t ~/projects/remarkable/rm2pdf/templates/A4.pdf'
 alias pomo-clear='rm ~/Library/Application\ Support/pomo/pomo.db; pomo init'
 alias pdf2rm='~/bin/pdf2rmnotebook'
 alias updf2rm='~/.scripts/updf2rm'
-alias jcmp='javac *.java'
+alias jcmp='javac -g *.java'
 alias jarify='jar -cvf build.jar *' # doesn't work right. I think?
 alias regex='echo "
 POSIX       REGEX           MEANING
@@ -41,26 +64,4 @@ alias edittmux="nvim ~/.tmux.conf"
 alias dot="cd ~/projects/dotfiles"
 alias dotconf="cd ~/.config/nvim/"
 alias lg="lazygit"
-
-OS=$( uname -a )
-# unsure if first character is capital or not
-case $OS in 
-    *"ebian"*)
-        ;;
-    *"buntu"*)
-        ;;
-    *"arwin"*)
-        export LS_COLORS=exfxcxdxbxegedabagacad
-        export LSCOLORS=exfxcxdxbxegedabagacad
-        ;;
-    *"edora"*)
-        ;;
-    *"fc36"*) # testing this for now, not sure if it's a good solution.                                    │
-                   # need better portable os type solution
-        ;;
-    *) 
-        export LS_COLORS=exfxcxdxbxegedabagacad
-        export LSCOLORS=exfxcxdxbxegedabagacad
-        ;;
-esac
-
+alias jdbg="java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=5005,suspend=y" #followed by filename
