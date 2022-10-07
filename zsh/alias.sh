@@ -1,30 +1,7 @@
-OS=$( uname -a )
-# unsure if first character is capital or not
-case $OS in 
-    *"ebian"*)
-        ;;
-    *"buntu"*)
-        ;;
-    *"arwin"*)
-        export LS_COLORS=exfxcxdxbxegedabagacad
-        export LSCOLORS=exfxcxdxbxegedabagacad
-        ;;
-    *"edora"*)
-        ;;
-    *"fc36"*) # testing this for now, not sure if it's a good solution.                                    │
-                   # need better portable os type solution
-        ;;
-    *) 
-        export LS_COLORS=exfxcxdxbxegedabagacad
-        export LSCOLORS=exfxcxdxbxegedabagacad
-        ;;
-esac
-
-
 #alias ls="ls -G"
 alias snooze="osascript -e 'tell application \"System Events\" to sleep'"
 #set LS colors
-alias ls='ls -GH'
+#alias ls='ls -GH'
 alias nq='networkquality'
 alias rmpdf='rm2pdf -t ~/projects/remarkable/rm2pdf/templates/A4.pdf'
 alias pomo-clear='rm ~/Library/Application\ Support/pomo/pomo.db; pomo init'
