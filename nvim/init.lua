@@ -116,8 +116,7 @@ require('packer').startup(function(use)
     use { 'lervag/vimtex' ,
         event  = { "BufNewFile", "BufRead", "InsertEnter" },}
     -- random tools
-    use { 'vimwiki/vimwiki' ,
-        event  = { "BufNewFile", "BufRead", "InsertEnter" },}
+    use { 'vimwiki/vimwiki' ,}
     use { 'lambdalisue/suda.vim' ,
         event  = { "BufNewFile", "BufRead", "InsertEnter" },} -- write using sudo with SudaWrite
     use { 'jamessan/vim-gnupg' ,
