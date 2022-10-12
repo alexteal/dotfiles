@@ -5,7 +5,7 @@ require("nvim-tree").setup({
     mappings = {
       list = {
         { key = "u", action = "dir_up" },
-        { key = "s", action = "vsplit" }, 
+        { key = "s", action = "vsplit" },
         { key = "i", action = "split"},
         { key = "?", action = "toggle_help" },
         { key = "C", action = "cd" },
@@ -13,7 +13,7 @@ require("nvim-tree").setup({
     },
   },
   renderer = {
-    group_empty = true,
+    group_empty = false,
   },
   filters = {
     dotfiles = true,
@@ -23,5 +23,4 @@ require("nvim-tree").setup({
     update_cwd = true,
   },
 })
-
 vim.g.nvim_tree_respect_buf_cwd = 1
