@@ -20,6 +20,8 @@ nest.applyKeymaps {
                 {'c', '<cmd>Telescope commands<CR> ' },
                 {'b', '<cmd>Telescope buffers<CR>jj' },
                 {'s', '<cmd>PRg<CR>' },
+                {'d', '<CMD>Telescope coc diagnostics<CR>'},
+                {'l', '<CMD>Telescope coc document_symbols<CR>'},
             }},
             {'hex', '<cmd>file %.hexdump<CR><cmd>%!xxd<CR><cmd>set syntax=xxd<CR>'},
             { 'jd','<cmd>CocCommand java.debug.vimspector.start<CR>'},
