@@ -2,8 +2,6 @@ local opt = vim.opt
 opt.showmatch = true		-- show matching
 opt.ignorecase = true
 opt.hlsearch = true
-opt.ignorecase = true
-opt.hlsearch = true
 opt.incsearch = true             -- incremental search
 opt.tabstop = 4             -- number of columns occupied by a tab
 opt.softtabstop = 4         -- see multiple spaces as tabstops so <BS> does the right thing
@@ -18,3 +16,5 @@ opt.mouse = 'a'              -- enable mouse click
 opt.clipboard = 'unnamedplus'-- using system clipboard
 opt.ttyfast = true               -- Speed up scrolling in Vim
 opt.encoding = 'UTF-8'
+-- longer wait time for keymap
+opt.timeoutlen = 1750 -- in ms
