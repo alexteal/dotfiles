@@ -42,7 +42,8 @@ alias edittmux="nvim ~/.tmux.conf"
 alias dot="cd ~/projects/dotfiles"
 alias dotconf="cd ~/.config/nvim/"
 alias lg="lazygit"
-alias jdbg="java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=5005,suspend=y" #followed by filename
+alias jdbg="javac -g *.java; java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=5005,suspend=y" #followed by filename
+alias jtest="javac -g *.java; java" #followed by file name
 alias todo='nvim ~/TODO -c ":set filetype=vimwiki"'
 alias rmgui='python3 -m remy.gui'
 alias regex='echo "
