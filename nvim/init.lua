@@ -207,7 +207,7 @@ cmd("autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif")
 cmd("autocmd BufEnter term://* startinsert")
 -- don't close tags if in vimwiki
 cmd[[ 
-autocmd FileType vimwiki inoremap <buffer> ' '| inoremap <buffer> " "| inoremap <buffer> ( (| inoremap <buffer> { {| inoremap <buffer> [ [| inoremap <buffer> ?? ??
+autocmd FileType vimwiki inoremap <buffer> ' '| inoremap <buffer> " "| inoremap <buffer> ( (| inoremap <buffer> { {| inoremap <buffer> ?? ??
 ]]
 --relative line numbers depending on insert / normal mode
 cmd[[
