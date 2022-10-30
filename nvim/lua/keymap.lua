@@ -76,4 +76,7 @@ nest.applyKeymaps {
     {mode = 'v', {
         {'//', '<Esc>'},
     }},
+    {mode = 'vn', {
+        {'<RightMouse>', 'y'},
+    }},
 }
