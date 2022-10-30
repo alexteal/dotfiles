@@ -7,7 +7,7 @@ cd $HOME/vimwiki/
 gpgtar -o $HOME/vimwiki/diary$slug.gpg --yes -r $USER -e diary
 bytes_new=$(wc -c $HOME/vimwiki/diary$slug.gpg)
 bytes_old=$(wc -c $HOME/vimwiki/diary.gpg)
-if [[ $count -gt 20 ]]; then
+if [[ $count -gt 30 ]]; then
     if [[ "$?" == "0" ]]; then
         mv -f $HOME/vimwiki/diary$slug.gpg $HOME/vimwiki/diary.gpg
         rm -rf $HOME/vimwiki/diary
