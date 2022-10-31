@@ -11,20 +11,15 @@ case $OS in
         ;;
     *"edora"*)
         ;;
-    *"fc36"*) # testing this for now, not sure if it's a good solution.                                    │
-                   # need better portable os type solution
+    *"fc36"*)
+        export LS_COLORS="di=34:ln=35:so=32:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43"
         ;;
     *) 
-        export LS_COLORS=exfxcxdxbxegedabagacad
-        export LSCOLORS=exfxcxdxbxegedabagacad
         ;;
 esac
 
 
-#alias ls="ls -G"
 alias snooze="osascript -e 'tell application \"System Events\" to sleep'"
-#set LS colors
-alias ls='ls -GH'
 alias nq='networkquality'
 alias rmpdf='rm2pdf -t ~/projects/remarkable/rm2pdf/templates/A4.pdf'
 alias pomo-clear='rm ~/Library/Application\ Support/pomo/pomo.db; pomo init'
@@ -46,6 +41,8 @@ alias jdbg="javac -g *.java; java -Xdebug -Xrunjdwp:server=y,transport=dt_socket
 alias jtest="javac -g *.java; java" #followed by file name
 alias todo='nvim ~/TODO -c ":set filetype=vimwiki"'
 alias rmgui='python3 -m remy.gui'
+alias l='ls -lah --color=auto'
+alias ls='ls -GH --color=auto'
 alias regex='echo "
 POSIX       REGEX           MEANING
 ################################################################################
