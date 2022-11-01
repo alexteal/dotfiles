@@ -20,31 +20,33 @@ require('packer').startup(function(use)
     use({
         "nvim-telescope/telescope.nvim",
         requires = {
-            {'fannheyward/telescope-coc.nvim',
-        },
-        { "nvim-lua/plenary.nvim",
-            event  = { "BufNewFile", "BufRead", "InsertEnter" },
-        },
-        { 'nvim-telescope/telescope-fzf-native.nvim',
-            cmd="make",
-            event  = { "BufNewFile", "BufRead", "InsertEnter" },},
-        { "kdheepak/lazygit.nvim",
-            event  = { "BufNewFile", "BufRead", "InsertEnter" },},
-        },
-        config = function()
-            require("telescope").load_extension("lazygit")
-            require('telescope').load_extension('coc')
-            require('telescope').setup({
-                extensions = {
-                    coc = {
-                        theme = 'ivy',
-                        prefer_locations = true, -- always use Telescope locations to preview definitions/declarations/implementations etc
-                    }
+                {'fannheyward/telescope-coc.nvim'},
+                {'kdheepak/lazygit.nvim'},
+                { "nvim-lua/plenary.nvim",
+                    event  = { "BufNewFile", "BufRead", "InsertEnter" },
                 },
-            })
-        end,
-        event  = { "BufNewFile", "BufRead", "InsertEnter" },
-})
+                { 'nvim-telescope/telescope-fzf-native.nvim',
+                    cmd="make",
+                    event  = { "BufNewFile", "BufRead", "InsertEnter" },
+                },
+                { "kdheepak/lazygit.nvim",
+                    event = { "BufNewFile", "BufRead", "InsertEnter" },
+                }
+            },
+            config = function()
+                require('telescope').load_extension('coc')
+                require('telescope').load_extension('lazygit')
+                require('telescope').setup({
+                    extensions = {
+                        coc = {
+                            theme = 'ivy',
+                            prefer_locations = true, -- always use Telescope locations to preview definitions/declarations/implementations etc
+                        }
+                    },
+                })
+            end,
+            event  = { "BufNewFile", "BufRead", "InsertEnter" },
+        })
     use { 'junegunn/fzf', run = './install --bin',
         event  = { "BufNewFile", "BufRead", "InsertEnter" }
     }
@@ -53,7 +55,7 @@ require('packer').startup(function(use)
         config = function() require'nvim-web-devicons'.setup{} end,
     }
     use { 'kyazdani42/nvim-tree.lua',
-        requires = { 'kyazdani42/nvim-web-devicons' }
+        requires = { 'kyazdani42/nvim-web-devicons' },
     }
     -- snippets
     use { 'honza/vim-snippets',
@@ -63,7 +65,6 @@ require('packer').startup(function(use)
     -- syntax / code completion
     use { 'neoclide/coc.nvim',
         branch='release',
-        disable = false ,
     }
     use { 'prabirshrestha/vim-lsp' , disable = false ,
         event  = { "BufNewFile", "BufRead", "InsertEnter" },}
@@ -89,10 +90,15 @@ require('packer').startup(function(use)
     use { 'puremourning/vimspector' ,
         event  = { "BufNewFile", "BufRead", "InsertEnter" },}
     use { 'mfussenegger/nvim-jdtls' ,
-        event  = { "BufNewFile", "BufRead", "InsertEnter" },}
+        event  = { "BufNewFile", "BufRead", "InsertEnter" },
+        ft = {'java'},
+        disable = true, -- we're using coc-java instead for now
+    }
     use { 'artur-shaik/jc.nvim' ,
         config = function() require('jc').setup{} end,
-        event  = { "BufNewFile", "BufRead", "InsertEnter" },}
+        event  = { "BufNewFile", "BufRead", "InsertEnter" },
+        disable = true,
+    }
     -- debugger
     use { "rcarriga/nvim-dap-ui", requires = {"mfussenegger/nvim-dap"},
         event  = { "BufNewFile", "BufRead", "InsertEnter" }, }
@@ -111,8 +117,12 @@ require('packer').startup(function(use)
     -- syntax highlighting
     use { 'nvim-treesitter/nvim-treesitter', run = ":TSUpdate" ,
         event  = { "BufNewFile", "BufRead", "InsertEnter" },}
-    use { 'numirias/semshi', run = ":UpdateRemotePlugins" ,
-        event  = { "BufNewFile", "BufRead", "InsertEnter" },}
+
+-- out of date and unmaintained, possibly mothballed by creater
+--    use { 'numirias/semshi', run = ":UpdateRemotePlugins" ,
+--        event  = { "BufNewFile", "BufRead", "InsertEnter" },
+--        ft = {'python'},}
+
     use { 'lervag/vimtex' ,
         event  = { "BufNewFile", "BufRead", "InsertEnter" },}
     -- random tools
