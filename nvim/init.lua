@@ -69,26 +69,41 @@ require('packer').startup(function(use)
     use { 'prabirshrestha/vim-lsp' , disable = false ,
         event  = { "BufNewFile", "BufRead", "InsertEnter" },}
     use { 'alvan/vim-closetag',
-        event  = { "BufNewFile", "BufRead", "InsertEnter" },}
+        event  = { "BufNewFile", "BufRead", "InsertEnter" },
+        ft={'javascript', 'typescript', 'css', 'less', 'scss', 'json',
+        'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html', 'tsx','jsx',
+        'typescriptreact'},
+    }
     use { 'LionC/nest.nvim' }
     use { 'rafcamlet/nvim-luapad', requires = "antoinemadec/FixCursorHold.nvim",
-        event  = { "BufNewFile", "BufRead", "InsertEnter" },}
+        event  = { "BufNewFile", "BufRead", "InsertEnter" },
+        ft = {'lua'},
+    }
     -- ESLinter for webdev
     use { 'neovim/nvim-lspconfig', disable = false,
         event  = { "BufNewFile", "BufRead", "InsertEnter" },}
     use { 'jose-elias-alvarez/null-ls.nvim', disable = false ,
         event  = { "BufNewFile", "BufRead", "InsertEnter" },}
     use { 'MunifTanjim/eslint.nvim' , disable =false  ,
-        event  = { "BufNewFile", "BufRead", "InsertEnter" },}
+        event  = { "BufNewFile", "BufRead", "InsertEnter" },
+        ft={'javascript', 'typescript', 'css', 'less', 'scss', 'json',
+        'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html', 'tsx','jsx',
+        'typescriptreact'},
+    }
     -- Java linting / completion
     use { 'hrsh7th/nvim-cmp' ,
-        event  = { "BufNewFile", "BufRead", "InsertEnter" },}
+        event  = { "BufNewFile", "BufRead", "InsertEnter" },
+    }
     use { 'hrsh7th/cmp-nvim-lsp' ,
-        event  = { "BufNewFile", "BufRead", "InsertEnter" },}
+        event  = { "BufNewFile", "BufRead", "InsertEnter" },
+    }
     use { 'williamboman/nvim-lsp-installer' ,
-        event  = { "BufNewFile", "BufRead", "InsertEnter" },}
+        event  = { "BufNewFile", "BufRead", "InsertEnter" },
+    }
     use { 'puremourning/vimspector' ,
-        event  = { "BufNewFile", "BufRead", "InsertEnter" },}
+        event  = { "BufNewFile", "BufRead", "InsertEnter" },
+        ft = {'java'},
+    }
     use { 'mfussenegger/nvim-jdtls' ,
         event  = { "BufNewFile", "BufRead", "InsertEnter" },
         ft = {'java'},
@@ -97,6 +112,7 @@ require('packer').startup(function(use)
     use { 'artur-shaik/jc.nvim' ,
         config = function() require('jc').setup{} end,
         event  = { "BufNewFile", "BufRead", "InsertEnter" },
+        ft = {'java'},
         disable = true,
     }
     -- debugger
