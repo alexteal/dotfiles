@@ -22,9 +22,7 @@ require('packer').startup(function(use)
         requires = {
                 {'fannheyward/telescope-coc.nvim'},
                 {'kdheepak/lazygit.nvim'},
-                { "nvim-lua/plenary.nvim",
-                    event = { "BufNewFile", "BufRead", "InsertEnter" },
-                },
+                { "nvim-lua/plenary.nvim"},
                 { 'nvim-telescope/telescope-fzf-native.nvim',
                     cmd="make",
                     event = { "BufNewFile", "BufRead", "InsertEnter" },
@@ -139,8 +137,7 @@ require('packer').startup(function(use)
 --        event  = { "BufNewFile", "BufRead", "InsertEnter" },
 --        ft = {'python'},}
 
-    use { 'lervag/vimtex' ,
-        event  = { "BufNewFile", "BufRead", "InsertEnter" },}
+    use { 'lervag/vimtex' }
     -- random tools
     use { 'vimwiki/vimwiki' ,}
     use { 'lambdalisue/suda.vim' ,
