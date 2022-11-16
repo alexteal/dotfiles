@@ -6,6 +6,8 @@ nest.applyKeymaps {
 
     {mode = 'n', {
         {'<LeftMouse>', '<LeftMouse>i'},
+        -- control keybinds
+        { '<c-x>',  '<cmd>call vimspector#Continue()<CR>' },
         -- leader
         {'<leader>', {
             -- rebind jumping back to previous buffer

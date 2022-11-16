@@ -1,4 +1,4 @@
-vim.g.python_host_prog = os.getenv('NEOVIM_PY_PATH')
+vim.g.python3_host_prog = os.getenv('NEOVIM_PY_PATH')
 --Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
 if os.getenv('TMUX') then
     if vim.fn.has('nvim') then
@@ -16,18 +16,18 @@ require('packer').startup(function(use)
     use { 'xiyaowong/nvim-transparent', disable = false }
     -- IDE style things
     use { 'nvim-lua/plenary.nvim',
-        event  = { "BufNewFile", "BufRead", "InsertEnter" } }
+        event = { "BufNewFile", "BufRead", "InsertEnter" } }
     use({
         "nvim-telescope/telescope.nvim",
         requires = {
                 {'fannheyward/telescope-coc.nvim'},
                 {'kdheepak/lazygit.nvim'},
                 { "nvim-lua/plenary.nvim",
-                    event  = { "BufNewFile", "BufRead", "InsertEnter" },
+                    event = { "BufNewFile", "BufRead", "InsertEnter" },
                 },
                 { 'nvim-telescope/telescope-fzf-native.nvim',
                     cmd="make",
-                    event  = { "BufNewFile", "BufRead", "InsertEnter" },
+                    event = { "BufNewFile", "BufRead", "InsertEnter" },
                 },
                 { "kdheepak/lazygit.nvim",
                     event = { "BufNewFile", "BufRead", "InsertEnter" },
