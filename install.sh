@@ -78,28 +78,28 @@ function debian_ubuntu () {
     eval "$sudo apt-get update"
     eval "$sudo apt-get upgrade"
 }
+function determine_distro(){
+    OS=$(cat /proc/version)
+    case $OS in 
+        *"Red Hat"*)
+            fedora
+            ;;
+        *"centos"*)
+            fedora
+            ;;
+        *) 
+            debian_ubuntu
+            ;;
+    esac
+}
 ERRORS=""
 OS=$( uname -a )
-# unsure if first character is capital or not
 case $OS in 
-    *"ebian"*)
-        debian_ubuntu
-        ;;
-    *"buntu"*)
-        debian_ubuntu
-        ;;
-    *"arwin"*)
+    *"arwin"*) # inconsistencies with if first character is capital or not
         osx
         ;;
-    *"edora"*)
-        fedora
-        ;;
-    *"fc36"*) # testing this for now, not sure if it's a good solution.                                    │
-                   # need better portable os type solution
-        fedora
-        ;;
     *) 
-        debian_ubuntu
+        determine_distro
         ;;
 esac
 
