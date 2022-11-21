@@ -31,10 +31,10 @@ fi
 for filename in ./scripts/.scripts/*
 do
     [ -e "$filename" ] || continue
-    file1=$(cksum $filename ) &> /dev/null
-    file2=$(cksum $HOME${filename:9} ) &> /dev/null
-    file1=${file1:0:10}
-    file2=${file2:0:10}
+    file1=$(cksum "$filename" ) &> /dev/null
+    file2=$(cksum $HOME/.scripts/$(basename "$filename") ) &> /dev/null
+    file1=$(basename "$file1")
+    file2=$(basename "$file2")
     if [ "$file1" != "$file2" ]; then
         relink=1
     fi
@@ -109,7 +109,7 @@ if [[ "$relink" == 1 ]]; then
     for filename in ./scripts/.scripts/*
     do
         [ -e "$filename" ] || continue
-        $sudo ln -sf $HOME${filename:19} /usr/local/bin/${filename:19}
+        $sudo ln -sf $HOME$(basename "$filename") /usr/local/bin/$(basename "$filename")
     done
 fi
 
@@ -118,7 +118,7 @@ mkdir -p $HOME/bin
 for filename in $HOME/.scripts/*
 do
     [ -e "$filename" ] || continue
-    ln -sf $filename $HOME/bin/${filename:25}
+    ln -sf "$filename" $HOME/bin/$(basename "$filename")
 done
 
 
