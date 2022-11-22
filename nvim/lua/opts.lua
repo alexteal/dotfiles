@@ -18,3 +18,4 @@ opt.ttyfast = true               -- Speed up scrolling in Vim
 opt.encoding = 'UTF-8'
 -- longer wait time for keymap
 opt.timeoutlen = 1750 -- in ms
+opt.scrolloff = 8 -- keep 8 lines above/below cursor
