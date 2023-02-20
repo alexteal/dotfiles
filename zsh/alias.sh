@@ -19,7 +19,7 @@ case $OS in
 esac
 
 
-alias snooze="osascript -e 'tell application \"System Events\" to sleep'"
+alias sl="osascript -e 'tell application \"System Events\" to sleep'"
 alias nq='networkquality'
 alias rmpdf='rm2pdf -t ~/projects/remarkable/rm2pdf/templates/A4.pdf'
 alias pomo-clear='rm ~/Library/Application\ Support/pomo/pomo.db; pomo init'
@@ -43,6 +43,7 @@ alias todo='nvim ~/TODO -c ":set filetype=vimwiki"'
 alias rmgui='python3 -m remy.gui'
 alias l='ls -lah --color=auto'
 alias ls='ls -GH --color=auto'
+alias rsync='/usr/local/bin/rsync --ignore-existing -a --info=progress2 --stats'
 alias regex='echo "
 POSIX       REGEX           MEANING
 ################################################################################
