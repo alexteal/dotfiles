@@ -1,3 +1,4 @@
+-- luacheck: globals vim
 vim.g.python3_host_prog = os.getenv('NEOVIM_PY_PATH')
 --Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
 if os.getenv('TMUX') then
@@ -10,13 +11,15 @@ if vim.fn.has('termguicolors') then
 end
 require('packer').startup(function(use)
     use 'wbthomason/packer.nvim'
+    --notifications
+    use { 'rcarriga/nvim-notify' }
     -- colorschemes
     use { 'NLKNguyen/papercolor-theme' }
     -- transparent bg
     use { 'xiyaowong/nvim-transparent', disable = false }
+    -- async processes
+    use { 'nvim-lua/plenary.nvim'}
     -- IDE style things
-    use { 'nvim-lua/plenary.nvim',
-        event = { "BufNewFile", "BufRead", "InsertEnter" } }
     use({
         "nvim-telescope/telescope.nvim",
         requires = {
@@ -139,7 +142,7 @@ require('packer').startup(function(use)
 
     use { 'lervag/vimtex' }
     -- random tools
-    use { 'vimwiki/vimwiki' ,}
+    use { 'vimwiki/vimwiki' }
     use { 'lambdalisue/suda.vim' ,
         event  = { "BufNewFile", "BufRead", "InsertEnter" },} -- write using sudo with SudaWrite
     use { 'jamessan/vim-gnupg' ,
