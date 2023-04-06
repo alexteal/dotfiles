@@ -44,6 +44,7 @@ alias rmgui='python3 -m remy.gui'
 alias l='ls -lah --color=auto'
 alias ls='ls -GH --color=auto'
 alias rsync='/usr/local/bin/rsync --ignore-existing -a --info=progress2 --stats'
+alias graal="export PATH=/Library/Java/JavaVirtualMachines/graalvm-ce-java17-22.3.1/Contents/Home/bin:$PATH ; export JAVA_HOME=/Library/Java/JavaVirtualMachines/graalvm-ce-java17-22.3.1/Contents/Home; echo 'java path set to graalvm'"
 alias regex='echo "
 POSIX       REGEX           MEANING
 ################################################################################
