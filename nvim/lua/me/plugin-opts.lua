@@ -9,6 +9,8 @@ vim.g.coq_settings = {
   },
 }
 
+
+
 vim.cmd([[
 ino <silent><expr> <Esc>   pumvisible() ? "\<C-e><Esc>" : "\<Esc>"
 ino <silent><expr> <C-c>   pumvisible() ? "\<C-e><C-c>" : "\<C-c>"
@@ -19,10 +21,11 @@ ino <silent><expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<BS>"
 
 --ino <silent><expr> <CR>    pumvisible() ? (complete_info().selected == -1 ? "\<C-e><CR>" : "\<C-y>") : "\<CR>"
 require'lspconfig'.eslint.setup({
-  on_attach = function(client, bufnr)
-    vim.api.nvim_create_autocmd("BufWritePre", {
-      buffer = bufnr,
-      command = "EslintFixAll",
-    })
-  end,
+    on_attach = function(client, bufnr)
+        vim.api.nvim_create_autocmd("BufWritePre", {
+            buffer = bufnr,
+            command = "EslintFixAll",
+        })
+    end,
 })
+-- require'lspconfig'.jdtls.setup()

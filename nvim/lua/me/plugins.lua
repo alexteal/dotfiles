@@ -69,9 +69,7 @@ require('packer').startup(function(use)
     use { 'neovim/nvim-lspconfig' }
     -- java linting, jdtls is hefty and uses own package
     -- config file is in ../../ftplugin/java.lua
-    use { 'mfussenegger/nvim-jdtls',
-        ft = {"java"},
-    }
+    use { 'mfussenegger/nvim-jdtls' }
    
     -- snippets
     use { 'honza/vim-snippets',
