@@ -2,9 +2,13 @@
 
 ## all of my customization files, tracked for posterity
 
-## Use
+## Use (with extreme caution)
 
 ### Install
+
+First off, you really should just reach out to me if you wanna test this out.
+This is an INCREDIBLY hacky install script that only works in specific
+environments.
 
 Install using bash interpreter with
 
