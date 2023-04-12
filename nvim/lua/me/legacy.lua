@@ -28,13 +28,12 @@ autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | se
 cmd[[
 command! -bang -nargs=* PRg
 \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'dir': expand('%:p:h')}, <bang>0) ]]
-
+-- enable prettier when on corresponding filetypes
 cmd[[
 let g:prettier#quickfix_enabled = 0
 let g:prettier#exec_cmd_async = 1
 autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.svelte,*.yaml,*.html PrettierAsync
 ]]
-cmd('highlight ColorColumn guibg=#89748a') -- pink
 cmd[[
 " Load all plugins now.
 " Plugins need to be added to runtimepath before helptags can be generated.
@@ -43,12 +42,4 @@ packloadall
 " All messages and errors will be ignored.
 silent! helptags ALL
 ]]
-
---disabled plugins and associated commands
---########################################
--- close nerdtree automatically
---cmd("autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif")
--- for dracula theme
---cmd('hi StatusLine guibg=#424450')
---cmd('highlight ColorColumn guibg=#424450') -- dracula dark grey
---cmd('highlight ColorColumn guibg=#678686') -- same as status bar
+-- cmd('highlight ColorColumn guibg=#89748a') -- pink column
