@@ -1,25 +1,16 @@
-vim.g.closetag_filenames='*.html,*.xhtml,*.phtml,*.vue,*.tsx'
-require ('nvim-tree-config')
-require ('mason').setup()
-
+local vim = vim
 vim.g.coq_settings = {
   auto_start = 'shut-up',
   keymap = {
       recommended = false,
   },
+  clients = {
+      tabnine = {
+          enabled = true,
+      },
+  },
 }
 
-
-
-vim.cmd([[
-ino <silent><expr> <Esc>   pumvisible() ? "\<C-e><Esc>" : "\<Esc>"
-ino <silent><expr> <C-c>   pumvisible() ? "\<C-e><C-c>" : "\<C-c>"
-ino <silent><expr> <BS>    pumvisible() ? "\<C-e><BS>"  : "\<BS>"
-ino <silent><expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-ino <silent><expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<BS>"
-]])
-
---ino <silent><expr> <CR>    pumvisible() ? (complete_info().selected == -1 ? "\<C-e><CR>" : "\<C-y>") : "\<CR>"
 require'lspconfig'.eslint.setup({
     on_attach = function(client, bufnr)
         vim.api.nvim_create_autocmd("BufWritePre", {
@@ -28,4 +19,14 @@ require'lspconfig'.eslint.setup({
         })
     end,
 })
--- require'lspconfig'.jdtls.setup()
+require'lspconfig'.lua_ls.setup({})
+require'lspconfig'.jdtls.setup({})
+require'lspconfig'.pyright.setup({})
+require'lspconfig'.rust_analyzer.setup({})
+require'lspconfig'.texlab.setup({})
+require'lspconfig'.dockerls.setup({})
+require'lspconfig'.cmake.setup({})
+require'lspconfig'.tsserver.setup({})
+require'lspconfig'.bashls.setup({})
+
+require ('mason').setup({})
