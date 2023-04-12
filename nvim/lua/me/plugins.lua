@@ -21,19 +21,22 @@ require('packer').startup(function(use)
 
     use { 'kyazdani42/nvim-tree.lua',
         requires = { 'kyazdani42/nvim-web-devicons' },
+        config = function()
+            require ('nvim-tree-config')
+        end,
     }
 
     -- easy keymap config, over in lua/me/keymaps.lua
     use { 'LionC/nest.nvim' }
 
-
     -- floating windows,, Telescope config
     use({
-        "nvim-telescope/telescope.nvim",
+        'nvim-telescope/telescope.nvim',
         requires = {
                 {'fannheyward/telescope-coc.nvim'},
-                {'kdheepak/lazygit.nvim'},
-                { "nvim-lua/plenary.nvim"},
+                {'kdheepak/lazygit.nvim' },
+                { 'nvim-lua/plenary.nvim' },
+                { 'xiyaowong/telescope-emoji.nvim' },
                 { 'nvim-telescope/telescope-fzf-native.nvim',
                     cmd="make",
                     event = { "BufNewFile", "BufRead", "InsertEnter" },
@@ -43,22 +46,10 @@ require('packer').startup(function(use)
                 }
             },
             config = function()
-                require('telescope').load_extension('coc')
                 require('telescope').load_extension('lazygit')
-                require('telescope').setup({
-                    extensions = {
-                        coc = {
-                            theme = 'ivy',
-                            prefer_locations = true, -- always use Telescope locations to preview definitions/declarations/implementations etc
-                        }
-                    },
-                })
+                require("telescope").load_extension("emoji")
+                require('telescope').setup({})
             end,
-            event  = { "BufNewFile", "BufRead", "InsertEnter" },
-        })
-    use { 'junegunn/fzf', run = './install --bin',
-        event  = { "BufNewFile", "BufRead", "InsertEnter" }
-    }
     })
 
     -- telescope Chat-GPT plugin
@@ -80,18 +71,15 @@ require('packer').startup(function(use)
         end,
     })
 
+    use { 'junegunn/fzf', run = './install --bin'}
 
     -- lsp server install manager
-    use {
-        "williamboman/mason.nvim",
-        run = ":MasonUpdate" -- :MasonUpdate updates registry contents
-    }
+    use { "williamboman/mason.nvim" }
     -- lsp server configs
     use { 'neovim/nvim-lspconfig' }
     -- java linting, jdtls is hefty and uses own package
     -- config file is in ../../ftplugin/java.lua
     use { 'mfussenegger/nvim-jdtls' }
-   
     -- snippets
     use { 'honza/vim-snippets',
         requires = 'SirVer/ultisnips' ,
@@ -115,35 +103,22 @@ require('packer').startup(function(use)
         event  = { "BufNewFile", "BufRead", "InsertEnter" },}
     -- syntax highlighting
     use { 'nvim-treesitter/nvim-treesitter', run = ":TSUpdate" ,
+        requires = {
+            'alexteal/nvim-ts-autotag',
+        },
         config = function()
         require('nvim-treesitter.configs').setup {
           highlight = {
-              enabled = true
-          }
+              enable = true,
+          },
+          autotag = {
+              enable = true,
+          },
         }
         end,
-        event  = { "BufNewFile", "BufRead", "InsertEnter" },}
-
-    -- jsx linting and pretty colors
-    use { 'alvan/vim-closetag',
-        event  = { "BufNewFile", "BufRead", "InsertEnter" },
-        ft={'javascript', 'typescript', 'css', 'less', 'scss', 'json',
-        'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html', 'tsx','jsx',
-        'typescriptreact'},
-    }
-    use { 'pangloss/vim-javascript',
-        event  = { "BufNewFile", "BufRead", "BufEnter" },
-        ft={'tsx','jsx'},
-    }
-    use { 'maxmellon/vim-jsx-pretty',
-        event = {"BufNewFile", "BufRead", "BufEnter" },
-        ft = {'tsx','jsx'},
     }
 
     -- assorted tools for different things
-    
-    
-
     -- latex support
     use { 'lervag/vimtex',
         ft = {"tex"},
