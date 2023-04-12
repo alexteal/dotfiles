@@ -59,6 +59,27 @@ require('packer').startup(function(use)
     use { 'junegunn/fzf', run = './install --bin',
         event  = { "BufNewFile", "BufRead", "InsertEnter" }
     }
+    })
+
+    -- telescope Chat-GPT plugin
+    use ({
+      "jackMort/ChatGPT.nvim",
+        requires = {
+          "MunifTanjim/nui.nvim",
+          "nvim-lua/plenary.nvim",
+          "nvim-telescope/telescope.nvim"
+        },
+        config = function()
+            require'chatgpt'.setup({
+                keymaps = {
+                    submit = {
+                        "<C-s>"
+                    },
+                },
+            })
+        end,
+    })
+
 
     -- lsp server install manager
     use {

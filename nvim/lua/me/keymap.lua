@@ -12,6 +12,7 @@ nest.applyKeymaps {
         { '<c-x>',  '<cmd>call vimspector#Continue()<CR>' },
         -- leader
         {'<leader>', {
+            { 'ai', '<CMD>ChatGPT<CR>', },
             { 'cpd', '<CMD>Copilot disable<CR>'},
             { 'cpe', '<CMD>Copilot enable<CR>'},
             { 'cpp', '<CMD>Copilot panel<CR>'},
@@ -82,6 +83,7 @@ nest.applyKeymaps {
         {'<leader>sh', shell.newshell},
     }},
     {mode = 'v', {
+        {'ai', '<CMD>ChatGPTEditWithInstructions<CR>'},
         {'//', '<Esc>'},
     }},
     {mode = 'vn', {
