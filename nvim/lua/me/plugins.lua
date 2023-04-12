@@ -104,7 +104,7 @@ require('packer').startup(function(use)
     -- syntax highlighting
     use { 'nvim-treesitter/nvim-treesitter', run = ":TSUpdate" ,
         requires = {
-            'alexteal/nvim-ts-autotag',
+            'windwp/nvim-ts-autotag',
         },
         config = function()
         require('nvim-treesitter.configs').setup {
