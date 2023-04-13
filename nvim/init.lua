@@ -1,3 +1,4 @@
+local vim = vim
 -- new colorscheme
 local ok, catppuccin = pcall(require, "catppuccin")
 if not ok then return end
@@ -25,7 +26,7 @@ require('me.plugin-opts')
 require('me.keymap')
 --require('me.dap')
 require('me.legacy')
-require('nvim-tree-config')
+--require('nvim-tree-config')
 --require 'transparent-bg'
 --require'lspconfig'.pyright.setup{}
 --require'lspconfig'.bashls.setup{}
