@@ -40,15 +40,16 @@ do
     fi
 done
 
-mkdir ~/.config
-mkdir ~/.config/nvim
-mkdir ~/.config/alacritty
-mkdir ~/.scripts
+mkdir -p ~/.config
+mkdir -p ~/.config/nvim
+mkdir -p ~/.config/alacritty
+mkdir -p ~/.scripts
 
 cp -f ./zsh/zshrc $HOME/.zshrc
 cp -f ./zsh/alias.sh $HOME/.alias.sh
 cp -f ./tmux/tmux.conf $HOME/.tmux.conf
 cp -f ./tmux/p10k.zsh $HOME/.p10k.zsh
+cp -f ./tmux/tmux-powerlinerc $HOME/.tmux-powerlinerc
 cp -r -f ./nvim/* $HOME/.config/nvim/
 cp -f ./scripts/.scripts/* $HOME/.scripts/
 cp -f ./alacritty/alacritty.yaml ~/.config/alacritty/alacritty.yaml
