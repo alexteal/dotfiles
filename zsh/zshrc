@@ -119,7 +119,8 @@ source $ZSH/oh-my-zsh.sh
 [[ ! -f ~/.alias.sh ]] || source ~/.alias.sh
 [[ ! -f ~/.path.sh ]] || source ~/.path.sh
 [[ ! -f ~/.secrets ]] || source ~/.secrets
-
+[[ ! -d $HOME/google-cloud-sdk ]] || source $HOME/google-cloud-sdk/completion.zsh.inc
+[[ ! -d $HOME/google-cloud-sdk ]] || source $HOME/google-cloud-sdk/path.zsh.inc
 #gpg config
 export GPG_TTY=`tty`
 # Custom path completion and LS colors
