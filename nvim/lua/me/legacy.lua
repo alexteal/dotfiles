@@ -11,7 +11,7 @@ local cmd = vim.api.nvim_command
 -- spellcheck when in latex or in vimwiki
 cmd("autocmd BufEnter,WinEnter,FocusGained *.tex set spelllang=en_gb spell")
 -- close nvim-tree
-cmd("autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif")
+--cmd("autocmd BufEnter * ++nested if winnr('$') == 1 && bufname() == 'NvimTree_' . tabpagenr() | quit | endif")
 --close telescope
 cmd("autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif")
 -- enter insert mode when tabbing into a shell
@@ -43,3 +43,8 @@ packloadall
 silent! helptags ALL
 ]]
 -- cmd('highlight ColorColumn guibg=#89748a') -- pink column
+
+-- auto save last session
+cmd[[
+" autocmd! VimLeave * mksession
+]]

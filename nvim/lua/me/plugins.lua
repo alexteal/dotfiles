@@ -19,13 +19,17 @@ require('packer').startup(function(use)
         config = function() require'nvim-web-devicons'.setup{} end,
     }
 
-    use { 'kyazdani42/nvim-tree.lua',
-        requires = { 'kyazdani42/nvim-web-devicons' },
-        config = function()
-            require ('nvim-tree-config')
-        end,
-    }
+--      use { 'kyazdani42/nvim-tree.lua',
+--          requires = { 'kyazdani42/nvim-web-devicons' },
+--          config = function()
+--              require ('nvim-tree-config')
+--          end,
+--      }
 
+    use { 'ms-jpq/chadtree',
+        branch = 'chad',
+        run = 'python3 -m chadtree deps',
+    }
     -- easy keymap config, over in lua/me/keymaps.lua
     use { 'LionC/nest.nvim' }
 

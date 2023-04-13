@@ -5,7 +5,8 @@ local notify = require("notify")
 nest.applyKeymaps {
     -- Remove silent from ; : mapping, so that : shows up in command mode
     { ';', ':' , options = { silent = false } },
-
+    { '<LEADER>P', '<CMD>source $HOME/Session.vim<CR>'},
+    { '<LEADER>S', '<CMD>mksession!<CR>'},
     {mode = 'n', {
         {'<LeftMouse>', '<LeftMouse>i'},
         -- control keybinds
@@ -42,7 +43,7 @@ nest.applyKeymaps {
             {'sh', shell.newshell },
             --search THIS folder ( uses current buffer directory )
             {'stf','<cmd>lua require"telescope.builtin".live_grep{ search_dirs={"%:p:h"} }<CR>'},
-            {'t', '<CMD>NvimTreeToggle<CR>'},
+            {'t', '<CMD>CHADopen<CR>'},
             -- quick resource
             {'rr', '<CMD>source $MYVIMRC<CR>' },
             -- vimspector commands
