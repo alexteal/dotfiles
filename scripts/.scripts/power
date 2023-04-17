@@ -1,0 +1,2 @@
+#!/bin/bash
+ioreg -rw0 -c AppleSmartBattery | grep -o -e '"ChargingCurrent"=[0-9]*'
