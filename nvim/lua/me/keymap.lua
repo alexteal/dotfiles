@@ -37,6 +37,8 @@ nest.applyKeymaps {
             {'js', '<cmd>JsDoc<CR>'},
             {'lg', '<cmd>LazyGit<CR>'},
             {'wp', '<cmd>Files ~/vimwiki/<CR>' },
+            -- search emojis
+            {'se', '<cmd>Telescope emoji<CR>' },
             -- search folder (uses pwd)
             {'sf', '<cmd>Telescope live_grep<CR>' },
             -- quick open terminal
