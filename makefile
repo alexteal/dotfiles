@@ -4,11 +4,11 @@ update:
 	cp -R ~/.config/nvim/lua nvim/
 	cp -R ~/.scripts ./scripts
 	cp ~/.tmux.conf tmux/tmux.conf
+	cp ~/.tmux.conf.local tmux/tmux.conf.local
 	cp ~/.zshrc zsh/zshrc
 	cp ~/.alias.sh zsh/alias.sh
 	cp ~/.p10k.zsh tmux/p10k.zsh
 	cp ~/.config/alacritty/alacritty.yml alacritty/alacritty.yaml
-	cp ~/.tmux-powerlinerc tmux/tmux-powerlinerc
 
 install:
 	sh install.sh
