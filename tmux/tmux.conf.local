@@ -66,7 +66,7 @@ tmux_conf_24b_colour=auto
 #   - tmux_conf_theme_root
 #   - tmux_conf_theme_synchronized
 tmux_conf_theme=enabled
-
+# catpuccino theming (ansi assumed)
 tmux_conf_theme_colour_1="colour0"    # pastel pink
 tmux_conf_theme_colour_2="colour1"    # gray
 tmux_conf_theme_colour_3="colour2"    # light gray
@@ -84,41 +84,6 @@ tmux_conf_theme_colour_14="#dda0dd"   # dark gray
 tmux_conf_theme_colour_15="colour14"   # dark gray
 tmux_conf_theme_colour_16="colour15"   # red
 tmux_conf_theme_colour_17="colour16"   # white
-#
-#tmux_conf_theme_colour_1="#080808"    # dark gray
-#tmux_conf_theme_colour_2="#add8e6"    # pastel blue
-#tmux_conf_theme_colour_3="#d8bfd8"    # pastel lavender
-#tmux_conf_theme_colour_4="#e0ffff"    # pastel cyan
-#tmux_conf_theme_colour_5="#ffffe0"    # pastel yellow
-#tmux_conf_theme_colour_6="#ffb6c1"    # pastel pink
-#tmux_conf_theme_colour_7="#f5deb3"    # pastel wheat
-#tmux_conf_theme_colour_8="#ffb6c1"    # pastel pink
-#tmux_conf_theme_colour_9="#ffffe0"    # pastel yellow
-#tmux_conf_theme_colour_10="#ff69b4"   # pastel hot pink
-#tmux_conf_theme_colour_11="#98fb98"   # pastel green
-#tmux_conf_theme_colour_12="#d8bfd8"   # pastel lavender
-#tmux_conf_theme_colour_13="#f5deb3"   # pastel wheat
-#tmux_conf_theme_colour_14="#ffb6c1"   # pastel pink
-## default theme
-
-#FFB6C1 (Pastel Pink)
-#FFC0CB (Pastel Pink 2)
-#FFDAB9 (Pastel Peach)
-#FFE4C4 (Pastel Apricot)
-#FFFFE0 (Pastel Yellow)
-#E0FFFF (Pastel Cyan)
-#AFEEEE (Pastel Turquoise)
-#ADD8E6 (Pastel Blue)
-#B0E0E6 (Pastel Blue 2)
-#D8BFD8 (Pastel Lavender)
-#DDA0DD (Pastel Plum)
-#FFC8B4 (Pastel Salmon)
-#FFA07A (Pastel Orange)
-#FFDAB9 (Pastel Coral)
-#98FB98 (Pastel Green)
-#FFB347 (Pastel Amber)
-#FFD700 (Pastel Gold)
-
 # default theme (ansi)
 #tmux_conf_theme_colour_1="colour0"
 #tmux_conf_theme_colour_2="colour8"
@@ -137,26 +102,6 @@ tmux_conf_theme_colour_17="colour16"   # white
 #tmux_conf_theme_colour_15="colour0"
 #tmux_conf_theme_colour_16="colour1"
 #tmux_conf_theme_colour_17="colour15"
-
-# custom theme (gay)
-#FFB6C1 (Pastel Pink)
-#FFC0CB (Pastel Pink 2)
-#FFDAB9 (Pastel Peach)
-#FFE4C4 (Pastel Apricot)
-#FFFFE0 (Pastel Yellow)
-#E0FFFF (Pastel Cyan)
-#AFEEEE (Pastel Turquoise)
-#ADD8E6 (Pastel Blue)
-#B0E0E6 (Pastel Blue 2)
-#D8BFD8 (Pastel Lavender)
-#dda0dd (Pastel Plum)
-#FFC8B4 (Pastel Salmon)
-#FFA07A (Pastel Orange)
-#FFDAB9 (Pastel Coral)
-#98FB98 (Pastel Green)
-#FFB347 (Pastel Amber)
-#FFD700 (Pastel Gold)
-
 
 #tmux_conf_theme_colour_1="#FFB6C1"
 #tmux_conf_theme_colour_2="#FFC0CB"
@@ -322,8 +267,12 @@ tmux_conf_theme_right_separator_sub='\uE0B3'  #   PowerlineSymbols.otf font, see
 #     - #{uptime_s}
 #     - #{username}
 #     - #{username_ssh}
+set -g @now-playing-scrollable-threshold 10
+set -g @now-playing-scrollable-format "{title}-{artist}"
+# left
 tmux_conf_theme_status_left=" ❐ #S | ↑#{?uptime_y, #{uptime_y}y,}#{?uptime_d, #{uptime_d}d,}#{?uptime_h, #{uptime_h}h,}#{?uptime_m, #{uptime_m}m,} | #{username}#{root}@#{hostname} "
-tmux_conf_theme_status_right="#{?battery_status,#{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},}|#{prefix}#{now_playing}#{mouse}#{pairing}#{synchronized}|#($TMUX_PLUGIN_MANAGER_PATH/tmux-mem-cpu-load/tmux-mem-cpu-load -a 0 -g 0 --interval 2)|#{ip_address}|%m/%d/%y|%H:%M"
+# right
+tmux_conf_theme_status_right="#{?battery_status,#{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},}|#{prefix}#{now_playing}#{pairing}#{synchronized}|#{cpu}|#{ip_address}|%m/%d/%y|%H:%M"
 
 # status left style
 tmux_conf_theme_status_left_fg="$tmux_conf_theme_colour_1,$tmux_conf_theme_colour_1,$tmux_conf_theme_colour_1"
@@ -571,6 +520,29 @@ set -g @plugin 'spywhere/tmux-now-playing'
 # online() {
 #   ping -c 1 1.1.1.1 >/dev/null 2>&1 && printf '✔' || printf '✘'
 # }
+#
+#    cpu(){
+#
+#
+#        if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+## Get CPU usage and memory usage on Linux
+#            top_output=$(top -bn1)
+#                cpu_usage=$(printf "%04.2f" $(echo "$top_output" | grep "Cpu(s)" | awk '{print $2 + $4}'))
+#                mem_usage=$(printf "%04.2f" $(echo "$top_output" | awk '/Mem/{printf("%.2f"), $3/$2*100}'))
+#                elif [[ "$OSTYPE" == "darwin"* ]]; then
+## Get CPU usage and memory usage on Mac
+#                top_output=$(top -l 1)
+#                cpu_usage=$(printf "%04.2f" $(echo "$top_output" | grep "CPU usage" | awk '{print $3}' | cut -d'%' -f1))
+#                mem_used=$(echo "$top_output" | grep PhysMem | awk '{print $2}' | sed 's/M//')
+#                mem_total=$(echo "$top_output" | grep PhysMem | awk '{print $6}' | sed 's/M//')
+#                mem_usage=$(printf "%04.2f" $(echo "scale=2; $mem_used/$mem_total*100" | bc))
+#        else
+#            echo "Unsupported OS"
+#                exit 1
+#                fi 
+#                echo "CPU[$cpu_usage] MEM[$mem_usage]"
+#    }
+#
 #
 # "$@"
 # # /!\ do not remove the previous line
