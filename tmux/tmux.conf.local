@@ -323,16 +323,20 @@ tmux_conf_theme_right_separator_sub='\uE0B3'  #   PowerlineSymbols.otf font, see
 #     - #{username}
 #     - #{username_ssh}
 tmux_conf_theme_status_left=" ❐ #S | ↑#{?uptime_y, #{uptime_y}y,}#{?uptime_d, #{uptime_d}d,}#{?uptime_h, #{uptime_h}h,}#{?uptime_m, #{uptime_m}m,} | #{username}#{root}@#{hostname} "
-tmux_conf_theme_status_right=" #{prefix}#{mouse}#{pairing}#{synchronized}#{?battery_status,#{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},}|#($TMUX_PLUGIN_MANAGER_PATH/tmux-mem-cpu-load/tmux-mem-cpu-load -a 0 -g 0 --interval 2)|#{ip_address}|%m/%d/%y|%H:%M|"
+tmux_conf_theme_status_right="#{?battery_status,#{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},}|#{prefix}#{now_playing}#{mouse}#{pairing}#{synchronized}|#($TMUX_PLUGIN_MANAGER_PATH/tmux-mem-cpu-load/tmux-mem-cpu-load -a 0 -g 0 --interval 2)|#{ip_address}|%m/%d/%y|%H:%M"
 
 # status left style
-tmux_conf_theme_status_left_fg="$tmux_conf_theme_colour_1,$tmux_conf_theme_colour_1,$tmux_conf_theme_colour_1,$tmux_conf_theme_colour_1,$tmux_conf_theme_colour_1"
+tmux_conf_theme_status_left_fg="$tmux_conf_theme_colour_1,$tmux_conf_theme_colour_1,$tmux_conf_theme_colour_1"
 tmux_conf_theme_status_left_bg="$tmux_conf_theme_colour_13,$tmux_conf_theme_colour_16,$tmux_conf_theme_colour_14"
 tmux_conf_theme_status_left_attr="bold,none,none"
 
 # status right style
-tmux_conf_theme_status_right_fg="$tmux_conf_theme_colour_2,$tmux_conf_theme_colour_4,$tmux_conf_theme_colour_3,$tmux_conf_theme_colour_5,$tmux_conf_theme_colour_6"
-tmux_conf_theme_status_right_bg="$tmux_conf_theme_colour_1,$tmux_conf_theme_colour_1,$tmux_conf_theme_colour_1,$tmux_conf_theme_colour_1,$tmux_conf_theme_colour_1"
+# ok, so this is borked. As of 04/17/23 
+# First color is used as the LAST color, for some reason. I think it's because the 
+# battery config is shown first. Doesn't make much sense, but it works for now. 
+# BE CAREFUL.
+tmux_conf_theme_status_right_fg="$tmux_conf_theme_colour_6,$tmux_conf_theme_colour_2,$tmux_conf_theme_colour_4,$tmux_conf_theme_colour_3,$tmux_conf_theme_colour_5,$tmux_conf_theme_colour_6"
+tmux_conf_theme_status_right_bg="$tmux_conf_theme_colour_1,$tmux_conf_theme_colour_1,$tmux_conf_theme_colour_1,$tmux_conf_theme_colour_1,$tmux_conf_theme_colour_1,$tmux_conf_theme_colour_1"
 tmux_conf_theme_status_right_attr="none,none,none,none,none"
 
 # pairing indicator
