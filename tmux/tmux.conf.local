@@ -441,16 +441,35 @@ set -g mouse on
 set-option -g prefix C-Space
 
 bind-key C-Space send-prefix
-
+# free keys
+unbind J
+unbind K
+unbind H
+unbind L
+unbind C-h
+unbind C-l
+#easy splits
 bind S split-window -v -c "#{pane_current_path}"
 bind D split-window -h -c "#{pane_current_path}"
+#move panes
 bind h select-pane -L
 bind l select-pane -R
 bind k select-pane -U
 bind j select-pane -D
+#default window movement
 bind n next-window
 bind p previous-window
+#resizing
+bind -r C-h resize-pane -L 2
+bind -r C-j resize-pane -D 2
+bind -r C-k resize-pane -U 2
+bind -r C-l resize-pane -R 2
 
+
+bind -r K swap-pane -U
+bind -r J swap-pane -D
+bind -r H swap-pane -U
+bind -r L swap-pane -D
 bind g new-window -c "#{pane_current_path}" "lazygit"
 bind F new-window -c "#{pane_current_path}" 'cat $( find . -maxdepth 2 ) 2>/dev/null | fzf'
 
@@ -523,6 +542,7 @@ tmux_conf_uninstall_plugins_on_reload=true
 set -g @plugin 'tmux-plugins/tmux-cpu'
 set -g @plugin 'anghootys/tmux-ip-address'
 set -g @plugin 'thewtex/tmux-mem-cpu-load'
+set -g @plugin 'spywhere/tmux-now-playing'
 #set -g @plugin 'tmux-plugins/tmux-resurrect'
 #set -g @plugin 'tmux-plugins/tmux-continuum'
 #set -g @continuum-restore 'on'

@@ -134,4 +134,5 @@ require('packer').startup(function(use)
         event  = { "BufNewFile", "BufRead", "InsertEnter" },
         config = function() require('colorizer').setup() end,
     }
+    use { 'simeji/winresizer' }
 end)

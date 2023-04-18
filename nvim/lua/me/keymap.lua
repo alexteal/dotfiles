@@ -11,6 +11,11 @@ nest.applyKeymaps {
         {'<LeftMouse>', '<LeftMouse>i'},
         -- control keybinds
         { '<c-x>',  '<cmd>call vimspector#Continue()<CR>' },
+        -- window resizing commands
+        { '<C-w><C-h>', '<CMD>WinResizerStartResize<CR>h' },
+        { '<C-w><C-j>', '<CMD>WinResizerStartResize<CR>j' },
+        { '<C-w><C-k>', '<CMD>WinResizerStartResize<CR>k' },
+        { '<C-w><C-l>', '<CMD>WinResizerStartResize<CR>l' },
         -- leader
         {'<leader>', {
             { 'ai', '<CMD>ChatGPT<CR>', },
