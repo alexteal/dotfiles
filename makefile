@@ -8,7 +8,7 @@ update:
 	cp ~/.zshrc zsh/zshrc
 	cp ~/.alias.sh zsh/alias.sh
 	cp ~/.p10k.zsh tmux/p10k.zsh
-	cp ~/.config/alacritty/alacritty.yml alacritty/alacritty.yaml
+	cp ~/.config/alacritty/alacritty.yaml alacritty/alacritty.yaml
 
 install:
 	sh install.sh
