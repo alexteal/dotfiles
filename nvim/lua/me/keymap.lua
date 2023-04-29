@@ -6,7 +6,7 @@ nest.applyKeymaps {
     -- Remove silent from ; : mapping, so that : shows up in command mode
     { ';', ':' , options = { silent = false } },
     { '<LEADER>P', '<CMD>source $HOME/Session.vim<CR>'},
-    { '<LEADER>S', '<CMD>mksession!<CR>'},
+    { '<LEADER>S', '<CMD>mksession! $HOME/Session.vim<CR>'},
     {mode = 'n', {
         {'<LeftMouse>', '<LeftMouse>i'},
         -- control keybinds
@@ -27,21 +27,37 @@ nest.applyKeymaps {
             --datetime
             {'da', 'i<return><esc><up><cmd>put =strftime(\'%c\')<CR>i<backspace>==<Esc><S-a>==<esc><S-a><return>'},
 
-            -- leader f
+            -- leader f ( for "Find" )
             {'f', {
-                {'f', '<CMD>FZF<CR>' },
-                {'h', '<cmd>Telescope help_tags<CR>' },
+                -- find buffer
+                {'b', '<cmd>Telescope buffers<CR>' },
+                -- find command
                 {'c', '<cmd>Telescope commands<CR> ' },
-                {'b', '<cmd>Telescope buffers<CR>jj' },
-                {'s', '<cmd>PRg<CR>' },
                 {'d', '<CMD>Telescope coc diagnostics<CR>'},
+                -- find emoji
+                {'e', '<cmd>Telescope emoji<CR>' },
+                -- find file
+                {'f', '<CMD>FZF<CR>' },
+                -- find help
+                {'h', '<cmd>Telescope help_tags<CR>' },
+                -- find in file
+                {'if', '<CMD>Telescope current_buffer_fuzzy_find<CR>' },
+                -- find in buffer (same command, but easier to remember)
+                {'ib', '<CMD>Telescope current_buffer_fuzzy_find<CR>' },
+                -- find keymap
+                {'k', '<CMD>Telescope keymaps<CR>' },
                 {'l', '<CMD>Telescope coc document_symbols<CR>'},
+                -- find in THIS folder (current buffer directory)
+                {'tf','<cmd>lua require"telescope.builtin".live_grep{ search_dirs={"%:p:h"} }<CR>'},
+                {'s', '<cmd>PRg<CR>' },
             }},
             {'hex', '<cmd>file %.hexdump<CR><cmd>%!xxd<CR><cmd>set syntax=xxd<CR>'},
             { 'jd','<cmd>CocCommand java.debug.vimspector.start<CR>'},
             {'js', '<cmd>JsDoc<CR>'},
             {'lg', '<cmd>LazyGit<CR>'},
             {'wp', '<cmd>Files ~/vimwiki/<CR>' },
+            -- search buffer
+            {'se', '<cmd>Telescope current_buffer_fuzzy_find<CR>' },
             -- search emojis
             {'se', '<cmd>Telescope emoji<CR>' },
             -- search folder (uses pwd)
