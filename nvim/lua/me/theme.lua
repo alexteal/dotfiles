@@ -1,0 +1,2 @@
+theme = 'latte'
+return theme

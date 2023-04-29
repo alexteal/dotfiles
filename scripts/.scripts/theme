@@ -1,0 +1,24 @@
+#!/bin/bash
+#define available themes
+themes=("frappe" "latte" "macchiato" "mocha")
+# Check if theme argument is provided
+if [ -z "$1" ]; then
+  echo "Please provide a theme argument"
+  echo -e "Available themes are: \n\t${themes[*]}"
+  exit 1
+fi
+# Check if the argument is one of the available themes
+if [[ ! " ${themes[*]} " =~ " $1 " ]]; then
+  echo -e "$1 isn't a theme. Available themes are: \n\t${themes[*]}"
+  exit 1
+fi
+# Set the ~/.config/alacritty/theme.yml file to
+# import: 
+# - ~/.config/alacritty/catpuccin/catpuccin-$1.yml
+echo "import:" > ~/.config/alacritty/theme.yml
+echo "  - ~/.config/alacritty/catpuccin/catppuccin-$1.yml" >> ~/.config/alacritty/theme.yml
+echo "Theme changed to $1"
+
+# Set the neovim theme to the same as the alacritty theme
+echo "theme = '$1'" > ~/.config/nvim/lua/me/theme.lua
+echo "return theme" >> ~/.config/nvim/lua/me/theme.lua
