@@ -11,7 +11,7 @@ update:
 	cp ~/.config/alacritty/alacritty.yaml alacritty/alacritty.yaml
 
 install:
-	sh install.sh
+	./install
 test:
 	cp ~/.config/nvim/init.vim nvim/init.vim.test
 	cp ~/.tmux.conf tmux/tmux.conf.test
