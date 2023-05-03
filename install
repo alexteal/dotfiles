@@ -1,0 +1,280 @@
+#!/bin/bash
+
+# Backup dotfiles
+while true; do
+    read -p "Do you want to make backups of your current dotfiles? (y/n) " yn
+    case $yn in
+        [yY]*)
+            echo "Making backups..."
+            for file in "$HOME"/.{zshrc,tmux.conf,p10k.zsh}; do
+                if [[ -f $file ]]; then
+                    mv -f "$file" "${file}.bak"
+                fi
+            done
+            break;;
+        [nN]*) echo "Proceeding without backups."; break;;
+        *) echo "Invalid response. Please enter 'y' or 'n'.";;
+    esac
+done
+
+# Create necessary directories
+mkdir -p "$HOME"/.config/{nvim,alacritty} "$HOME"/.scripts "$HOME"/bin
+
+# Backup init.lua if it exists
+init_file="$HOME"/.config/nvim/init.lua
+if [[ -f "$init_file" ]]; then
+    echo "An init.lua was found. Moving it to init.lua."
+    mv -f "$init_file" "${init_file}.backup.$(date +%s)"
+fi
+
+# Ensure scripts are up to date
+relink=0
+for script in ./scripts/.scripts/*; do
+    [[ ! -e $script ]] && continue
+    file1=$(cksum "$script" 2>/dev/null)
+    file2=$(cksum "$HOME/.scripts/$(basename "$script")" 2>/dev/null)
+    file1=$(basename "$file1")
+    file2=$(basename "$file2")
+    [[ $file1 != $file2 ]] && relink=1
+done
+
+# Copy dotfiles and scripts
+cp -f ./zsh/{zshrc,alias.sh} "$HOME"
+cp -f ./tmux/{tmux.conf,p10k.zsh,tmux.conf.local} "$HOME"
+cp -r -f ./nvim/* "$HOME"/.config/nvim/
+cp -f ./scripts/.scripts/* "$HOME"/.scripts/
+cp -f ./alacritty/alacritty.yaml "$HOME"/.config/alacritty/
+
+# Determine package manager and install necessary dependencies
+install_prefix=""
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # OSX
+    if [[ ! "$(command -v brew)" ]]; then
+        echo "Installing Homebrew..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    fi
+    install_prefix="brew install"
+elif command -v dnf &> /dev/null; then
+    # Fedora
+    install_prefix="sudo dnf install -y"
+    sudo dnf makecache --refresh
+elif command -v apt-get &> /dev/null; then
+    # Debian/Ubuntu
+    install_prefix="sudo apt-get install -y"
+    sudo apt-get update
+    sudo apt-get upgrade
+fi
+
+if [[ -n "$install_prefix" ]]; then
+    echo "Installing dependencies..."
+    for program in zsh make tmux curl fzf node npm git nvim; do
+        if ! command -v "$program" &> /dev/null; then
+            echo "$program not found, installing..."
+            eval "$install_prefix $program"
+        fi
+    done
+    # Install oh-my-zsh if not already installed
+    if [ ! -f $HOME/.oh-my-zsh/oh-my-zsh.sh ]; then
+        echo "oh-my-zsh not found, installing..."
+        sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    fi
+
+    # Install powerlevel10k if not already installed
+    if [ ! -d $HOME/.oh-my-zsh/custom/themes/powerlevel10k ]; then
+        echo "powerline10k not found, installing... ( required for bash line styling )"
+        git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+    fi
+
+    if [ ! -d $HOME/.local/share/nvim/site/pack/packer/start ] ; then
+        echo "packer.nvim not found, installing..."
+        git clone --depth 1 https://github.com/wbthomason/packer.nvim\
+            $HOME/.local/share/nvim/site/pack/packer/start/packer.nvim
+    fi
+
+
+    # Install lazygit if not already installed
+    if ! command -v lazygit &> /dev/null; then
+        case $OS in
+            "Darwin")
+                eval "$install_prefix jesseduffield/lazygit/lazygit"
+                ;;
+            "Fedora")
+                echo "lazygit not found, installing..."
+                eval "$sudo dnf copr enable atim/lazygit -y"
+                eval "$install_prefix lazygit"
+                ;;
+            *)
+                ERRORS+="lazygit not available for this distro. Install from source \n"
+                ERRORS+="https://github.com/jesseduffield/lazygit#manual"
+                ;;
+        esac
+    fi
+
+    # Install Python3 and pip if not already installed
+    if ! command -v python3 &> /dev/null; then
+        while true; do
+            echo "Python3 not found. This installer assumes you have pip, so this can cause problems."
+            echo "(1) install using $install_prefix"
+            echo "(2) exit installation, my python path is weird."
+            read val
+
+            case $val in
+                [1]) echo "installing...";
+                    eval "$install_prefix python3"
+                    break;;
+                [2]) echo "EXITING";
+                    exit 1
+                    break;;
+                *) echo "invalid response";;
+            esac
+        done
+    fi
+
+    # All pip installs go between here and the 'deactivate' block
+    # Activate virtual environment
+    if [ ! -d $HOME/.config/nvim/venv ]; then
+        echo "Python3 venv for neovim not found. Generating..."
+        original_virtual_env="$VIRTUAL_ENV"
+        python3 -m venv "$HOME/.config/nvim/venv"
+    fi
+    # assuming that we can source this venv path
+    source "$HOME/.config/nvim/venv/bin/activate"
+    # install sed, and set proper nvim venv path
+    if [ -d $HOME/.path.zsh ] ; then 
+        which sed &> /dev/null
+        nvim_py_venv_path=$HOME/.config/nvim/venv/bin/python
+        if [[ $? != 0 ]]; then
+            "gnu-sed not found, installing..."
+        fi
+        case $OS in 
+            *"ebian"*)
+                eval "$install_prefix sed"
+                sed -i "s/NVIM_PY_PATH.*/NVIM_PY_PATH=$nvim_py_venv_path/g" $HOME/.alias.zsh
+                ;;
+            *"buntu"*)
+                eval "$install_prefix sed"
+                sed -i "s/NVIM_PY_PATH.*/NVIM_PY_PATH=$nvim_py_venv_path/g" $HOME/.alias.zsh
+                ;;
+            *"arwin"*)
+                eval "$install_prefix gnu-sed"
+                gsed -i "s/NVIM_PY_PATH.*/NVIM_PY_PATH=$nvim_py_venv_path/g" $HOME/.alias.zsh
+                ;;
+            *"edora"*)
+                eval "$install_prefix sed"
+                sed -i "s/NVIM_PY_PATH.*/NVIM_PY_PATH=$nvim_py_venv_path/g" $HOME/.alias.zsh
+                ;;
+            *) 
+                ;;
+        esac
+
+    fi
+
+    function install_py_mod() {
+        pip show $1 &> /dev/null
+        if [[ $? != 0 ]]; then
+            echo "$1 python package not found, installing..."
+            pip install $1
+        fi
+    } 
+
+    install_py_mod neovim 
+    install_py_mod jedi 
+
+    # recover current virtual env
+    deactivate
+
+    if [ -n "$original_virtual_env" ]; then
+        source "$original_virtual_env/bin/activate"
+    fi
+
+    # install yarn/ neovim for node
+    # Install neovim using npm, just for compatiblity
+    npm list --location=global neovim &> /dev/null
+    if [[ $? != 0 ]]; then
+        which yarn &> /dev/null
+        if [[ $? != 0 ]]; then
+            "yarn not found, installing..."
+            $sudo npm install -g yarn
+        fi
+        yarn global list neovim | grep "neovim" &> /dev/null
+        if [[ $? != 0 ]]; then
+            echo "installing neovim module with npm..."
+            $sudo npm install -g neovim
+        fi
+    fi
+
+    # Ruby installation
+    which ruby &> /dev/null
+    if [[ $? != 0 ]]; then
+        echo "ruby not found, checking ruby-install..."
+        which ruby-install &> /dev/null
+        if [[ $? != 0 ]]; then
+            case $OS in 
+                *"ebian"*)
+                    echo "ruby-install not available, installing package manager ruby..."
+                    eval "$install_prefix ruby-full"
+                    ;;
+                *"buntu"*)
+                    echo "ruby-install not available, installing package manager ruby..."
+                    eval "$install_prefix ruby-full"
+                    ;;
+                *"arwin"*)
+                    echo "ruby-install not found, installing..."
+                    eval "$install_prefix ruby-install --HEAD"
+                    echo "installing latest ruby using ruby-install..."
+                    ruby-install --latest
+                    ;;
+                *"edora"*)
+                    echo "ruby-install not available, installing package manager ruby..."
+                    eval "$sudo yum install ruby"
+                    ;;
+                *) 
+                    ;;
+            esac
+        fi
+        echo 
+    fi
+
+    gem list neovim | grep "neovim" &> /dev/null
+    if [[ $? != 0 ]]; then
+        "neovim gem not found, installing..."
+        gem install neovim
+    fi
+
+    if [[ ! $PATH == *"$HOME/bin"* ]]; then
+        if [ -d $HOME/bin ]; then
+            echo "$HOME/bin not found in path, adding to $HOME/.path.zsh"
+            echo 'if [[ ! $PATH == *"$HOME/bin"* ]]; then
+            export PATH=$PATH:$HOME/bin
+        fi
+        ' >> $HOME/.path.zsh
+    fi
+fi
+
+fi
+echo
+echo
+echo "    ██╗ ██████╗ ███████╗███╗   ██╗███████╗                              ";
+echo "   ██╔╝██╔════╝ ██╔════╝████╗  ██║╚══███╔╝                              ";
+echo "  ██╔╝ ██║  ███╗█████╗  ██╔██╗ ██║  ███╔╝                               ";
+echo " ██╔╝  ██║   ██║██╔══╝  ██║╚██╗██║ ███╔╝                                ";
+echo "██╔╝   ╚██████╔╝███████╗██║ ╚████║███████╗                              ";
+echo "╚═╝     ╚═════╝ ╚══════╝╚═╝  ╚═══╝╚══════╝                              ";
+echo "                                                                        ";
+echo "███╗   ███╗███████╗███████╗████████╗███████╗                            ";
+echo "████╗ ████║██╔════╝██╔════╝╚══██╔══╝██╔════╝                            ";
+echo "██╔████╔██║█████╗  █████╗     ██║   ███████╗                            ";
+echo "██║╚██╔╝██║██╔══╝  ██╔══╝     ██║   ╚════██║                            ";
+echo "██║ ╚═╝ ██║███████╗███████╗   ██║   ███████║                            ";
+echo "╚═╝     ╚═╝╚══════╝╚══════╝   ╚═╝   ╚══════╝                            ";
+echo "                                                                        ";
+echo "████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗         ██╗";
+echo "╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║        ██╔╝";
+echo "   ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║       ██╔╝ ";
+echo "   ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║      ██╔╝  ";
+echo "   ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗██╔╝   ";
+echo "   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝╚═╝    ";
+echo "                                                                        ";
+echo "Run checkhealth inside of neovim to ensure plugins installed correctly."
+echo $ERRORS
+

@@ -128,32 +128,17 @@ do
     ln -sf "$filename" $HOME/bin/$(basename "$filename")
 done
 
+function install_using_prefix {
+    for program in "$@"; do
+        which "$program" &> /dev/null
+        if [[ $? != 0 ]] ; then
+            echo "$program not found, installing..."
+            eval "$install_prefix $program"
+        fi
+    done
+}
 
-
-which zsh &> /dev/null
-if [[ $? != 0 ]] ; then
-    echo "zsh not found, installing..."
-    eval "$install_prefix zsh"
-fi
-
-which make &> /dev/null
-if [[ $? != 0 ]] ; then
-    echo "make not found, installing..."
-    eval "$install_prefix make"
-fi
-
-which tmux &> /dev/null
-if [[ $? != 0 ]] ; then
-    echo "tmux not found, installing..."
-    eval "$install_prefix tmux"
-    git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
-fi
-
-which curl &> /dev/null
-if [[ $? != 0 ]] ; then
-    echo "curl not found, installing..."
-    eval "$install_prefix curl"
-fi
+install_using_prefix zsh make tmux curl fzf node npm 
 
 which nvim &> /dev/null
 if [[ $? != 0 ]] ; then
@@ -171,12 +156,6 @@ fi
 if [ ! -d $HOME/.oh-my-zsh/custom/themes/powerlevel10k ] ; then
     echo "powerline10k not found, installing... ( required for bash line styling )"
     git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
-fi
-
-which fzf &> /dev/null
-if [[ $? != 0 ]] ; then
-    echo "fzf not found, installing... ( required for neovim )"
-    eval "$install_prefix fzf"
 fi
 
 which lazygit &> /dev/null
@@ -299,18 +278,6 @@ pip show  jedi &> /dev/null
 if [[ $? != 0 ]]; then
     echo "neovim python package not found, installing..."
     pip install jedi
-fi
-
-which node &> /dev/null
-if [[ $? != 0 ]]; then
-    "node not found, installing..."
-    eval "$install_prefix node"
-fi
-
-which npm &> /dev/null
-if [[ $? != 0 ]]; then
-    "npm not found, installing..."
-    eval "$install_prefix npm"
 fi
 
 # install yarn/ neovim for node
