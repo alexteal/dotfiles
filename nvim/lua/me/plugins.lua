@@ -13,6 +13,8 @@ require('packer').startup(function(use)
     -- async processes
     use { 'nvim-lua/plenary.nvim'}
 
+    -- sudo while non-superuser
+    use { 'lambdalisue/suda.vim' }
     -- file tree 
     use { 'kyazdani42/nvim-web-devicons',
         disable = false ,
