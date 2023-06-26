@@ -6,6 +6,7 @@ default_ignore="// BEGIN Default Ignored folders
 *mypy_cache**
 *node_modules**
 ARCHIVE**
+.env**
 // END Default Ignore folders
 "
 echo "$default_ignore" >> "$HOME/projects/.stignore"
