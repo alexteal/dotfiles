@@ -1,24 +1,23 @@
 #!/bin/bash
 slug=$(date +%s)
 count=$(ls $HOME/vimwiki/diary | wc -l| xargs)
-
 cd $HOME/vimwiki/
-
 gpgtar -o $HOME/vimwiki/diary$slug.gpg --yes -r $USER -e diary
-bytes_new=$(wc -c $HOME/vimwiki/diary$slug.gpg)
-bytes_old=$(wc -c $HOME/vimwiki/diary.gpg)
-if [[ $count -gt 30 ]]; then
-    if [[ "$?" == "0" ]]; then
-        mv -f $HOME/vimwiki/diary$slug.gpg $HOME/vimwiki/diary.gpg
-        rm -rf $HOME/vimwiki/diary
-        echo [Locked]
-    fi
+bytes_new=$(wc -c $HOME/vimwiki/diary$slug.gpg | awk '{print $1}')
+bytes_old=$(wc -c $HOME/vimwiki/diary.gpg | awk '{print $1}')
+if [[ $count -ge 30 && $bytes_new -gt $bytes_old ]]; then
+    mv -f $HOME/vimwiki/diary$slug.gpg $HOME/vimwiki/diary.gpg
+    rm -rf $HOME/vimwiki/diary
+    echo "[Locked]"
 else
-    echo "[Error] Current diary contains $count items, much less than expected."
+    echo "[Error] Current diary does not meet the requirements for replacement."
     echo "Check directory, trying to force this might cause file loss."
+    echo "[Requirements]"
+    echo "- Contains at least 30 items"
+    echo "- New archive is larger than old archive"
     echo "[Bytes]"
     echo "New archive: $bytes_new"
     echo "Old archive: $bytes_old"
     rm $HOME/vimwiki/diary$slug.gpg
     exit 1
-fi 
+fi
