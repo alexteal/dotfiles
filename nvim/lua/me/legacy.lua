@@ -48,3 +48,7 @@ silent! helptags ALL
 cmd[[
 " autocmd! VimLeave * mksession
 ]]
+-- vimwiki uses markdown
+cmd[[
+let g:vimwiki_list = [{'path': '~/vimwiki/', 'syntax': 'markdown', 'ext': '.md'}]
+]]

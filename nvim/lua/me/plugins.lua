@@ -130,7 +130,7 @@ require('packer').startup(function(use)
         ft = {"tex"},
     }
     -- wiki
-    use { 'vimwiki/vimwiki' }
+    use { 'vimwiki/vimwiki'}
     -- colorizer for hex
     use { 'norcalli/nvim-colorizer.lua' ,
         event  = { "BufNewFile", "BufRead", "InsertEnter" },
