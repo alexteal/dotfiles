@@ -1,13 +1,26 @@
 #!/bin/bash
 slug=$(date +%s)
-count=$(ls $HOME/vimwiki/diary | wc -l| xargs)
+count=$(ls $HOME/vimwiki/diary | wc -l | xargs)
 cd $HOME/vimwiki/
-gpgtar -o $HOME/vimwiki/diary$slug.gpg --yes -r $USER -e diary
+gpgtar -o $HOME/vimwiki/diary$slug.gpg -r alexteal -e diary
 bytes_new=$(wc -c $HOME/vimwiki/diary$slug.gpg | awk '{print $1}')
 bytes_old=$(wc -c $HOME/vimwiki/diary.gpg | awk '{print $1}')
 if [[ $count -ge 30 && $bytes_new -gt $bytes_old ]]; then
+    # Move the new diary file to diary.gpg
     mv -f $HOME/vimwiki/diary$slug.gpg $HOME/vimwiki/diary.gpg
-    rm -rf $HOME/vimwiki/diary
+    # Rotate the old diary files
+    for ((i=9; i>=0; i--)); do
+        if [[ -f $HOME/vimwiki/diary_$i.gpg ]]; then
+            mv -f $HOME/vimwiki/diary_$i.gpg $HOME/vimwiki/diary_$((i+1)).gpg
+        fi
+    done
+    # Create newest backup
+    cp $HOME/vimwiki/diary.gpg $HOME/vimwiki/diary_0.gpg
+    # Remove the oldest diary file if it exists
+    if [[ -f $HOME/vimwiki/diary_10.gpg ]]; then
+        rm -f $HOME/vimwiki/diary_10.gpg
+    fi
+
     echo "[Locked]"
 else
     echo "[Error] Current diary does not meet the requirements for replacement."
@@ -21,3 +34,4 @@ else
     rm $HOME/vimwiki/diary$slug.gpg
     exit 1
 fi
+
