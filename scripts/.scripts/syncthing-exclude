@@ -7,6 +7,9 @@ default_ignore="// BEGIN Default Ignored folders
 *node_modules**
 ARCHIVE**
 .env**
+*.env**
+*zathura**
+
 // END Default Ignore folders
 "
 echo "$default_ignore" >> "$HOME/projects/.stignore"
