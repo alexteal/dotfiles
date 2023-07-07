@@ -20,7 +20,9 @@ if [[ $count -ge 30 && $bytes_new -gt $bytes_old ]]; then
     if [[ -f $HOME/vimwiki/diary_10.gpg ]]; then
         rm -f $HOME/vimwiki/diary_10.gpg
     fi
-
+    # remove old diary
+    
+    rm -rf $HOME/vimwiki/diary
     echo "[Locked]"
 else
     echo "[Error] Current diary does not meet the requirements for replacement."
