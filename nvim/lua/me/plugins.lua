@@ -140,4 +140,6 @@ require('packer').startup(function(use)
 
     -- transparent background on load (trying this out==Sun 25 Jun 2023 08:57:12 PM EDT==)
     use { 'xiyaowong/transparent.nvim', event = { 'BufEnter', 'BufRead' } }
+
+    use {'rinx/nvim-minimap'}
 end)

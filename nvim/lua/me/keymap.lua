@@ -49,12 +49,15 @@ nest.applyKeymaps {
                 {'l', '<CMD>Telescope coc document_symbols<CR>'},
                 -- find in THIS folder (current buffer directory)
                 {'tf','<cmd>lua require"telescope.builtin".live_grep{ search_dirs={"%:p:h"} }<CR>'},
+                -- find registers
+                {'r', '<cmd>Telescope registers<CR>' }, 
                 {'s', '<cmd>PRg<CR>' },
             }},
             {'hex', '<cmd>file %.hexdump<CR><cmd>%!xxd<CR><cmd>set syntax=xxd<CR>'},
             { 'jd','<cmd>CocCommand java.debug.vimspector.start<CR>'},
             {'js', '<cmd>JsDoc<CR>'},
             {'lg', '<cmd>LazyGit<CR>'},
+            {'m', '<cmd>MinimapToggle<cr>'},
             {'wp', '<cmd>Files ~/vimwiki/<CR>' },
             -- search buffer
             {'se', '<cmd>Telescope current_buffer_fuzzy_find<CR>' },
