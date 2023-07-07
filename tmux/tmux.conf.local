@@ -415,7 +415,6 @@ bind -r C-j resize-pane -D 2
 bind -r C-k resize-pane -U 2
 bind -r C-l resize-pane -R 2
 
-
 bind -r K swap-pane -U
 bind -r J swap-pane -D
 bind -r H swap-pane -U
@@ -430,6 +429,11 @@ bind Q run-shell "~/.scripts/tmux-kill-session.sh"
 bind c new-window -c "#{pane_current_path}"
 bind '"' split-window -c "#{pane_current_path}"
 bind % split-window -h -c "#{pane_current_path}"
+
+#rotate current opacity in alacritty
+bind O run-shell "opac"
+# kill current session
+bind Q run-shell "~/.scripts/tmux-kill-session.sh"
 # this fixes bad backspace behavior
 #set -g default-terminal "xterm-256color"
 #set -g terminal-overrides ',xterm-256color:Tc'
