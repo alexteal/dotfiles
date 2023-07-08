@@ -1,4 +1,10 @@
 #!/bin/bash
+# Define the ANSI escape sequence for red color
+RED='\033[0;31m'
+# Define the ANSI escape sequence to reset the color
+NC='\033[0m'
+# Echo the error message in red color
+#echo -e "${RED}Error: Something went wrong.${NC}"
 slug=$(date +%s)
 count=$(ls $HOME/vimwiki/diary | wc -l | xargs)
 cd $HOME/vimwiki/
@@ -21,19 +27,39 @@ if [[ $count -ge 30 && $bytes_new -gt $bytes_old ]]; then
         rm -f $HOME/vimwiki/diary_10.gpg
     fi
     # remove old diary
-    
     rm -rf $HOME/vimwiki/diary
     echo "[Locked]"
 else
-    echo "[Error] Current diary does not meet the requirements for replacement."
-    echo "Check directory, trying to force this might cause file loss."
+    echo -e "${RED}[Error] Current diary does not meet the requirements for replacement.${NC}"
+    echo -e "${RED}Check directory, trying to force this might cause file loss.${NC}"
     echo "[Requirements]"
     echo "- Contains at least 30 items"
     echo "- New archive is larger than old archive"
     echo "[Bytes]"
     echo "New archive: $bytes_new"
     echo "Old archive: $bytes_old"
-    rm $HOME/vimwiki/diary$slug.gpg
-    exit 1
+    read -p "Do you want to override and lock the diary anyway? (y/n) " choice
+    case "$choice" in 
+      y|Y ) 
+        read -p "$(echo -e ${RED}ARE YOU SURE? This is a destructive action!${NC}) (y/n)" confirm
+        case "$confirm" in
+          y|Y ) 
+            mv -f $HOME/vimwiki/diary$slug.gpg $HOME/vimwiki/diary.gpg
+            rm -rf $HOME/vimwiki/diary
+            echo "[Locked]"
+            ;;
+          * ) 
+            echo "Operation cancelled."
+            rm $HOME/vimwiki/diary$slug.gpg
+            exit 1
+            ;;
+        esac
+        ;;
+      * ) 
+        echo "Operation cancelled."
+        rm $HOME/vimwiki/diary$slug.gpg
+        exit 1
+        ;;
+    esac
 fi
 
