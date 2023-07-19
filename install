@@ -38,6 +38,13 @@ for script in ./scripts/.scripts/*; do
     [[ $file1 != $file2 ]] && relink=1
 done
 
+if [[ $relink -eq 1 ]]; then
+    for i in "$HOME"/.scripts/*;
+    do 
+        ln -sf "$i" "$HOME"/bin/$(echo "$i" | cut -d "/" -f 5)
+    done
+fi
+
 # Copy dotfiles and scripts
 cp -f ./zsh/{zshrc,alias.sh} "$HOME"
 cp -f ./zsh/zshrc "$HOME"/.zshrc
