@@ -20,8 +20,10 @@ font:
 window:
   opacity: 0.85
 
-    #import:
-  #- ~/.config/alacritty/themes/themes/ayu_dark.yaml
+import:
+  - ~/.config/alacritty/theme.yml
+  - ~/.config/alacritty/opacity.yml
+
 shell:
   program: /bin/zsh
   args:
