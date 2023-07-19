@@ -27,7 +27,7 @@ require('packer').startup(function(use)
 --              require ('nvim-tree-config')
 --          end,
 --      }
-
+    use { 'sindrets/diffview.nvim' }
     use { 'ms-jpq/chadtree',
         branch = 'chad',
         run = 'python3 -m chadtree deps',

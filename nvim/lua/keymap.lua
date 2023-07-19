@@ -16,15 +16,29 @@ nest.applyKeymaps {
             {'bb', '<c-6>'},
             --datetime
             {'da','i<return><esc><up><cmd>put =system('LC_TIME=C date "+==%a %b %e %T %Y=="')<CR>i<backspace>==<Esc><S-a>==<esc><S-a><return>'},
+
             -- leader f
             {'f', {
+                -- find file
                 {'f', '<CMD>FZF<CR>' },
+                -- find help
                 {'h', '<cmd>Telescope help_tags<CR>' },
+                -- find command
                 {'c', '<cmd>Telescope commands<CR> ' },
+                -- find buffer
                 {'b', '<cmd>Telescope buffers<CR>jj' },
+                -- 
                 {'s', '<cmd>PRg<CR>' },
+                -- find diagnostic
                 {'d', '<CMD>Telescope coc diagnostics<CR>'},
+                -- find symbols
                 {'l', '<CMD>Telescope coc document_symbols<CR>'},
+                -- find file (use pwd)
+                {'tf','<cmd>lua require"telescope.builtin".live_grep{ search_dirs={"%:p:h"} }<CR>'},
+                -- find THIS file (use current buffer dir)
+                {'tF','<cmd>Telescope live_grep<CR>'},
+                -- find keymap
+                {'k', '<CMD>Telescope keymaps<CR>'},
             }},
             {'hex', '<cmd>file %.hexdump<CR><cmd>%!xxd<CR><cmd>set syntax=xxd<CR>'},
             { 'jd','<cmd>CocCommand java.debug.vimspector.start<CR>'},
