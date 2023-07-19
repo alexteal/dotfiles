@@ -26,6 +26,7 @@ nest.applyKeymaps {
             {'bb', '<c-6>'},
             --datetime
             {'da', 'i<return><esc><up><cmd>put =strftime(\'%c\')<CR>i<backspace># <Esc><S-a><esc><S-a><return>'},
+            {'da', 'i<return><esc><up><cmd>put =strftime(\'%c\')<CR>i<backspace>==<Esc><S-a>==<esc><S-a><return>'},
 
             -- leader f ( for "Find" )
             {'f', {
