@@ -49,7 +49,7 @@ cp -f ./tmux/tmux.conf "$HOME"/.tmux.conf
 cp -f ./tmux/tmux.conf.local "$HOME"/.tmux.conf.local
 cp -r -f ./nvim/* "$HOME"/.config/nvim/
 cp -f ./scripts/.scripts/* "$HOME"/.scripts/
-cp -f ./alacritty/alacritty.yaml "$HOME"/.config/alacritty/
+cp -f ./alacritty/alacritty.yml "$HOME"/.config/alacritty/alacritty.yml
 
 # Determine package manager and install necessary dependencies
 install_prefix=""
