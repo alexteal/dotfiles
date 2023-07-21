@@ -17,11 +17,10 @@ font:
 
   size: 10
 
-window:
-  opacity: 0.85
+import:
+  - ~/.config/alacritty/theme.yml
+  - ~/.config/alacritty/opacity.yml
 
-    #import:
-  #- ~/.config/alacritty/themes/themes/ayu_dark.yaml
 shell:
   program: /bin/zsh
   args:
