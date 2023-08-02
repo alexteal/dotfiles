@@ -204,6 +204,12 @@ if [[ -n "$install_prefix" ]]; then
         source "$original_virtual_env/bin/activate"
     fi
 
+    which nvim &> /dev/null
+    if [[ $? != 0 ]]; then
+        echo "neovim not found, installing..."
+        eval "$install_prefix neovim"
+    fi
+
     # install yarn/ neovim for node
     # Install neovim using npm, just for compatiblity
     npm list --location=global neovim &> /dev/null
