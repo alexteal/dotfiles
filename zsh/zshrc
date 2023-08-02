@@ -128,9 +128,12 @@ else
 [[ ! -d $HOME/google-cloud-sdk ]] || source $HOME/google-cloud-sdk/completion.zsh.inc
 [[ ! -d $HOME/google-cloud-sdk ]] || source $HOME/google-cloud-sdk/path.zsh.inc
 #pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+if [[ -d $HOME/.pyenv ]]; 
+then 
+    export PYENV_ROOT="$HOME/.pyenv"
+    command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+    eval "$(pyenv init -)"
+fi
 #gpg config
 export GPG_TTY=`tty`
 # Custom path completion and LS colors
