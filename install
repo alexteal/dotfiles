@@ -197,7 +197,7 @@ if [[ -n "$install_prefix" ]]; then
     install_py_mod neovim 
     install_py_mod jedi 
 
-    # recover current virtual env
+    # recover previous py env
     deactivate
 
     if [ -n "$original_virtual_env" ]; then
