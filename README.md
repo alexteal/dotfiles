@@ -1,34 +1,32 @@
 # dotfiles
 
-## all of my customization files, tracked for posterity
+A hacky general cli environment. _Should_ run on anything from a new mac to a
+docker container.
 
-## Use (with extreme caution)
+Includes:
 
-### Install
+-   zsh
+-   nvim
+    -   tons of plugins
+-   tmux
+-   ohmyzsh
+    -   p10k
+-   custom bash scripts
 
-First off, you really should just reach out to me if you wanna test this out.
-This is an INCREDIBLY hacky install script that only works in specific
-environments.
+## Install
 
-Install using bash interpreter with
+You need bash to install. Install with `./install`
 
-```bash
-make install
-```
+You may be prompted to press 'y' for some packages. First time installs will
+require you to interact with Oh-my-zsh, and exit the shell the first time.
 
-If this fails, you can run it directly with
+Then `source ~/.zshrc` to enable environment.
 
-```bash
-./install.sh
-```
-
-Then
-
-```bash
-source ~/.zshrc
-```
+### no longer supported
 
 ### Testing
+
+`no longer supported`
 
 If you'd like to test out my environment without permanently changing yours, you
 can temporarily use it with
@@ -45,38 +43,3 @@ make revert
 ```
 
 This doesn't install necessary packages, it simply copies .zshrc, .init.vim, .tmux.conf.
-
-## What's in it?
-
-### Neovim
-
-TODO
-explanations for plugins/keybinds
-
-### Zsh
-
-This uses
-
--   Oh-my-zsh
--   powerline-p10k
-
-And sources 3 custom files if they exist.
-
--   .path.zsh
--   .alias.zsh
--   .secrets
-
-path.zsh contains all machine-specific paths and env variables
-
-alias.zsh contains machine-specific aliases
-
-secrets is where sensitive environment variables go
-
-### Lazygit
-
-Lazygit is awesome. Use it in tmux with \<Prefix\>g
-
-### Tmux
-
-TODO
-explanations for tmux config
