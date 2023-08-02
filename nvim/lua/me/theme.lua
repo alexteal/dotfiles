@@ -1,2 +1,2 @@
-theme = 'latte'
+theme = 'macchiato'
 return theme
