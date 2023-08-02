@@ -76,6 +76,12 @@ elif command -v apt-get &> /dev/null; then
     sudo apt-get upgrade
 fi
 
+# Determine if we need sudo, or if we're already root
+if [[ ! "$(whoami)" == "root" ]];
+then
+    sudo="sudo"
+fi
+
 if [[ -n "$install_prefix" ]]; then
     echo "Installing dependencies..."
     for program in zsh make tmux curl fzf node npm git nvim; do
@@ -221,25 +227,15 @@ if [[ -n "$install_prefix" ]]; then
         which ruby-install &> /dev/null
         if [[ $? != 0 ]]; then
             case $OS in 
-                *"ebian"*)
-                    echo "ruby-install not available, installing package manager ruby..."
-                    eval "$install_prefix ruby-full"
-                    ;;
-                *"buntu"*)
-                    echo "ruby-install not available, installing package manager ruby..."
-                    eval "$install_prefix ruby-full"
-                    ;;
                 *"arwin"*)
                     echo "ruby-install not found, installing..."
                     eval "$install_prefix ruby-install --HEAD"
                     echo "installing latest ruby using ruby-install..."
                     ruby-install --latest
                     ;;
-                *"edora"*)
-                    echo "ruby-install not available, installing package manager ruby..."
-                    eval "$sudo yum install ruby"
-                    ;;
                 *) 
+                    echo "ruby-install not available, installing package manager ruby..."
+                    eval "$install_prefix ruby-full"
                     ;;
             esac
         fi
@@ -248,8 +244,12 @@ if [[ -n "$install_prefix" ]]; then
 
     gem list neovim | grep "neovim" &> /dev/null
     if [[ $? != 0 ]]; then
-        "neovim gem not found, installing..."
-        gem install neovim
+        echo "neovim gem not found, installing..."
+        gem install neovim 2> /dev/null
+        if [[ $? != 0 ]]; then
+            echo "Permission denied, trying with sudo..."
+            sudo gem install neovim
+        fi
     fi
 
     if [[ ! $PATH == *"$HOME/bin"* ]]; then
