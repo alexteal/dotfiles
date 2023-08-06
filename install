@@ -27,27 +27,6 @@ if [[ -f "$init_file" ]]; then
     mv -f "$init_file" "${init_file}.backup.$(date +%s)"
 fi
 
-# Loop over all scripts in the directory and link them
-for script in ./scripts/.scripts/*; do
-    [[ ! -e $script ]] && continue
-
-    # Check if the current script is inside the "systemd" folder
-    if [[ $(basename "$script") == "systemd" ]]; then
-        # Loop over each script in the "systemd" folder
-        for systemd_script in "$script"/*; do
-            [[ ! -e $systemd_script ]] && continue
-
-            # Link the systemd script to /etc/systemd/system/multi-user.target.wants/ directory
-            ln -sf "$systemd_script" "/etc/systemd/system/multi-user.target.wants/$(basename "$systemd_script")"
-
-            # Set the permissions of the linked systemd script to 644 as required by systemd
-            chmod 644 "/etc/systemd/system/multi-user.target.wants/$(basename "$systemd_script")"
-        done
-    else
-        # Link non-systemd scripts to $HOME/bin/ directory
-        ln -sf "$script" "$HOME"/bin/$(basename "$script")
-    fi
-done
 
 # Copy dotfiles and scripts
 cp -f ./zsh/zshrc "$HOME"/.zshrc
@@ -59,6 +38,48 @@ cp -f ./tmux/tmux-powerlinerc "$HOME"/.tmux-powerlinerc
 cp -r -f ./nvim/* "$HOME"/.config/nvim/
 cp -f ./scripts/.scripts/* "$HOME"/.scripts/
 cp -f ./alacritty/alacritty.yml "$HOME"/.config/alacritty/alacritty.yml
+
+
+# Check if the user is root
+if [[ $EUID -ne 0 ]]; then
+    echo "Requiring sudo for linking custom scripts..."
+    SUDO=sudo
+fi
+
+# Get the full path of the .scripts/ directory
+scripts_dir=$(realpath ./scripts/.scripts/)
+
+# Loop over all scripts in the directory and link them
+for script in "$scripts_dir"/*; do
+    [[ ! -e $script ]] && continue
+
+    # Check if the current script is inside the "systemd" folder
+    if [[ $(basename "$script") == "systemd" ]]; then
+        # Loop over each script in the "systemd" folder
+        for systemd_script in "$script"/*; do
+            [[ ! -e $systemd_script ]] && continue
+
+            # Check if the target file or directory exists before creating 
+            # the symlink
+            if [[ -e "$systemd_script" ]]; then
+                # Link the systemd script to 
+                # /etc/systemd/system/multi-user.target.wants/ 
+                # directory with the full path
+                $SUDO ln -sf "$systemd_script" \
+                    "/etc/systemd/system/multi-user.target.wants/$(basename "$systemd_script")"
+
+                # Set the permissions of the linked systemd script to 644 as 
+                # required by systemd
+                $SUDO chmod 644 \
+                    "/etc/systemd/system/multi-user.target.wants/$(basename "$systemd_script")"
+            fi
+        done
+    else
+        # Link non-systemd scripts to $HOME/bin/ directory
+        ln -sf "$script" "$HOME"/bin/$(basename "$script")
+    fi
+done
+
 
 # Determine package manager and install necessary dependencies
 install_prefix=""
