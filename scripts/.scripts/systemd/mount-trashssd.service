@@ -1,0 +1,10 @@
+[Unit]
+Description=Mount trashSSD on boot
+
+[Service]
+ExecStart=/usr/bin/mount /dev/sdb1 /media/mount_trash
+
+Restart=no
+
+[Install]
+WantedBy=default.target

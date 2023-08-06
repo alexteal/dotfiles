@@ -1,0 +1,13 @@
+[Unit]
+Description=start HomeAssistant on boot
+After=network-online.target
+
+[Service]
+ExecStart=/usr/bin/virsh start hassos4
+ExecStop=/usr/bin/virsh shutdown hassos4
+ExecReload=/usr/bin/virsh restart hassos4
+
+Restart=no
+
+[Install]
+WantedBy=default.target
