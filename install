@@ -36,7 +36,7 @@ cp -f ./tmux/tmux.conf.local "$HOME"/.tmux.conf.local
 cp -f ./tmux/p10k.zsh "$HOME"/.p10k.zsh
 cp -f ./tmux/tmux-powerlinerc "$HOME"/.tmux-powerlinerc
 cp -r -f ./nvim/* "$HOME"/.config/nvim/
-cp -f ./scripts/.scripts/* "$HOME"/.scripts/
+cp -f ./scripts/.scripts/* "$HOME"/.scripts/ 2> /dev/null #ignore systemd error
 cp -f ./alacritty/alacritty.yml "$HOME"/.config/alacritty/alacritty.yml
 
 
