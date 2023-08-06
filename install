@@ -1,5 +1,6 @@
 #!/bin/bash
 
+git pull
 # Backup dotfiles
 while true; do
     read -p "Do you want to make backups of your current dotfiles? (y/n) " yn
