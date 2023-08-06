@@ -66,7 +66,7 @@ for script in "$scripts_dir"/*; do
                 $SUDO cp "$systemd_script" "/usr/lib/systemd/system/$(basename "$systemd_script")"
 
                 # Set the permissions of the copied systemd script to 644 as required by systemd
-                $SUDO chmod 644 "/usr/lib/systemd/system/$(basename "$systemd_script"
+                $SUDO chmod 644 "/usr/lib/systemd/system/$(basename "$systemd_script")"
             fi
         done
     else
