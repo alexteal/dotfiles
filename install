@@ -67,12 +67,11 @@ for script in "$scripts_dir"/*; do
                 # /etc/systemd/system/multi-user.target.wants/ 
                 # directory with the full path
                 $SUDO ln -sf "$systemd_script" \
-                    "/etc/systemd/system/multi-user.target.wants/$(basename "$systemd_script")"
-
+                    "/usr/lib/systemd/system/$(basename "$systemd_script")"
                 # Set the permissions of the linked systemd script to 644 as 
                 # required by systemd
                 $SUDO chmod 644 \
-                    "/etc/systemd/system/multi-user.target.wants/$(basename "$systemd_script")"
+                    "/usr/lib/systemd/system/$(basename "$systemd_script")"
             fi
         done
     else
