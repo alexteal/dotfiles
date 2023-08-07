@@ -8,24 +8,10 @@ default_ignore="// BEGIN Default Ignored folders
 ARCHIVE**
 .env**
 *media**
+**/venv/**
+**venv/**
 // END Default Ignore folders
 "
-#echo "$default_ignore" >> "$HOME/projects/.stignore"
-#for i in $HOME/projects/*; do
-#    if [[ -d "$i/.git" ]]; then
-#        echo "*${i:25}**" >> "$HOME/projects/.stignore"
-#
-#        continue
-#    else
-#        for j in $i/*; do
-#            if [[ -d "$j/.git" ]]; then
-#                echo "*${j:25}**" >> "$HOME/projects/.stignore"
-#                continue
-#            fi
-#        done
-#        continue
-#    fi
-#done
 echo "$default_ignore" >> "$HOME/projects/.stignore"
 for i in $HOME/projects/*; do
     if [[ -d "$i/.git" ]]; then
