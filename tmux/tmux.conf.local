@@ -441,6 +441,33 @@ bind Q run-shell "~/.scripts/tmux-kill-session.sh"
 # vim style keybinds
 setw -g mode-keys vi
 
+################################################################################
+########################## Nested Session Control ##############################
+################################################################################
+# SSH Specific settings
+# Set nested window different colors
+if-shell -b '[ -n "$SSH_CLIENT" ]' "\
+        set-option -g prefix2 C-b;\
+        set -g window-style 'fg=colour255,bg=colour235';\
+        set -g window-active-style 'fg=colour255,bg=colour234';\
+        set -g pane-active-border-style 'fg=colour68 bg=colour68'"
+
+# Overrides for specific machines over SSH
+# Each successive tmux_priority level is a nested session. 
+# Sets different tmux command keybind, but ctrl-space twice still works. 
+
+# Work 
+if-shell -b '[ $TMUX_PRIORITY = 0 ] && [ -n "$SSH_CLIENT" ]' "\
+        set-option -g prefix2 C-b;\
+        bind-key C-b send-prefix;\ "
+# Server
+if-shell -b '[ $TMUX_PRIORITY = 1 ] && [ -n "$SSH_CLIENT" ]' "\
+        set-option -g prefix2 C-b;\
+        bind-key C-b send-prefix;\ "
+# Personal
+if-shell -b '[ $TMUX_PRIORITY = 2 ] && [ -n "$SSH_CLIENT" ]' "\
+        set-option -g prefix2 `;\
+        bind-key ` send-prefix;\ "
 
 # replace C-b by C-a instead of using both prefixes
 # set -gu prefix2
