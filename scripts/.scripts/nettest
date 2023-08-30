@@ -1,0 +1,28 @@
+#!/bin/bash
+#written by gpt-4
+# Define the target
+TARGET="google.com"
+# Perform a ping test
+echo "Performing ping test..."
+ping -c 5 $TARGET
+# Perform a traceroute
+echo "Performing traceroute..."
+traceroute $TARGET
+# Perform a DNS lookup
+echo "Performing DNS lookup..."
+nslookup $TARGET
+# Check network interface status
+echo "Checking network interface status..."
+ifconfig
+# Display network statistics
+echo "Displaying network statistics..."
+netstat -s
+# Check for any packet loss
+echo "Checking for packet loss..."
+ping -c 10 $TARGET | grep 'packet loss'
+# Check the latency
+echo "Checking the latency..."
+ping -c 10 $TARGET | tail -1| awk '{print $4}' | cut -d '/' -f 2
+# Check the jitter
+echo "Checking the jitter..."
+ping -c 10 $TARGET | tail -1| awk '{print $4}' | cut -d '/' -f 3
