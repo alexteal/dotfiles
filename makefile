@@ -2,7 +2,7 @@ SHELL=/bin/zsh
 update: 
 	cp ~/.config/nvim/init.lua nvim/init.lua
 	cp -R ~/.config/nvim/lua nvim/
-	cp -Rr ~/.scripts ./scripts
+	cp -R ~/.scripts ./scripts
 	cp ~/.tmux.conf tmux/tmux.conf
 	cp ~/.tmux.conf.local tmux/tmux.conf.local
 	cp ~/.zshrc zsh/zshrc
