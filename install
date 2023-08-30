@@ -59,14 +59,18 @@ for script in "$scripts_dir"/*; do
         # Loop over each script in the "systemd" folder
         for systemd_script in "$script"/*; do
             [[ ! -e $systemd_script ]] && continue
-
-            # Check if the target file or directory exists before creating the symlink
             if [[ -e "$systemd_script" ]]; then
-                # Copy the systemd script to /usr/lib/systemd/system/ directory with the full path
-                $SUDO cp "$systemd_script" "/usr/lib/systemd/system/$(basename "$systemd_script")"
-
-                # Set the permissions of the copied systemd script to 644 as required by systemd
-                $SUDO chmod 644 "/usr/lib/systemd/system/$(basename "$systemd_script")"
+            # Check if the target directory exists before copying the file
+                if [[ -d "/usr/lib/systemd/system/" ]]; then
+                    # Copy the systemd script to /usr/lib/systemd/system/ directory with the full path
+                    $SUDO cp "$systemd_script" "/usr/lib/systemd/system/$(basename "$systemd_script")"
+                    # Set the permissions of the copied systemd script to 644 as required by systemd
+                    $SUDO chmod 644 "/usr/lib/systemd/system/$(basename "$systemd_script")"
+                else
+                    echo "systemd not in use, skipping daemon..."
+                fi
+            else
+                echo "Systemd script does not exist."
             fi
         done
     else
