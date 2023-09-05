@@ -48,6 +48,8 @@ alias graal="export PATH=/Library/Java/JavaVirtualMachines/graalvm-ce-java17-22.
 alias venv="source ./venv/bin/activate"
 alias wgup="wg-quick up wg0"
 alias wgdown="wg-quick down wg0"
+alias gpt="gpt --model gpt-3.5-turbo"
+alias gpt4="gpt --model gpt-4"
 #alias x11-sudo="sudo xauth add $(xauth -f ~$(whoami)/.Xauthority list|tail -1)\" # retains x11 forwarding during a sudo session
 alias regex='echo "
 POSIX       REGEX           MEANING
