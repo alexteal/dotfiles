@@ -20,10 +20,10 @@ for i in $HOME/projects/*; do
     else
         git_dir=$(find "$i" -type d -name ".git" -print -quit)
         if [[ -n "$git_dir" ]]; then
-            folder_path="${i##*/}"
+            folder_path="${git_dir%/*}"
+            folder_path="${folder_path##*/}"
             echo "*$folder_path**" >> "$HOME/projects/.stignore"
             continue
         fi
     fi
 done
-
