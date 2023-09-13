@@ -1,0 +1,10 @@
+[Unit]
+Description=Home Assistant control with Pose Detection
+
+[Service]
+ExecStart=/home/veronica/projects/pose-detection/main_headless.py
+
+Restart=no
+
+[Install]
+WantedBy=default.target
