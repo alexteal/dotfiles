@@ -1,0 +1,26 @@
+#!/bin/bash
+# Check if the required environment variables are set
+if [ -z "$HASS_ADDRESS" ]; then
+    echo "HASS_ADDRESS is not set"
+    exit 1
+fi
+if [ -z "$HASS_TOKEN" ]; then
+    echo "HASS_TOKEN is not set"
+    exit 1
+fi
+# If no arguments are provided, get the list of all domains
+if [ $# -eq 0 ]; then
+    curl -s \
+      -H "Authorization: Bearer $HASS_TOKEN" \
+      -H "Content-Type: application/json" \
+      $HASS_ADDRESS/api/services #| jq -r '.[].domain'#| awk -F'"' '/domain/{print $4}'
+    exit 0
+fi
+# Construct the entity_id from the argument
+ENTITY_ID="switch.$1"
+# Run the curl command
+curl \
+  -H "Authorization: Bearer $HASS_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d "{\"entity_id\": \"$ENTITY_ID\"}" \
+  $HASS_ADDRESS/api/services/switch/toggle
