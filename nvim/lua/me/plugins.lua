@@ -86,12 +86,6 @@ require('packer').startup(function(use)
     -- java linting, jdtls is hefty and uses own package
     -- config file is in ../../ftplugin/java.lua
     use { 'mfussenegger/nvim-jdtls' }
-    -- snippets
-    use { 'honza/vim-snippets',
-        requires = 'SirVer/ultisnips' ,
-        event  = { "BufNewFile", "BufRead", "InsertEnter" },
-    }
-
     -- code completion using coq
     use { 'ms-jpq/coq_nvim', branch = 'coq' }
     use { 'ms-jpq/coq.artifacts', branch = 'artifacts' }
