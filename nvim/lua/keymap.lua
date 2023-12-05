@@ -44,6 +44,8 @@ nest.applyKeymaps {
             { 'jd','<cmd>CocCommand java.debug.vimspector.start<CR>'},
             {'js', '<cmd>JsDoc<CR>'},
             {'lg', '<cmd>LazyGit<CR>'},
+            {'o', '<CMD>TransparentToggle<CR>'},
+            {'O', '<CMD>TransparentToggle<CR>'},
             {'wp', '<cmd>Files ~/vimwiki/<CR>' },
             -- search folder (uses pwd)
             {'sf', '<cmd>Telescope live_grep<CR>' },

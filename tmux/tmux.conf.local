@@ -432,6 +432,7 @@ bind % split-window -h -c "#{pane_current_path}"
 
 #rotate current opacity in alacritty
 bind O run-shell "~/.scripts/opac"
+#bind-key O display-message "Change the opacity:\nO: lower\no: higher" \; command-prompt -p "Press O to lower or o to increase opacity" "run-shell 'if [[ %% == O ]]; then ~/.scripts/opac 100; else ~/.scripts/opac 100; fi'"
 # kill current session
 bind Q run-shell "~/.scripts/tmux-kill-session.sh"
 # this fixes bad backspace behavior

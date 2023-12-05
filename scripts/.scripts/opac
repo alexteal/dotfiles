@@ -1,6 +1,6 @@
 #!/bin/bash
 # Define opacity levels
-levels=(0.25 0.85)
+levels=(0.25 0.95)
 # Check if argument is provided
 if [ -z "$1" ]
 then
