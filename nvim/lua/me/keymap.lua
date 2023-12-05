@@ -58,6 +58,7 @@ nest.applyKeymaps {
             {'js', '<cmd>JsDoc<CR>'},
             {'lg', '<cmd>LazyGit<CR>'},
             {'m', '<cmd>MinimapToggle<cr>'},
+            {'O', '<CMD>TransparentToggle<CR>'},
             {'wp', '<cmd>Files ~/vimwiki/<CR>' },
             -- search buffer
             {'se', '<cmd>Telescope current_buffer_fuzzy_find<CR>' },
