@@ -273,7 +273,8 @@ set -g @now-playing-scrollable-format "{title}-{artist}"
 # left
 tmux_conf_theme_status_left=" ❐ #S | ↑#{?uptime_y, #{uptime_y}y,}#{?uptime_d, #{uptime_d}d,}#{?uptime_h, #{uptime_h}h,}#{?uptime_m, #{uptime_m}m,} | #{username}#{root}@#{hostname} "
 # right
-tmux_conf_theme_status_right="#{?battery_status,#{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},}|#{prefix}#{now_playing}#{pairing}#{synchronized}|#{cpu}|#{ip_address}|%m/%d/%y|%H:%M"
+# tmux_conf_theme_status_right="#{?battery_status,#{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},}|#{prefix}#{now_playing}#{pairing}#{synchronized}|#{cpu}|#{ip_address}|%m/%d/%y|%H:%M"
+tmux_conf_theme_status_right="#{?battery_status,#{battery_status},}#{?battery_bar, #{battery_bar},}#{?battery_percentage, #{battery_percentage},}|#{prefix}#{now_playing}#{pairing}#{synchronized}|#{ip_address}|%m/%d/%y|%H:%M"
 
 # status left style
 tmux_conf_theme_status_left_fg="$tmux_conf_theme_colour_1,$tmux_conf_theme_colour_1,$tmux_conf_theme_colour_1"
@@ -285,7 +286,9 @@ tmux_conf_theme_status_left_attr="bold,none,none"
 # First color is used as the LAST color, for some reason. I think it's because the 
 # battery config is shown first. Doesn't make much sense, but it works for now. 
 # BE CAREFUL.
-tmux_conf_theme_status_right_fg="$tmux_conf_theme_colour_6,$tmux_conf_theme_colour_2,$tmux_conf_theme_colour_4,$tmux_conf_theme_colour_3,$tmux_conf_theme_colour_5,$tmux_conf_theme_colour_6"
+#tmux_conf_theme_status_right_fg="$tmux_conf_theme_colour_6,$tmux_conf_theme_colour_2,$tmux_conf_theme_colour_4,$tmux_conf_theme_colour_3,$tmux_conf_theme_colour_5,$tmux_conf_theme_colour_6"
+#tmux_conf_theme_status_right_bg="$tmux_conf_theme_colour_1,$tmux_conf_theme_colour_1,$tmux_conf_theme_colour_1,$tmux_conf_theme_colour_1,$tmux_conf_theme_colour_1,$tmux_conf_theme_colour_1"
+tmux_conf_theme_status_right_fg="$tmux_conf_theme_colour_6,$tmux_conf_theme_colour_2,$tmux_conf_theme_colour_4,$tmux_conf_theme_colour_5,$tmux_conf_theme_colour_6,$tmux_conf_theme_colour_6"
 tmux_conf_theme_status_right_bg="$tmux_conf_theme_colour_1,$tmux_conf_theme_colour_1,$tmux_conf_theme_colour_1,$tmux_conf_theme_colour_1,$tmux_conf_theme_colour_1,$tmux_conf_theme_colour_1"
 tmux_conf_theme_status_right_attr="none,none,none,none,none"
 
@@ -432,7 +435,6 @@ bind % split-window -h -c "#{pane_current_path}"
 
 #rotate current opacity in alacritty
 bind O run-shell "~/.scripts/opac"
-#bind-key O display-message "Change the opacity:\nO: lower\no: higher" \; command-prompt -p "Press O to lower or o to increase opacity" "run-shell 'if [[ %% == O ]]; then ~/.scripts/opac 100; else ~/.scripts/opac 100; fi'"
 # kill current session
 bind Q run-shell "~/.scripts/tmux-kill-session.sh"
 # this fixes bad backspace behavior
@@ -522,9 +524,9 @@ tmux_conf_uninstall_plugins_on_reload=true
 # visit https://github.com/tmux-plugins for available plugins
 #set -g @plugin 'tmux-plugins/tmux-copycat'
 #set -g @plugin 'tmux-plugins/tmux-cpu'
-set -g @plugin 'anghootys/tmux-ip-address'
+#set -g @plugin 'anghootys/tmux-ip-address'
 #set -g @plugin 'thewtex/tmux-mem-cpu-load'
-set -g @plugin 'spywhere/tmux-now-playing'
+#set -g @plugin 'spywhere/tmux-now-playing'
 #set -g @plugin 'tmux-plugins/tmux-resurrect'
 #set -g @plugin 'tmux-plugins/tmux-continuum'
 #set -g @continuum-restore 'on'
