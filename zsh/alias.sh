@@ -45,7 +45,7 @@ alias l='ls -lah --color=auto'
 alias ls='ls -GH --color=auto'
 alias rsync='/usr/local/bin/rsync --ignore-existing -a --info=progress2 --stats'
 alias graal="export PATH=/Library/Java/JavaVirtualMachines/graalvm-ce-java17-22.3.1/Contents/Home/bin:$PATH ; export JAVA_HOME=/Library/Java/JavaVirtualMachines/graalvm-ce-java17-22.3.1/Contents/Home; echo 'java path set to graalvm'"
-alias venv="source ./venv/bin/activate"
+#alias venv="source ./venv/bin/activate"
 alias wgup="wg-quick up wg0"
 alias wgdown="wg-quick down wg0"
 alias gpt="gpt --model gpt-3.5-turbo-1106"
