@@ -1,6 +1,6 @@
 #!/bin/bash
 # Check if venv directory exists
-if [ -d "./venv" ]
+if [ -d "./venv/bin" ]
 then
   echo "sourced local ./venv"
   source ./venv/bin/activate
