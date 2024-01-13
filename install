@@ -1,9 +1,68 @@
 #!/bin/bash
 
-git pull
+# Globals
+# this should track relative to the "$HOME" path
+user_level_tracked_files=('.zshrc' '.tmux.conf' '.p10k.zsh' '.tmux.conf.local' '.alias.sh' '.config/nvim/lua' '~/.config/nvim/plugin/packer_compiled.lua')
+# this is where our root level files will get tracked
+# TODO: 
+linux_system_level_tracked_files=('')
+
+# Borrowed from https://www.unix.com/shell-programming-and-scripting/140231-bash-keypress-read-single-character.html
+# by Franklin52
+
+_key()
+{
+  local kp
+  ESC=$'\e'
+  _KEY=
+  read -d '' -sn1 _KEY
+  case $_KEY in
+    "$ESC")
+        while read -d '' -sn1 -t1 kp
+        do
+          _KEY=$_KEY$kp
+          case $kp in
+            [a-zA-NP-Z~]) break;;
+          esac
+        done
+    ;;
+  esac
+  printf -v "${1:-_KEY}" "%s" "$_KEY"
+}
+
+# Read one character, if y then true
+_read_yes_or_no(){
+    _key x
+    case $x in
+        y) return true;;
+        Y) return true;;
+        *) return false ;;
+    esac
+}
+_install(){
+    # install script goes here
+}
+_update(){
+    # update config script goes here
+}
+
+_main(){
+    _key x 
+    case $x in 
+        i) _install ;;
+        I) _install ;;
+        u) _update ;;
+        U) _update ;;
+        *) exit 0 ;;
+    esac
+}
+
+
+
+
 # Backup dotfiles
 while true; do
-    read -p "Do you want to make backups of your current dotfiles? (y/n) " yn
+    read -n 1 -p "Do you want to make backups of your current dotfiles? (y/n) " yn
     case $yn in
         [yY]*)
             echo "Making backups..."
@@ -60,7 +119,7 @@ for script in "$scripts_dir"/*; do
         for systemd_script in "$script"/*; do
             [[ ! -e $systemd_script ]] && continue
             if [[ -e "$systemd_script" ]]; then
-            # Check if the target directory exists before copying the file
+                # Check if the target directory exists before copying the file
                 if [[ -d "/usr/lib/systemd/system/" ]]; then
                     # Copy the systemd script to /usr/lib/systemd/system/ directory with the full path
                     $SUDO cp "$systemd_script" "/usr/lib/systemd/system/$(basename "$systemd_script")"
@@ -286,8 +345,8 @@ if [[ -n "$install_prefix" ]]; then
         if [ -d $HOME/bin ]; then
             echo "$HOME/bin not found in path, adding to $HOME/.path.zsh"
             echo 'if [[ ! $PATH == *"$HOME/bin"* ]]; then\n    export PATH=$PATH:$HOME/bin\nfi' >> $HOME/.path.zsh
+        fi
     fi
-fi
 
 fi
 echo
@@ -315,4 +374,9 @@ echo "   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     �
 echo "                                                                        ";
 echo "Run checkhealth inside of neovim to ensure plugins installed correctly."
 echo $ERRORS
+
+
+
+
+
 
