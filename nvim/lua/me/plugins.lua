@@ -143,5 +143,7 @@ require('packer').startup(function(use)
 
     use { 'rinx/nvim-minimap' }
 
-    use { 'f-person/git-blame.nvim', event = { 'BufEnter', 'BufRead' } }
+    -- I love this plugin, but it causes problems if you scroll too fast. 
+    -- Might be an issue I can push something for.
+    -- use { 'f-person/git-blame.nvim', event = { 'BufEnter', 'BufRead' } }
 end)
