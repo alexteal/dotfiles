@@ -5,17 +5,22 @@ docker container.
 
 Includes:
 
--   zsh
--   nvim
-    -   tons of plugins
--   tmux
 -   ohmyzsh
     -   p10k
+    -   Autocomplete and fuzzy searchable command history
+-   nvim
+    -   tons of plugins
+    -   Largely minimal, optimized for webdev
+    -   half broken but still does the job 99% of the time
+-   tmux
+    -   some solid custom config, with catpuccin themed status line
 -   custom bash scripts
+    -   available in `./scripts/`
+    -   contains neat features like `venv`, which creates a python3 venv and sources it in one command
 
 ## Install
 
-`it's been a long time since i've done real damage tests with this script. it might overwrite config files, so back them up in case.`
+**it's been a long time since i've done real damage tests with this script. it might overwrite config files, so back them up in case.**
 
 You need bash to install. Install with `./install`
 
@@ -24,11 +29,21 @@ require you to interact with Oh-my-zsh, and exit the shell the first time.
 
 Then `source ~/.zshrc` to enable environment.
 
+## nvim setup
+
+`:PackerSync`
+`:TSInstall tsx html`
+
+## Bug Tracker
+
+-   [ ] git blame causing error when scrolling too fast
+-   [ ] scripts are softlinked to git directory, not to local `~/.scripts`
+
 ### no longer supported
 
-### Testing
+_leaving for documentation_
 
-`no longer supported`
+### Testing
 
 If you'd like to test out my environment without permanently changing yours, you
 can temporarily use it with
