@@ -41,12 +41,23 @@ _read_yes_or_no(){
 }
 _install(){
     # install script goes here
+    # create our directories
+    mkdir -p "$HOME"/.config/{nvim,alacritty} "$HOME"/.scripts "$HOME"/bin
+
 }
 _update(){
     # update config script goes here
 }
 
 _main(){
+    echo -e "\e[1;33mwelcome!\e[0m"
+    echo ""
+    echo -e "what would you like to do?"
+    echo ""
+    echo -e "\e[1;32m[i] install this config\e[0m"
+    echo -e "\e[1;34m[u] update this config with your existing setup\e[0m"
+    echo -e "\e[1;31m[e] exit\e[0m"
+
     _key x 
     case $x in 
         i) _install ;;
