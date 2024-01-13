@@ -1,12 +1,17 @@
 #!/bin/bash
-# Check if venv directory exists
-if [ -d "./venv/bin" ]
-then
-  echo "sourced local ./venv"
-  source ./venv/bin/activate
+if [ -d "venv/bin" ]; then
+    echo "Virtual environment already exists."
 else
-  echo "Virtual environment does not exist. Creating one..."
-  python -m venv venv
-  # Activate the virtual environment
-  source ./venv/bin/activate
+    if ! command -v virtualenv &> /dev/null; then
+        echo "virtualenv could not be found. Attempting to install..."
+        if ! command -v pip &> /dev/null; then
+            echo "pip could not be found. Attempting to install..."
+            curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+            python get-pip.py
+            rm get-pip.py
+        fi
+        pip install virtualenv
+    fi
+    virtualenv -p python3 venv
+    echo "Virtual environment created. Attempting to source..."
 fi
