@@ -34,8 +34,7 @@ _key()
 _read_yes_or_no(){
     _key x
     case $x in
-        y) return true;;
-        Y) return true;;
+        [yY]) return true;;
         *) return false ;;
     esac
 }
@@ -47,6 +46,50 @@ _install(){
 }
 _update(){
     # update config script goes here
+
+    cp -v ~/.config/nvim/init.lua nvim/init.lua
+	cp -v -R ~/.config/nvim/lua nvim/
+	cp -v -R ~/.scripts ./scripts
+	cp -v ~/.tmux.conf tmux/tmux.conf
+	cp -v ~/.tmux.conf.local tmux/tmux.conf.local
+	cp -v ~/.zshrc zsh/zshrc
+	cp -v ~/.alias.sh zsh/alias.sh
+	cp -v ~/.p10k.zsh tmux/p10k.zsh
+	cp -v ~/.config/alacritty/alacritty.yml alacritty/alacritty.yml
+
+}
+
+_backup(){
+    # Backup dotfiles
+    echo "Do you want to make backups of your current configs?"
+    echo
+    echo "If you have \e[1;31mNOT\e[0m used this before, I highly recommend pressing [y]."
+    echo
+    echo "This will copy existing .[file_name] config files to .[file_name].pre_genz"
+    while true; do
+        _key yn 
+        case $yn in
+            [yY]*)
+                echo "Making backups..."
+                for file in "${user_level_tracked_files[@]}"; do
+                    if [[ -f $file ]]; then
+                        mv -f "$file" "${file}.pre_genz"
+                    fi
+                done
+                break;;
+            [nN]*) echo "Proceeding without backups."; break;;
+            *) echo "Invalid response. Please enter 'y' or 'n'.";;
+        esac
+    done
+}
+_revert(){
+    # Revert dotfiles
+    echo "Reverting to previous configs..."
+    for file in "${user_level_tracked_files[@]}"; do
+        if [[ -f "${file}.pre_genz" ]]; then
+            mv -f "${file}.pre_genz" "$file"
+        fi
+    done
 }
 
 _main(){
@@ -57,36 +100,16 @@ _main(){
     echo -e "\e[1;32m[i] install this config\e[0m"
     echo -e "\e[1;34m[u] update this config with your existing setup\e[0m"
     echo -e "\e[1;31m[e] exit\e[0m"
+    echo -e "\e[1;31m[r] revert config\e[0m"
 
     _key x 
     case $x in 
-        i) _install ;;
-        I) _install ;;
-        u) _update ;;
-        U) _update ;;
+        [iI]) _install ;;
+        [uU]) _update ;;
+        [rR]) _revert ;;
         *) exit 0 ;;
     esac
 }
-
-
-
-
-# Backup dotfiles
-while true; do
-    read -n 1 -p "Do you want to make backups of your current dotfiles? (y/n) " yn
-    case $yn in
-        [yY]*)
-            echo "Making backups..."
-            for file in "$HOME"/.{zshrc,tmux.conf,p10k.zsh,tmux.conf.local,alias.sh}; do
-                if [[ -f $file ]]; then
-                    mv -f "$file" "${file}.bak"
-                fi
-            done
-            break;;
-        [nN]*) echo "Proceeding without backups."; break;;
-        *) echo "Invalid response. Please enter 'y' or 'n'.";;
-    esac
-done
 
 # Create necessary directories
 mkdir -p "$HOME"/.config/{nvim,alacritty} "$HOME"/.scripts "$HOME"/bin
