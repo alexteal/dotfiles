@@ -42,11 +42,19 @@ _install(){
     # install script goes here
     # create our directories
     mkdir -p "$HOME"/.config/{nvim,alacritty} "$HOME"/.scripts "$HOME"/bin
-
+    # Copy dotfiles and scripts
+    cp -f ./zsh/zshrc "$HOME"/.zshrc
+    cp -f ./zsh/alias.sh "$HOME"/.alias.sh
+    cp -f ./tmux/tmux.conf "$HOME"/.tmux.conf
+    cp -f ./tmux/tmux.conf.local "$HOME"/.tmux.conf.local
+    cp -f ./tmux/p10k.zsh "$HOME"/.p10k.zsh
+    cp -f ./tmux/tmux-powerlinerc "$HOME"/.tmux-powerlinerc
+    cp -r -f ./nvim/* "$HOME"/.config/nvim/
+    cp -f ./scripts/.scripts/* "$HOME"/.scripts/ 2> /dev/null #ignore systemd error
+    cp -f ./alacritty/alacritty.yml "$HOME"/.config/alacritty/alacritty.yml
 }
 _update(){
     # update config script goes here
-
     cp -v ~/.config/nvim/init.lua nvim/init.lua
 	cp -v -R ~/.config/nvim/lua nvim/
 	cp -v -R ~/.scripts ./scripts
@@ -56,7 +64,6 @@ _update(){
 	cp -v ~/.alias.sh zsh/alias.sh
 	cp -v ~/.p10k.zsh tmux/p10k.zsh
 	cp -v ~/.config/alacritty/alacritty.yml alacritty/alacritty.yml
-
 }
 
 _backup(){
