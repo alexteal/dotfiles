@@ -25,10 +25,11 @@ require('me.opts')
 require('me.plugins')
 require('me.plugin-opts')
 require('me.keymap')
+require('me.first-time')
 --require('me.dap')
 require('me.legacy')
 --require('nvim-tree-config')
---require 'transparent-bg'
+--require('me.transparent-bg')
 --require'lspconfig'.pyright.setup{}
 --require'lspconfig'.bashls.setup{}
 --require'lspconfig'.tsserver.setup{}

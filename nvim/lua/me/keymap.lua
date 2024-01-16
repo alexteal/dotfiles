@@ -1,5 +1,5 @@
 local nest = require('nest')
-local shell = require('shell-split')
+local shell = require('me.shell-split')
 local async = require("plenary.async")
 local notify = require("notify")
 nest.applyKeymaps {
