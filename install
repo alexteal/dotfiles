@@ -356,6 +356,7 @@ _update(){
     echo "Updating..."
     # update config script goes here
     cp -v ~/.config/nvim/init.lua nvim/init.lua
+    cp -v ~/.config/nvim/plugin/packer_compiled.lua nvim/plugin/packer_compiled.lua
 	cp -v -R ~/.config/nvim/lua nvim/
 	cp -v -R ~/.scripts ./scripts
 	cp -v ~/.tmux.conf tmux/tmux.conf
