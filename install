@@ -89,7 +89,8 @@ _install_scripts(){
     #
     # Check if the user is root
     if [[ $EUID -ne 0 ]]; then
-        echo "Requiring sudo for linking custom scripts..."
+        echo "This requires root for linking custom scripts. You may be \
+prompted for your password."
         SUDO=sudo
     fi
 
@@ -345,11 +346,14 @@ _install_via_package_manager(){
 }
 
 _install(){
+    echo "Installing..."
+    _backup
     _install_config_files
     _install_scripts
     _install_via_package_manager 
 }
 _update(){
+    echo "Updating..."
     # update config script goes here
     cp -v ~/.config/nvim/init.lua nvim/init.lua
 	cp -v -R ~/.config/nvim/lua nvim/
@@ -365,10 +369,12 @@ _update(){
 _backup(){
     # Backup dotfiles
     echo "Do you want to make backups of your current configs?"
-    echo
-    echo "If you have \e[1;31mNOT\e[0m used this before, I highly recommend pressing [y]."
+    echo "If you have $(tput bold)$(tput setaf 1)NOT$(tput sgr0) used this before, I highly recommend pressing [y]."
     echo
     echo "This will copy existing .[file_name] config files to .[file_name].pre_genz"
+    echo "Ex. ~/.zshrc -> ~/.zshrc.pre_genz"
+    echo
+    echo "[y/n]"
     while true; do
         _key yn 
         case $yn in
