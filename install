@@ -122,6 +122,7 @@ _install_scripts(){
            #         echo "Systemd script does not exist."
            #     fi
            # done
+        :   
         else
             # Link non-systemd scripts to $HOME/bin/ directory
             ln -sf "$script" "$HOME"/bin/$(basename "$script")
@@ -396,15 +397,14 @@ _revert(){
 }
 
 _main(){
-    echo -e "\e[1;33mwelcome!\e[0m"
+    echo -e "$(tput setaf 3)welcome!$(tput sgr0)"
     echo ""
     echo -e "what would you like to do?"
     echo ""
-    echo -e "\e[1;32m[i] install this config\e[0m"
-    echo -e "\e[1;34m[u] update this config with your existing setup\e[0m"
-    echo -e "\e[1;31m[e] exit\e[0m"
-    echo -e "\e[1;31m[r] revert config\e[0m"
-
+    echo -e "$(tput setaf 2)[i] install this config$(tput sgr0)"
+    echo -e "$(tput setaf 4)[u] update this config with your existing setup$(tput sgr0)"
+    echo -e "$(tput setaf 1)[e] exit$(tput sgr0)"
+    echo -e "$(tput setaf 1)[r] revert config$(tput sgr0)"
     _key x 
     case $x in 
         [iI]) _install ;;
@@ -414,4 +414,5 @@ _main(){
     esac
 }
 
+_main
 echo $ERRORS
