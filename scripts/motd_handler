@@ -1,0 +1,29 @@
+#!/bin/bash
+# specify the file from which to extract a line
+file='quotes.txt'
+
+# check if file exists and is not empty
+if [ ! -s "$file" ]; then
+    echo "File does not exist or is empty"
+    exit 1
+fi
+
+# count the number of lines in the file
+num_lines=$(wc -l < "$file")
+
+# generate a random number between 1 and the total number of lines
+random_line_number=$(shuf -i 1-"$num_lines" -n 1)
+
+# output the line corresponding to the random line number
+line=$(sed "${random_line_number}q;d" "$file")
+
+# calculate the length of the line
+line_length=${#line}
+
+# create a border for the box
+border=$(printf "*%.0s" $(seq 1 $((line_length+4))))
+
+# print the box with the line
+echo "$border"
+echo -e "* $line *"
+echo "$border"

@@ -34,6 +34,37 @@ Then `source ~/.zshrc` to enable environment.
 `:PackerSync`
 `:TSInstall tsx html`
 
+## Feature Tracker
+
+-   [ ] CLI_overhaul
+    -   [ ] Track more files
+        -   [ ] nvim
+        -   [ ] zsh
+        -   [ ] apt
+        -   [ ] systemctl
+        -   [ ] ssh
+        -   [ ] homebrew
+        -   [ ] custom scripts
+        -   [ ] tmux
+        -   [ ] nushell
+        -   [ ] alacritty
+        -   [ ] shell login MOTD's
+    -   [ ] Move system to cli based installer, with better options / more coherent system
+    -   [ ] Install all neovim config, bootstrap and make it work out of the box.
+    -   [ ] New CLI based installer
+        -   [ ] Need portability, so use bash with portable commands
+    -   [ ] Update git project flow, get new config and update existing stuff
+        -   [ ] (Optional) Show changes to be made before update
+    -   [ ] Update local files, use latest git files and update accordingly
+        -   [ ] Flow that includes prompts for what scripts to change
+            -   [ ] select from many form
+                -   [ ] 1. Install this config
+                -   [ ] 1a. Ask to install
+                -   [ ] 2a. Show changes before update
+                -   [ ] 2. Update this config
+                -   [ ] 3. Exit
+        -   [ ] Do not force install things if possible
+
 ## Bug Tracker
 
 -   [ ] git blame causing error when scrolling too fast

@@ -1,318 +1,425 @@
 #!/bin/bash
 
-git pull
-# Backup dotfiles
-while true; do
-    read -p "Do you want to make backups of your current dotfiles? (y/n) " yn
-    case $yn in
-        [yY]*)
-            echo "Making backups..."
-            for file in "$HOME"/.{zshrc,tmux.conf,p10k.zsh,tmux.conf.local,alias.sh}; do
-                if [[ -f $file ]]; then
-                    mv -f "$file" "${file}.bak"
-                fi
-            done
-            break;;
-        [nN]*) echo "Proceeding without backups."; break;;
-        *) echo "Invalid response. Please enter 'y' or 'n'.";;
-    esac
-done
+# Globals
+# this should track relative to the "$HOME" path
+user_level_tracked_files=('.zshrc' '.tmux.conf' '.p10k.zsh' '.tmux.conf.local' '.alias.sh' '.config/nvim/lua' './.config/nvim/plugin/packer_compiled.lua')
+# this is where our root level files will get tracked
+# TODO: 
+linux_system_level_tracked_files=('')
 
-# Create necessary directories
-mkdir -p "$HOME"/.config/{nvim,alacritty} "$HOME"/.scripts "$HOME"/bin
+# Borrowed from https://www.unix.com/shell-programming-and-scripting/140231-bash-keypress-read-single-character.html
+# by Franklin52
 
-# Backup init.lua if it exists
-init_file="$HOME"/.config/nvim/init.lua
-if [[ -f "$init_file" ]]; then
-    echo "An init.lua was found. Moving it to init.lua."
-    mv -f "$init_file" "${init_file}.backup.$(date +%s)"
-fi
+_title_card(){
+    echo
+    echo
+    echo "    ██╗ ██████╗ ███████╗███╗   ██╗███████╗                              ";
+    echo "   ██╔╝██╔════╝ ██╔════╝████╗  ██║╚══███╔╝                              ";
+    echo "  ██╔╝ ██║  ███╗█████╗  ██╔██╗ ██║  ███╔╝                               ";
+    echo " ██╔╝  ██║   ██║██╔══╝  ██║╚██╗██║ ███╔╝                                ";
+    echo "██╔╝   ╚██████╔╝███████╗██║ ╚████║███████╗                              ";
+    echo "╚═╝     ╚═════╝ ╚══════╝╚═╝  ╚═══╝╚══════╝                              ";
+    echo "                                                                        ";
+    echo "███╗   ███╗███████╗███████╗████████╗███████╗                            ";
+    echo "████╗ ████║██╔════╝██╔════╝╚══██╔══╝██╔════╝                            ";
+    echo "██╔████╔██║█████╗  █████╗     ██║   ███████╗                            ";
+    echo "██║╚██╔╝██║██╔══╝  ██╔══╝     ██║   ╚════██║                            ";
+    echo "██║ ╚═╝ ██║███████╗███████╗   ██║   ███████║                            ";
+    echo "╚═╝     ╚═╝╚══════╝╚══════╝   ╚═╝   ╚══════╝                            ";
+    echo "                                                                        ";
+    echo "████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗         ██╗";
+    echo "╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║        ██╔╝";
+    echo "   ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║       ██╔╝ ";
+    echo "   ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║      ██╔╝  ";
+    echo "   ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗██╔╝   ";
+    echo "   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝╚═╝    ";
+    echo "                                                                        ";
+    #echo "Run checkhealth inside of neovim to ensure plugins installed correctly."
+}
 
-
-# Copy dotfiles and scripts
-cp -f ./zsh/zshrc "$HOME"/.zshrc
-cp -f ./zsh/alias.sh "$HOME"/.alias.sh
-cp -f ./tmux/tmux.conf "$HOME"/.tmux.conf
-cp -f ./tmux/tmux.conf.local "$HOME"/.tmux.conf.local
-cp -f ./tmux/p10k.zsh "$HOME"/.p10k.zsh
-cp -f ./tmux/tmux-powerlinerc "$HOME"/.tmux-powerlinerc
-cp -r -f ./nvim/* "$HOME"/.config/nvim/
-cp -f ./scripts/.scripts/* "$HOME"/.scripts/ 2> /dev/null #ignore systemd error
-cp -f ./alacritty/alacritty.yml "$HOME"/.config/alacritty/alacritty.yml
-
-
-# Check if the user is root
-if [[ $EUID -ne 0 ]]; then
-    echo "Requiring sudo for linking custom scripts..."
-    SUDO=sudo
-fi
-
-# Get the full path of the .scripts/ directory
-scripts_dir=$(realpath ./scripts/.scripts/)
-
-# Loop over all scripts in the directory and link them
-for script in "$scripts_dir"/*; do
-    [[ ! -e $script ]] && continue
-
-    # Check if the current script is inside the "systemd" folder
-    if [[ $(basename "$script") == "systemd" ]]; then
-        # Loop over each script in the "systemd" folder
-        for systemd_script in "$script"/*; do
-            [[ ! -e $systemd_script ]] && continue
-            if [[ -e "$systemd_script" ]]; then
-            # Check if the target directory exists before copying the file
-                if [[ -d "/usr/lib/systemd/system/" ]]; then
-                    # Copy the systemd script to /usr/lib/systemd/system/ directory with the full path
-                    $SUDO cp "$systemd_script" "/usr/lib/systemd/system/$(basename "$systemd_script")"
-                    # Set the permissions of the copied systemd script to 644 as required by systemd
-                    $SUDO chmod 644 "/usr/lib/systemd/system/$(basename "$systemd_script")"
-                else
-                    echo "systemd not in use, skipping daemon..."
-                fi
-            else
-                echo "Systemd script does not exist."
-            fi
+_key()
+{
+  local kp
+  ESC=$'\e'
+  _KEY=
+  read -d '' -sn1 _KEY
+  case $_KEY in
+    "$ESC")
+        while read -d '' -sn1 -t1 kp
+        do
+          _KEY=$_KEY$kp
+          case $kp in
+            [a-zA-NP-Z~]) break;;
+          esac
         done
-    else
-        # Link non-systemd scripts to $HOME/bin/ directory
-        ln -sf "$script" "$HOME"/bin/$(basename "$script")
+    ;;
+  esac
+  printf -v "${1:-_KEY}" "%s" "$_KEY"
+}
+
+# Read one character, if y then true
+_read_yes_or_no(){
+    _key x
+    case $x in
+        [yY]) return true;;
+        *) return false ;;
+    esac
+}
+
+_install_config_files(){
+    # install script goes here
+    # create our directories
+    mkdir -p "$HOME"/.config/{nvim,alacritty} "$HOME"/.scripts "$HOME"/bin
+    # Copy dotfiles and scripts
+    cp -f ./zsh/zshrc "$HOME"/.zshrc
+    cp -f ./zsh/alias.sh "$HOME"/.alias.sh
+    cp -f ./tmux/tmux.conf "$HOME"/.tmux.conf
+    cp -f ./tmux/tmux.conf.local "$HOME"/.tmux.conf.local
+    cp -f ./tmux/p10k.zsh "$HOME"/.p10k.zsh
+    cp -f ./tmux/tmux-powerlinerc "$HOME"/.tmux-powerlinerc
+    cp -r -f ./nvim/* "$HOME"/.config/nvim/
+    cp -f ./scripts/.scripts/* "$HOME"/.scripts/ 2> /dev/null #ignore systemd error
+    cp -f ./alacritty/alacritty.yml "$HOME"/.config/alacritty/alacritty.yml
+}
+
+_install_scripts(){
+    #TODO 
+    # - [ ] Use $HOME/.scripts/ path instead. Current version could cause 
+    #       unexpected behavior
+    #
+    # Check if the user is root
+    if [[ $EUID -ne 0 ]]; then
+        echo "This requires root for linking custom scripts. You may be \
+prompted for your password."
+        SUDO=sudo
     fi
-done
 
+    # Get the full path of the .scripts/ directory
+    scripts_dir=$(realpath ./scripts/.scripts/)
 
-# Determine package manager and install necessary dependencies
-install_prefix=""
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    # OSX
-    if [[ ! "$(command -v brew)" ]]; then
-        echo "Installing Homebrew..."
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    fi
-    install_prefix="brew install"
-elif command -v dnf &> /dev/null; then
-    # Fedora
-    install_prefix="sudo dnf install -y"
-    sudo dnf makecache --refresh
-elif command -v apt-get &> /dev/null; then
-    # Debian/Ubuntu
-    install_prefix="sudo apt-get install -y"
-    sudo apt-get update
-    sudo apt-get upgrade
-fi
+    # Loop over all scripts in the directory and link them
+    for script in "$scripts_dir"/*; do
+        [[ ! -e $script ]] && continue
 
-# Determine if we need sudo, or if we're already root
-if [[ ! "$(whoami)" == "root" ]];
-then
-    sudo="sudo"
-fi
+        # Check if the current script is inside the "systemd" folder
+        if [[ $(basename "$script") == "systemd" ]]; then
+            # something about how this gpt'd section is written is bothering me. I'd rather do these systemd scripts myself for now.
+            # It still works, I just don't like it.
 
-if [[ -n "$install_prefix" ]]; then
-    echo "Installing dependencies..."
-    for program in zsh make tmux curl fzf node npm git nvim; do
-        if ! command -v "$program" &> /dev/null; then
-            echo "$program not found, installing..."
-            eval "$install_prefix $program"
+           # # Loop over each script in the "systemd" folder
+           # for systemd_script in "$script"/*; do
+           #     [[ ! -e $systemd_script ]] && continue
+           #     if [[ -e "$systemd_script" ]]; then
+           #         # Check if the target directory exists before copying the file
+           #         if [[ -d "/usr/lib/systemd/system/" ]]; then
+           #             # Copy the systemd script to /usr/lib/systemd/system/ directory with the full path
+           #             $SUDO cp "$systemd_script" "/usr/lib/systemd/system/$(basename "$systemd_script")"
+           #             # Set the permissions of the copied systemd script to 644 as required by systemd
+           #             $SUDO chmod 644 "/usr/lib/systemd/system/$(basename "$systemd_script")"
+           #         else
+           #             echo "systemd not in use, skipping daemon..."
+           #         fi
+           #     else
+           #         echo "Systemd script does not exist."
+           #     fi
+           # done
+        :   
+        else
+            # Link non-systemd scripts to $HOME/bin/ directory
+            ln -sf "$script" "$HOME"/bin/$(basename "$script")
         fi
     done
-    # Install oh-my-zsh if not already installed
-    if [ ! -f $HOME/.oh-my-zsh/oh-my-zsh.sh ]; then
-        echo "oh-my-zsh not found, installing..."
-        sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+}
+
+# I do not like this part.
+_install_via_package_manager(){
+    # Determine package manager and install necessary dependencies
+    install_prefix=""
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        # OSX
+        if [[ ! "$(command -v brew)" ]]; then
+            echo "Installing Homebrew..."
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        fi
+        install_prefix="brew install"
+    elif command -v dnf &> /dev/null; then
+        # Fedora
+        install_prefix="sudo dnf install -y"
+        sudo dnf makecache --refresh
+    elif command -v apt-get &> /dev/null; then
+        # Debian/Ubuntu
+        install_prefix="sudo apt-get install -y"
+        sudo apt-get update
+        sudo apt-get upgrade
     fi
 
-    # Install powerlevel10k if not already installed
-    if [ ! -d $HOME/.oh-my-zsh/custom/themes/powerlevel10k ]; then
-        echo "powerline10k not found, installing... ( required for bash line styling )"
-        git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+    # Determine if we need sudo, or if we're already root
+    if [[ ! "$(whoami)" == "root" ]];
+    then
+        sudo="sudo"
     fi
 
-    if [ ! -d $HOME/.local/share/nvim/site/pack/packer/start ] ; then
-        echo "packer.nvim not found, installing..."
-        git clone --depth 1 https://github.com/wbthomason/packer.nvim\
-            $HOME/.local/share/nvim/site/pack/packer/start/packer.nvim
-    fi
-
-
-    # Install lazygit if not already installed
-    if ! command -v lazygit &> /dev/null; then
-        case $OS in
-            "Darwin")
-                eval "$install_prefix jesseduffield/lazygit/lazygit"
-                ;;
-            "Fedora")
-                echo "lazygit not found, installing..."
-                eval "$sudo dnf copr enable atim/lazygit -y"
-                eval "$install_prefix lazygit"
-                ;;
-            *)
-                ERRORS+="lazygit not available for this distro. Install from source \n"
-                ERRORS+="https://github.com/jesseduffield/lazygit#manual"
-                ;;
-        esac
-    fi
-
-    # Install Python3 and pip if not already installed
-    if ! command -v python3 &> /dev/null; then
-        while true; do
-            echo "Python3 not found. This installer assumes you have pip, so this can cause problems."
-            echo "(1) install using $install_prefix"
-            echo "(2) exit installation, my python path is weird."
-            read val
-
-            case $val in
-                [1]) echo "installing...";
-                    eval "$install_prefix python3"
-                    break;;
-                [2]) echo "EXITING";
-                    exit 1
-                    break;;
-                *) echo "invalid response";;
-            esac
+    if [[ -n "$install_prefix" ]]; then
+        echo "Installing dependencies..."
+        for program in zsh make tmux curl fzf node npm git nvim; do
+            if ! command -v "$program" &> /dev/null; then
+                echo "$program not found, installing..."
+                eval "$install_prefix $program"
+            fi
         done
-    fi
-
-    # All pip installs go between here and the 'deactivate' block
-    # Activate virtual environment
-    if [ ! -d $HOME/.config/nvim/venv ]; then
-        echo "Python3 venv for neovim not found. Generating..."
-        original_virtual_env="$VIRTUAL_ENV"
-        python3 -m venv "$HOME/.config/nvim/venv"
-    fi
-    # assuming that we can source this venv path
-    source "$HOME/.config/nvim/venv/bin/activate"
-    # install sed, and set proper nvim venv path
-    if [ -d $HOME/.path.zsh ] ; then 
-        which sed &> /dev/null
-        nvim_py_venv_path=$HOME/.config/nvim/venv/bin/python
-        if [[ $? != 0 ]]; then
-            "gnu-sed not found, installing..."
+        # Install oh-my-zsh if not already installed
+        if [ ! -f $HOME/.oh-my-zsh/oh-my-zsh.sh ]; then
+            echo "oh-my-zsh not found, installing..."
+            sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
         fi
-        case $OS in 
-            *"ebian"*)
-                eval "$install_prefix sed"
-                sed -i "s/NVIM_PY_PATH.*/NVIM_PY_PATH=$nvim_py_venv_path/g" $HOME/.alias.zsh
-                ;;
-            *"buntu"*)
-                eval "$install_prefix sed"
-                sed -i "s/NVIM_PY_PATH.*/NVIM_PY_PATH=$nvim_py_venv_path/g" $HOME/.alias.zsh
-                ;;
-            *"arwin"*)
-                eval "$install_prefix gnu-sed"
-                gsed -i "s/NVIM_PY_PATH.*/NVIM_PY_PATH=$nvim_py_venv_path/g" $HOME/.alias.zsh
-                ;;
-            *"edora"*)
-                eval "$install_prefix sed"
-                sed -i "s/NVIM_PY_PATH.*/NVIM_PY_PATH=$nvim_py_venv_path/g" $HOME/.alias.zsh
-                ;;
-            *) 
-                ;;
-        esac
 
-    fi
-
-    function install_py_mod() {
-        pip show $1 &> /dev/null
-        if [[ $? != 0 ]]; then
-            echo "$1 python package not found, installing..."
-            pip install $1
+        # Install powerlevel10k if not already installed
+        if [ ! -d $HOME/.oh-my-zsh/custom/themes/powerlevel10k ]; then
+            echo "powerline10k not found, installing... ( required for bash line styling )"
+            git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
         fi
-    } 
 
-    install_py_mod neovim 
-    install_py_mod jedi 
-
-    # recover previous py env
-    deactivate
-
-    if [ -n "$original_virtual_env" ]; then
-        source "$original_virtual_env/bin/activate"
-    fi
-
-    which nvim &> /dev/null
-    if [[ $? != 0 ]]; then
-        echo "neovim not found, installing..."
-        eval "$install_prefix neovim"
-    fi
-
-    # install yarn/ neovim for node
-    # Install neovim using npm, just for compatiblity
-    npm list --location=global neovim &> /dev/null
-    if [[ $? != 0 ]]; then
-        which yarn &> /dev/null
-        if [[ $? != 0 ]]; then
-            "yarn not found, installing..."
-            $sudo npm install -g yarn
+        if [ ! -d $HOME/.local/share/nvim/site/pack/packer/start ] ; then
+            echo "packer.nvim not found, installing..."
+            git clone --depth 1 https://github.com/wbthomason/packer.nvim\
+                $HOME/.local/share/nvim/site/pack/packer/start/packer.nvim
         fi
-        yarn global list neovim | grep "neovim" &> /dev/null
-        if [[ $? != 0 ]]; then
-            echo "installing neovim module with npm..."
-            $sudo npm install -g neovim
-        fi
-    fi
 
-    # Ruby installation
-    which ruby &> /dev/null
-    if [[ $? != 0 ]]; then
-        echo "ruby not found, checking ruby-install..."
-        which ruby-install &> /dev/null
-        if [[ $? != 0 ]]; then
+
+        # Install lazygit if not already installed
+        if ! command -v lazygit &> /dev/null; then
+            case $OS in
+                "Darwin")
+                    eval "$install_prefix jesseduffield/lazygit/lazygit"
+                    ;;
+                "Fedora")
+                    echo "lazygit not found, installing..."
+                    eval "$sudo dnf copr enable atim/lazygit -y"
+                    eval "$install_prefix lazygit"
+                    ;;
+                *)
+                    ERRORS+="lazygit not available for this distro. Install from source \n"
+                    ERRORS+="https://github.com/jesseduffield/lazygit#manual"
+                    ;;
+            esac
+        fi
+
+        # Install Python3 and pip if not already installed
+        if ! command -v python3 &> /dev/null; then
+            while true; do
+                echo "Python3 not found. This installer assumes you have pip, so this can cause problems."
+                echo "(1) install using $install_prefix"
+                echo "(2) exit installation, my python path is weird."
+                read val
+
+                case $val in
+                    [1]) echo "installing...";
+                        eval "$install_prefix python3"
+                        break;;
+                    [2]) echo "EXITING";
+                        exit 1
+                        break;;
+                    *) echo "invalid response";;
+                esac
+            done
+        fi
+
+        # All pip installs go between here and the 'deactivate' block
+        # Activate virtual environment
+        if [ ! -d $HOME/.config/nvim/venv ]; then
+            echo "Python3 venv for neovim not found. Generating..."
+            original_virtual_env="$VIRTUAL_ENV"
+            python3 -m venv "$HOME/.config/nvim/venv"
+        fi
+        # assuming that we can source this venv path
+        source "$HOME/.config/nvim/venv/bin/activate"
+        # install sed, and set proper nvim venv path
+        if [ -d $HOME/.path.zsh ] ; then 
+            which sed &> /dev/null
+            nvim_py_venv_path=$HOME/.config/nvim/venv/bin/python
+            if [[ $? != 0 ]]; then
+                "gnu-sed not found, installing..."
+            fi
             case $OS in 
+                *"ebian"*)
+                    eval "$install_prefix sed"
+                    sed -i "s/NVIM_PY_PATH.*/NVIM_PY_PATH=$nvim_py_venv_path/g" $HOME/.alias.zsh
+                    ;;
+                *"buntu"*)
+                    eval "$install_prefix sed"
+                    sed -i "s/NVIM_PY_PATH.*/NVIM_PY_PATH=$nvim_py_venv_path/g" $HOME/.alias.zsh
+                    ;;
                 *"arwin"*)
-                    echo "ruby-install not found, installing..."
-                    eval "$install_prefix ruby-install --HEAD"
-                    echo "installing latest ruby using ruby-install..."
-                    ruby-install --latest
+                    eval "$install_prefix gnu-sed"
+                    gsed -i "s/NVIM_PY_PATH.*/NVIM_PY_PATH=$nvim_py_venv_path/g" $HOME/.alias.zsh
+                    ;;
+                *"edora"*)
+                    eval "$install_prefix sed"
+                    sed -i "s/NVIM_PY_PATH.*/NVIM_PY_PATH=$nvim_py_venv_path/g" $HOME/.alias.zsh
                     ;;
                 *) 
-                    echo "ruby-install not available, installing package manager ruby..."
-                    eval "$install_prefix ruby-full"
                     ;;
             esac
-        fi
-        echo 
-    fi
 
-    gem list neovim | grep "neovim" &> /dev/null
-    if [[ $? != 0 ]]; then
-        echo "neovim gem not found, installing..."
-        gem install neovim 2> /dev/null
+        fi
+
+        function install_py_mod() {
+            pip show $1 &> /dev/null
+            if [[ $? != 0 ]]; then
+                echo "$1 python package not found, installing..."
+                pip install $1
+            fi
+        } 
+
+        install_py_mod neovim 
+        install_py_mod jedi 
+
+        # recover previous py env
+        deactivate
+
+        if [ -n "$original_virtual_env" ]; then
+            source "$original_virtual_env/bin/activate"
+        fi
+
+        which nvim &> /dev/null
         if [[ $? != 0 ]]; then
-            echo "Permission denied, trying with sudo..."
-            sudo gem install neovim
+            echo "neovim not found, installing..."
+            eval "$install_prefix neovim"
         fi
-    fi
 
-    if [[ ! $PATH == *"$HOME/bin"* ]]; then
-        if [ -d $HOME/bin ]; then
-            echo "$HOME/bin not found in path, adding to $HOME/.path.zsh"
-            echo 'if [[ ! $PATH == *"$HOME/bin"* ]]; then\n    export PATH=$PATH:$HOME/bin\nfi' >> $HOME/.path.zsh
-    fi
-fi
+        # install yarn/ neovim for node
+        # Install neovim using npm, just for compatiblity
+        npm list --location=global neovim &> /dev/null
+        if [[ $? != 0 ]]; then
+            which yarn &> /dev/null
+            if [[ $? != 0 ]]; then
+                "yarn not found, installing..."
+                $sudo npm install -g yarn
+            fi
+            yarn global list neovim | grep "neovim" &> /dev/null
+            if [[ $? != 0 ]]; then
+                echo "installing neovim module with npm..."
+                $sudo npm install -g neovim
+            fi
+        fi
 
-fi
-echo
-echo
-echo "    ██╗ ██████╗ ███████╗███╗   ██╗███████╗                              ";
-echo "   ██╔╝██╔════╝ ██╔════╝████╗  ██║╚══███╔╝                              ";
-echo "  ██╔╝ ██║  ███╗█████╗  ██╔██╗ ██║  ███╔╝                               ";
-echo " ██╔╝  ██║   ██║██╔══╝  ██║╚██╗██║ ███╔╝                                ";
-echo "██╔╝   ╚██████╔╝███████╗██║ ╚████║███████╗                              ";
-echo "╚═╝     ╚═════╝ ╚══════╝╚═╝  ╚═══╝╚══════╝                              ";
-echo "                                                                        ";
-echo "███╗   ███╗███████╗███████╗████████╗███████╗                            ";
-echo "████╗ ████║██╔════╝██╔════╝╚══██╔══╝██╔════╝                            ";
-echo "██╔████╔██║█████╗  █████╗     ██║   ███████╗                            ";
-echo "██║╚██╔╝██║██╔══╝  ██╔══╝     ██║   ╚════██║                            ";
-echo "██║ ╚═╝ ██║███████╗███████╗   ██║   ███████║                            ";
-echo "╚═╝     ╚═╝╚══════╝╚══════╝   ╚═╝   ╚══════╝                            ";
-echo "                                                                        ";
-echo "████████╗███████╗██████╗ ███╗   ███╗██╗███╗   ██╗ █████╗ ██╗         ██╗";
-echo "╚══██╔══╝██╔════╝██╔══██╗████╗ ████║██║████╗  ██║██╔══██╗██║        ██╔╝";
-echo "   ██║   █████╗  ██████╔╝██╔████╔██║██║██╔██╗ ██║███████║██║       ██╔╝ ";
-echo "   ██║   ██╔══╝  ██╔══██╗██║╚██╔╝██║██║██║╚██╗██║██╔══██║██║      ██╔╝  ";
-echo "   ██║   ███████╗██║  ██║██║ ╚═╝ ██║██║██║ ╚████║██║  ██║███████╗██╔╝   ";
-echo "   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝╚══════╝╚═╝    ";
-echo "                                                                        ";
-echo "Run checkhealth inside of neovim to ensure plugins installed correctly."
+        # Ruby installation
+        which ruby &> /dev/null
+        if [[ $? != 0 ]]; then
+            echo "ruby not found, checking ruby-install..."
+            which ruby-install &> /dev/null
+            if [[ $? != 0 ]]; then
+                case $OS in 
+                    *"arwin"*)
+                        echo "ruby-install not found, installing..."
+                        eval "$install_prefix ruby-install --HEAD"
+                        echo "installing latest ruby using ruby-install..."
+                        ruby-install --latest
+                        ;;
+                    *) 
+                        echo "ruby-install not available, installing package manager ruby..."
+                        eval "$install_prefix ruby-full"
+                        ;;
+                esac
+            fi
+            echo 
+        fi
+
+        gem list neovim | grep "neovim" &> /dev/null
+        if [[ $? != 0 ]]; then
+            echo "neovim gem not found, installing..."
+            gem install neovim 2> /dev/null
+            if [[ $? != 0 ]]; then
+                echo "Permission denied, trying with sudo..."
+                sudo gem install neovim
+            fi
+        fi
+
+        if [[ ! $PATH == *"$HOME/bin"* ]]; then
+            if [ -d $HOME/bin ]; then
+                echo "$HOME/bin not found in path, adding to $HOME/.path.zsh"
+                echo 'if [[ ! $PATH == *"$HOME/bin"* ]]; then\n    export PATH=$PATH:$HOME/bin\nfi' >> $HOME/.path.zsh
+            fi
+        fi
+
+    fi
+}
+
+_install(){
+    echo "Installing..."
+    _backup
+    _install_config_files
+    _install_scripts
+    _install_via_package_manager 
+}
+_update(){
+    echo "Updating..."
+    # update config script goes here
+    cp -v ~/.config/nvim/init.lua nvim/init.lua
+    cp -v ~/.config/nvim/plugin/packer_compiled.lua nvim/plugin/packer_compiled.lua
+	cp -v -R ~/.config/nvim/lua nvim/
+	cp -v -R ~/.scripts ./scripts
+	cp -v ~/.tmux.conf tmux/tmux.conf
+	cp -v ~/.tmux.conf.local tmux/tmux.conf.local
+	cp -v ~/.zshrc zsh/zshrc
+	cp -v ~/.alias.sh zsh/alias.sh
+	cp -v ~/.p10k.zsh tmux/p10k.zsh
+	cp -v ~/.config/alacritty/alacritty.yml alacritty/alacritty.yml
+}
+
+_backup(){
+    # Backup dotfiles
+    echo "Do you want to make backups of your current configs?"
+    echo "If you have $(tput bold)$(tput setaf 1)NOT$(tput sgr0) used this before, I highly recommend pressing [y]."
+    echo
+    echo "This will copy existing .[file_name] config files to .[file_name].pre_genz"
+    echo "Ex. ~/.zshrc -> ~/.zshrc.pre_genz"
+    echo
+    echo "[y/n]"
+    while true; do
+        _key yn 
+        case $yn in
+            [yY]*)
+                echo "Making backups..."
+                for file in "${user_level_tracked_files[@]}"; do
+                    if [[ -f $file ]]; then
+                        mv -f "$file" "${file}.pre_genz"
+                    fi
+                done
+                break;;
+            [nN]*) echo "Proceeding without backups."; break;;
+            *) echo "Invalid response. Please enter 'y' or 'n'.";;
+        esac
+    done
+}
+
+_revert(){
+    # Revert dotfiles
+    echo "Reverting to previous configs..."
+    for file in "${user_level_tracked_files[@]}"; do
+        if [[ -f "${file}.pre_genz" ]]; then
+            mv -f "${file}.pre_genz" "$file"
+        fi
+    done
+}
+
+_main(){
+    echo -e "$(tput setaf 3)welcome!$(tput sgr0)"
+    echo ""
+    echo -e "what would you like to do?"
+    echo ""
+    echo -e "$(tput setaf 2)[i] install this config$(tput sgr0)"
+    echo -e "$(tput setaf 4)[u] update this config with your existing setup$(tput sgr0)"
+    echo -e "$(tput setaf 1)[e] exit$(tput sgr0)"
+    echo -e "$(tput setaf 1)[r] revert config$(tput sgr0)"
+    _key x 
+    case $x in 
+        [iI]) _install ;;
+        [uU]) _update ;;
+        [rR]) _revert ;;
+        *) exit 0 ;;
+    esac
+}
+
+_main
 echo $ERRORS
-
