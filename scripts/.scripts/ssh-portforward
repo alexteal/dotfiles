@@ -44,8 +44,17 @@ SCRIPT_NAME="$(basename ${0})"
 usage() { printf "Usage: "; head -${SCRIPT_HEADSIZE:-99} ${0} | grep -e "^#+" | sed -e "s/^#+[ ]*//g" -e "s/\${SCRIPT_NAME}/${SCRIPT_NAME}/g" ; }
 usagefull() { head -${SCRIPT_HEADSIZE:-99} ${0} | grep -e "^#[%+-]" | sed -e "s/^#[%+-]//g" -e "s/\${SCRIPT_NAME}/${SCRIPT_NAME}/g" ; }
 scriptinfo() { head -${SCRIPT_HEADSIZE:-99} ${0} | grep -e "^#-" | sed -e "s/^#-//g" -e "s/\${SCRIPT_NAME}/${SCRIPT_NAME}/g"; }
+function is_valid_port() {
+    if [[ $1 =~ ^[0-9]+$ ]] && [ $1 -le 65535 ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 REMOTE_PORT=${1%%:*}
 LOCAL_PORT=${1#*:}
+
 if [ "$REMOTE_PORT" == "$LOCAL_PORT" ]; then
     LOCAL_PORT=$REMOTE_PORT
 fi
@@ -53,12 +62,19 @@ case $1 in
     h )
         usagefull
         ;;
-    ''|*[!0-9]*) 
-        echo "Not a valid port / number" 
-        usage
-        exit 1 
-        ;;
     *) 
+        if [[ $1 =~ ":" ]]; then
+            IFS=':' read -ra PORTS <<< "$1"
+        else
+            PORTS=($1)
+        fi
+        # Check each part of the input
+        for port in "${PORTS[@]}"; do
+            if ! is_valid_port $port; then
+                echo "Not a valid port / number"
+                exit 1
+            fi
+        done
         ssh -o "ServerAliveInterval 10" -o "ServerAliveCountMax 3" -o "ExitOnForwardFailure yes" -L $LOCAL_PORT:localhost:$REMOTE_PORT -N $2 -v
         ;;
 esac
