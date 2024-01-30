@@ -11,19 +11,8 @@ default_ignore="// BEGIN Default Ignored folders
 **venv/**
 // END Default Ignore folders
 "
-echo "$default_ignore" >> "$HOME/projects/.stignore"
-for i in $HOME/projects/*; do
-    if [[ -d "$i/.git" ]]; then
-        folder_path="${i##*/}"
-        echo "$folder_path/**" >> "$HOME/projects/.stignore"
-        continue
-#    else
-#        git_dir=$(find "$i" -type d -name ".git" -print -quit)
-#        if [[ -n "$git_dir" ]]; then
-#            folder_path="${git_dir%/*}"
-#            folder_path="${folder_path##*/}"
-#            echo "*$folder_path/**" >> "$HOME/projects/.stignore"
-#            continue
-#        fi
-    fi
-done
+
+# genuine gpt magic
+find $HOME/projects -type d \( -name "node_modules" -o -name "venv" \)\
+-prune -o -name ".git" -exec sh -c 'folder="${1##*/projects/}";\
+echo "${folder%/.git}/**" >> "$HOME/projects/.stignore"' _ {} \;
