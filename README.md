@@ -38,37 +38,37 @@ Then `source ~/.zshrc` to enable environment.
 
 -   [ ] CLI_overhaul
     -   [ ] Track more files
-        -   [ ] nvim
-        -   [ ] zsh
+        -   [x] nvim
+        -   [x] zsh
         -   [ ] apt
         -   [ ] systemctl
         -   [ ] ssh
         -   [ ] homebrew
-        -   [ ] custom scripts
-        -   [ ] tmux
+        -   [x] custom scripts
+        -   [x] tmux
         -   [ ] nushell
-        -   [ ] alacritty
+        -   [x] alacritty
         -   [ ] shell login MOTD's
-    -   [ ] Move system to cli based installer, with better options / more coherent system
-    -   [ ] Install all neovim config, bootstrap and make it work out of the box.
-    -   [ ] New CLI based installer
-        -   [ ] Need portability, so use bash with portable commands
+    -   [x] Move system to cli based installer, with better options / more coherent system
+    -   [-] Install all neovim config, bootstrap and make it work out of the box.
+    -   [x] New CLI based installer
+        -   [x] Need portability, so use bash with portable commands
     -   [ ] Update git project flow, get new config and update existing stuff
         -   [ ] (Optional) Show changes to be made before update
-    -   [ ] Update local files, use latest git files and update accordingly
+    -   [x] Update local files, use latest git files and update accordingly
         -   [ ] Flow that includes prompts for what scripts to change
             -   [ ] select from many form
-                -   [ ] 1. Install this config
-                -   [ ] 1a. Ask to install
+                -   [x] 1. Install this config
+                -   [x] 1a. Ask to install
                 -   [ ] 2a. Show changes before update
-                -   [ ] 2. Update this config
-                -   [ ] 3. Exit
+                -   [x] 2. Update this config
+                -   [x] 3. Exit
         -   [ ] Do not force install things if possible
 
 ## Bug Tracker
 
 -   [ ] git blame causing error when scrolling too fast
--   [ ] scripts are softlinked to git directory, not to local `~/.scripts`
+-   [ ] scripts are softlinked to git directory, not to local `~/.scripts` ( is this a bug? it saves time...)
 
 ### no longer supported
 
