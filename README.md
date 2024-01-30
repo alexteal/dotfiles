@@ -41,6 +41,23 @@ errors are expected on a first time run.
 `:PackerSync`
 `:TSInstall tsx html`
 
+## scripts documentation
+
+| script          | function                                                                                                            |
+| --------------- | ------------------------------------------------------------------------------------------------------------------- |
+| docker-shell    | Creates and attaches to a Bash instance inside of a docker VM                                                       |
+| ha              | Toggle devices using the HomeAssistant API                                                                          |
+| lockd           | a diary tool i use to lock a diary with my gpg key                                                                  |
+| nettest         | Tests some random aspects of a network for sanity                                                                   |
+| opac            | toggle the opacity in Alacritty from 20% to 80%. Optionally use an argument to set the opacity between 0-100        |
+| power           | Check if a mac is charging                                                                                          |
+| rm2web          | Use a Remarkable's hostname and forward the address to your localhost at :8689                                      |
+| ssh-portforward | forward a remote port to yours. Simple syntax. Abstracts the ssh -L command.                                        |
+| theme           | swap a catpuccin theme. Syncs themes between Neovim and Alacritty                                                   |
+| ulockd          | unlock tool for my diary                                                                                            |
+| updf2rm         | upload a pdf to a remarkable notebook - given a hostname                                                            |
+| venv            | create and source a Python3 virtual environment in your current directory. Or, just source the existing virtualenv. |
+
 ## Feature Tracker
 
 -   [ ] CLI_overhaul
