@@ -96,6 +96,37 @@ require('packer').startup(function(use)
     use { 'ms-jpq/coq_nvim', branch = 'coq' }
     use { 'ms-jpq/coq.artifacts', branch = 'artifacts' }
 
+    -- esLint
+    use { 'jose-elias-alvarez/null-ls.nvim' }
+    use { 'MunifTanjim/eslint.nvim' ,
+        event  = { "BufNewFile", "BufRead", "InsertEnter" },
+        config = function()
+            local null_ls = require("null-ls")
+            local eslint = require("eslint")
+
+            null_ls.setup()
+
+            eslint.setup({
+              bin = 'eslint', -- or `eslint_d`
+              code_actions = {
+                enable = true,
+                apply_on_save = {
+                  enable = true,
+                  types = { "directive", "problem", "suggestion", "layout" },
+                },
+                disable_rule_comment = {
+                  enable = true,
+                  location = "separate_line", -- or `same_line`
+                },
+              },
+              diagnostics = {
+                enable = true,
+                report_unused_disable_directives = false,
+                run_on = "type", -- or `save`
+              },
+            })
+        end,
+    }
     -- Prettier for webdev
     use { 'prettier/vim-prettier',
         run = 'yarn install --frozen-lockfile --production',
@@ -142,6 +173,10 @@ require('packer').startup(function(use)
     use { 'xiyaowong/transparent.nvim', event = { 'BufEnter', 'BufRead' } }
 
     use { 'rinx/nvim-minimap' }
+
+    -- matlab 
+    -- jk this is really old
+    -- use {'daeyun/vim-matlab'}
 
     -- I love this plugin, but it causes problems if you scroll too fast. 
     -- Might be an issue I can push something for.
