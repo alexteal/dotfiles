@@ -119,7 +119,7 @@ fi
 [[ ! -f $HOME/.alias.sh ]] || source $HOME/.alias.sh
 [[ ! -f $HOME/.path.sh ]] || source $HOME/.path.sh
 [[ ! -f $HOME/.secrets ]] || source $HOME/.secrets
-[[ ! -f $HOME/.conda.sh ]] || source $HOME/.conda.sh
+# [[ ! -f $HOME/.conda.sh ]] || source $HOME/.conda.sh
 # handle custom theme completion for easy theme changes over neovim and alacritty
 # [[ ! -f ~/.scripts/theme_completion ]] || source ~/.scripts/theme_completion
 [[ ! -f $HOME/.scripts/functions.sh ]] || source $HOME/.scripts/functions.sh
