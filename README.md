@@ -31,6 +31,13 @@ Then `source ~/.zshrc` to enable environment.
 
 ## nvim setup
 
+_try starting nvim and just waiting. There's a first time install script that
+**should** bootstrap everything._
+
+Neovim should bootstrap itself ootb. If it doesn't, run these scripts. Currently,
+the paths it's trying to bootstrap itself from don't always exist, so critical
+errors are expected on a first time run.
+
 `:PackerSync`
 `:TSInstall tsx html`
 
