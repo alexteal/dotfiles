@@ -13,6 +13,4 @@ default_ignore="// BEGIN Default Ignored folders
 "
 
 # genuine gpt magic
-find $HOME/projects -type d \( -name "node_modules" -o -name "venv" \)\
--prune -o -name ".git" -exec sh -c 'folder="${1##*/projects/}";\
-echo "${folder%/.git}/**" >> "$HOME/projects/.stignore"' _ {} \;
+find $HOME/projects -type d \( -name "node_modules" -o -name "venv" \) -prune -o -name ".git" -exec sh -c 'folder="${1##*/projects/}"; echo "${folder%/.git}/**" >> "$HOME/projects/.stignore"' _ {} \;
