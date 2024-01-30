@@ -1,5 +1,9 @@
 # dotfiles
 
+## demo
+
+![demo video](./media/demo.gif "demo of my setup")
+
 A hacky general cli environment. _Should_ run on anything from a new mac to a
 docker container.
 
