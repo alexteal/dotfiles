@@ -423,6 +423,7 @@ bind -r J swap-pane -D
 bind -r H swap-pane -U
 bind -r L swap-pane -D
 bind g new-window -c "#{pane_current_path}" "lazygit"
+bind T new-window -c "#{pane_current_path}" "htop"
 bind F new-window -c "#{pane_current_path}" 'cat $( find . -maxdepth 2 ) 2>/dev/null | fzf'
 
 #destroy current session, move to next session in order
