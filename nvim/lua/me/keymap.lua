@@ -33,7 +33,8 @@ nest.applyKeymaps {
                 {'b', '<cmd>Telescope buffers<CR>' },
                 -- find command
                 {'c', '<cmd>Telescope commands<CR> ' },
-                {'d', '<CMD>Telescope coc diagnostics<CR>'},
+                -- find errors 
+                {'d', '<CMD>Telescope diagnostics<CR>'},
                 -- find emoji
                 {'e', '<cmd>Telescope emoji<CR>' },
                 -- find file
@@ -50,8 +51,8 @@ nest.applyKeymaps {
                 -- find in THIS folder (current buffer directory)
                 {'tf','<cmd>lua require"telescope.builtin".live_grep{ search_dirs={"%:p:h"} }<CR>'},
                 -- find registers
-                {'r', '<cmd>Telescope registers<CR>' }, 
-                {'s', '<cmd>PRg<CR>' },
+                {'r', '<cmd>Telescope registers<CR>' },
+                {'v', '<cmd>Telescope lsp_dynamic_workspace_symbols<CR>'},
             }},
             {'hex', '<cmd>file %.hexdump<CR><cmd>%!xxd<CR><cmd>set syntax=xxd<CR>'},
             { 'jd','<cmd>CocCommand java.debug.vimspector.start<CR>'},
