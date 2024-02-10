@@ -174,6 +174,11 @@ require('packer').startup(function(use)
 
     use { 'rinx/nvim-minimap' }
 
+    -- move windows easily
+    -- TODO
+    -- set this up in the future pls
+    --    use { 'sindrets/winshift.nvim', event =  { "BufNewFile", "BufRead", "InsertEnter" } }
+
     -- matlab 
     -- jk this is really old
     -- use {'daeyun/vim-matlab'}
