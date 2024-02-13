@@ -52,6 +52,7 @@ alias gpt3="gpt --model gpt-3.5-turbo"
 alias gpt35="gpt --model gpt-3.5-turbo-1106"
 alias gpt4="gpt --model gpt-4"
 alias gpt45="gpt --model gpt-4-1106-preview"
+alias matlab="matlab -nodesktop"
 #alias x11-sudo="sudo xauth add $(xauth -f ~$(whoami)/.Xauthority list|tail -1)\" # retains x11 forwarding during a sudo session
 alias regex='echo "
 POSIX       REGEX           MEANING
