@@ -29,11 +29,11 @@ cmd[[
 command! -bang -nargs=* PRg
 \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'dir': expand('%:p:h')}, <bang>0) ]]
 -- enable prettier when on corresponding filetypes
-cmd[[
-let g:prettier#quickfix_enabled = 0
-let g:prettier#exec_cmd_async = 1
-autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.svelte,*.yaml,*.html PrettierAsync
-]]
+--cmd[[
+--let g:prettier#quickfix_enabled = 0
+--let g:prettier#exec_cmd_async = 1
+--autocmd BufWritePre *.js,*.jsx,*.mjs,*.ts,*.tsx,*.css,*.less,*.scss,*.json,*.graphql,*.md,*.vue,*.svelte,*.yaml,*.html PrettierAsync
+--]]
 cmd[[
 " Load all plugins now.
 " Plugins need to be added to runtimepath before helptags can be generated.
