@@ -1,7 +1,5 @@
 local nest = require('nest')
 local shell = require('me.shell-split')
-local async = require("plenary.async")
-local notify = require("notify")
 nest.applyKeymaps {
     -- Remove silent from ; : mapping, so that : shows up in command mode
     { ';', ':' , options = { silent = false } },

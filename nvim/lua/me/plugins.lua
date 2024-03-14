@@ -80,9 +80,11 @@ require('packer').startup(function(use)
     use { 'junegunn/fzf', run = './install --bin'}
 
     -- lsp server install manager
-    use { "williamboman/mason.nvim" }
-    -- lsp server configs
-    use { 'neovim/nvim-lspconfig' }
+    use {
+        "williamboman/mason.nvim",
+        "williamboman/mason-lspconfig.nvim",
+        "neovim/nvim-lspconfig",
+    }
     -- java linting, jdtls is hefty and uses own package
     -- config file is in ../../ftplugin/java.lua
     use { 'mfussenegger/nvim-jdtls' }
@@ -92,12 +94,16 @@ require('packer').startup(function(use)
         event  = { "BufNewFile", "BufRead", "InsertEnter" },
     }
 
+    use('jose-elias-alvarez/null-ls.nvim')
+    use('MunifTanjim/prettier.nvim', {
+        config = function()
+            vim.cmd [[autocmd BufWritePre *.js,*.jsx,*.ts,*.tsx Prettier]]
+        end
+    })
     -- code completion using coq
     use { 'ms-jpq/coq_nvim', branch = 'coq' }
     use { 'ms-jpq/coq.artifacts', branch = 'artifacts' }
-
     -- esLint
-    use { 'jose-elias-alvarez/null-ls.nvim' }
     use { 'MunifTanjim/eslint.nvim' ,
         event  = { "BufNewFile", "BufRead", "InsertEnter" },
         config = function()
@@ -128,13 +134,18 @@ require('packer').startup(function(use)
         end,
     }
     -- Prettier for webdev
-    use { 'prettier/vim-prettier',
-        run = 'yarn install --frozen-lockfile --production',
-        ft={'javascript', 'typescript', 'css', 'less', 'scss', 'json',
-        'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html', 'tsx','jsx',
-        'typescriptreact'},
-        event  = { "BufNewFile", "BufRead", "InsertEnter" },}
-    use { 'tjdevries/nlua.nvim' ,
+--    use { 'prettier/vim-prettier',
+--        run = 'yarn install --frozen-lockfile --production',
+--        ft={'javascript', 'typescript', 'css', 'less', 'scss', 'json',
+--        'graphql', 'markdown', 'vue', 'svelte', 'yaml', 'html', 'tsx','jsx',
+--        'typescriptreact'},
+--        event  = { "BufNewFile", "BufRead", "InsertEnter" },
+--            enable = false,
+--        }
+--
+--
+
+use { 'tjdevries/nlua.nvim' ,
         event  = { "BufNewFile", "BufRead", "InsertEnter" },}
     use { 'euclidianAce/BetterLua.vim' ,
         event  = { "BufNewFile", "BufRead", "InsertEnter" },}
