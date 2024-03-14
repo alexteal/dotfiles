@@ -69,7 +69,7 @@ _read_yes_or_no(){
 _install_config_files(){
     # install script goes here
     # create our directories
-    mkdir -p "$HOME"/.config/{nvim,alacritty} "$HOME"/.scripts "$HOME"/bin
+    mkdir -p "$HOME"/.config/{lvim,nvim,alacritty} "$HOME"/.scripts "$HOME"/bin
     # Copy dotfiles and scripts
     cp -f ./zsh/zshrc "$HOME"/.zshrc
     cp -f ./zsh/alias.sh "$HOME"/.alias.sh
@@ -78,6 +78,7 @@ _install_config_files(){
     cp -f ./tmux/p10k.zsh "$HOME"/.p10k.zsh
     cp -f ./tmux/tmux-powerlinerc "$HOME"/.tmux-powerlinerc
     cp -r -f ./nvim/* "$HOME"/.config/nvim/
+    cp -r -f ./lvim/* "$HOME"/.config/lvim/
     cp -f ./scripts/.scripts/* "$HOME"/.scripts/ 2> /dev/null #ignore systemd error
     cp -f ./alacritty/alacritty.yml "$HOME"/.config/alacritty/alacritty.yml
 }
@@ -287,6 +288,13 @@ _install_via_package_manager(){
             eval "$install_prefix neovim"
         fi
 
+        which lvim &> /dev/null
+        if [[ $? != 0 ]]; then
+            echo "lvim not found, installing..."
+            LV_BRANCH='release-1.3/neovim-0.9' bash <(curl -s https://raw.githubusercontent.com/LunarVim/LunarVim/release-1.3/neovim-0.9/utils/installer/install.sh)
+        fi
+
+
         # install yarn/ neovim for node
         # Install neovim using npm, just for compatiblity
         npm list --location=global neovim &> /dev/null
@@ -359,6 +367,7 @@ _update(){
     cp -v ~/.config/nvim/plugin/packer_compiled.lua nvim/plugin/packer_compiled.lua
 	cp -v -R ~/.config/nvim/lua nvim/
 	cp -v -R ~/.config/nvim/after nvim/
+	cp -v -R ~/.config/lvim lvim/
 	cp -v -R ~/.scripts ./scripts
 	cp -v ~/.tmux.conf tmux/tmux.conf
 	cp -v ~/.tmux.conf.local tmux/tmux.conf.local
