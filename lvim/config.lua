@@ -1,11 +1,25 @@
--- Read the docs: https://www.lunarvim.org/docs/configuration
--- Video Tutorials: https://www.youtube.com/watch?v=sFA9kX-Ud_c&list=PLhoH5vyxr6QqGu0i7tt_XoVK9v-KvZ3m6
--- Forum: https://www.reddit.com/r/lunarvim/
--- Discord: https://discord.com/invite/Xb9B4Ny
-
+--------------------------------------------------------------------------------
+--
+--                      Hi. Welcome to my config!
+--                               03/19/2024
+--      I'm Alex, and I used to use a heavily modified custom Neovim.
+--
+--      It started annoying me, because each change resulted in a 
+--      cascade of issues since I never optimized anything - I just 
+--      relied on having a ~fast enough~ computer to handle the complexity.
+--
+--      So, now I use LunarVim. It's nice to have a more managed version of 
+--      Neovim. Mostly I use it for portability. 
+--
+--      If you are reading this, that means you're interested in my config.
+--      I'm usually pretty responsive, so if you need help on making something
+--      work, just send me an email. It's on my profile.
+--
+--------------------------------------------------------------------------------
 -- use this for controlling python env 
 -- vim.g.python3_host_prog = os.getenv('NEOVIM_PY_PATH')
-
+--------------------------------------------------------------------------------
+-- OG vim opts from back when I used native vim :P 
 local opt = vim.opt
 opt.showmatch = true		-- show matching
 opt.ignorecase = true
@@ -36,6 +50,15 @@ vim.g.vimwiki_list = {
     ext = 'md'}
 }
 
+--------------------------------------------------------------------------------
+--******************************************************************************
+-- catpuccin theme handler
+--******************************************************************************
+-- FYI, if you're running this config for the first time and it's NOT working,
+-- try commenting out this section and running the config again. Usually it 
+-- fails because it tries to load the catppuccin theme - which isn't installed 
+-- yet. 
+--******************************************************************************
 local ok, catppuccin = pcall(require, "catppuccin")
 if not ok then return end
 --local theme = require("me.theme") or "macchiato" -- use the lua variable or "macchiato" as default
@@ -46,7 +69,9 @@ catppuccin.setup()
 lvim.colorscheme = "catppuccin"
 
 lvim.leader = "\\"
--- plugin defs
+--******************************************************************************
+--------------------------------------------------------------------------------
+-- custom functions
 
 function lvim.newshell()
     local name=vim.api.nvim_buf_get_name(0)
@@ -62,6 +87,24 @@ function lvim.newshell()
     end
 end
 
+--------------------------------------------------------------------------------
+--legacy nvim/vim configs
+-- spellcheck when in latex or in vimwiki
+vim.cmd("autocmd BufEnter,WinEnter,FocusGained *.tex set spelllang=en_gb spell")
+--close telescope
+vim.cmd("autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif")
+-- enter insert mode when tabbing into a shell
+vim.cmd("autocmd BufEnter term://* startinsert")
+-- don't close tags if in vimwiki
+vim.cmd[[ 
+autocmd FileType vimwiki inoremap <buffer> ' '| inoremap <buffer> " "| inoremap <buffer> ( (| inoremap <buffer> { {| inoremap <buffer> ?? ??
+]]
+--relative line numbers depending on insert / normal mode
+vim.cmd[[
+autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set rnu   | endif 
+autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set nornu | endif ]]
+
+--------------------------------------------------------------------------------
 -- plugins
 
 lvim.plugins = {
@@ -154,9 +197,11 @@ lvim.plugins = {
             }
         end
      },
-    { 'sbdchd/neoformat' }
+    { 'sbdchd/neoformat' },
+    { 'goolord/alpha-nvim', enabled = false}
 }
 
+--------------------------------------------------------------------------------
 -- keymaps
 lvim.builtin.which_key.mappings ={
     -- normal mode maps
@@ -197,6 +242,7 @@ lvim.builtin.which_key.mappings ={
         stf = { "<cmd>lua require'telescope.builtin'.live_grep{ search_dirs={'%:p:h'} }<CR>", "Search in Folder" },
         t = { "<CMD>CHADopen<CR>", "CHADopen" },
         rr = { "<CMD>LvimReload<CR>", "Source Vimrc" },
+        qe = {"<CMD>tabnew ~/.config/lvim/config.lua<CR>", "quick edit config"},
         v = {
             name = "Vimspector",
             b = { "<cmd>call vimspector#ToggleBreakpoint()<CR>", "Toggle Breakpoint" },
@@ -238,6 +284,8 @@ lvim.keys.term_mode["<leader>sh"] = lvim.newshell
 lvim.keys.visual_mode["<leader>ai"] = "<CMD>ChatGPTEditWithInstructions<CR>"
 lvim.keys.visual_mode["\\"] = "<Esc>"
 
+--------------------------------------------------------------------------------
+-- lsp and formatters
 local lspconfig = require('lspconfig')
 lspconfig.eslint.setup({})
 
@@ -247,3 +295,4 @@ augroup fmt
   autocmd BufWritePre * undojoin | Neoformat
 augroup END
 ]]
+--------------------------------------------------------------------------------
