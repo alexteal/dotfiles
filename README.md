@@ -4,48 +4,47 @@
 
 ![demo video](./media/demo.gif "demo of my setup")
 
-A hacky general cli environment. _Should_ run on anything from a new mac to a
+A hacky general cli environment. _Should\*_ run on anything from a new mac to a
 docker container.
+
+\*as long as the planets have aligned properly
 
 Includes:
 
 -   ohmyzsh
     -   p10k
     -   Autocomplete and fuzzy searchable command history
--   nvim
-    -   tons of plugins
-    -   Largely minimal, optimized for webdev
-    -   half broken but still does the job 99% of the time
+-   lvim
+    - customized keybinds
+    - plugins that turn LunarVim into more of an IDE
 -   tmux
     -   some solid custom config, with catpuccin themed status line
--   custom bash scripts
+-   custom shell scripts
     -   available in `./scripts/`
-    -   contains neat features like `venv`, which creates a python3 venv and sources it in one command
 
 ## Install
 
-**it's been a long time since i've done real damage tests with this script. it might overwrite config files, so back them up in case.**
+**pre-reqs** 
+- bash
+- curl
+- *hopfully be on a linux distro i support or on OSX*
 
-You need bash to install. Install with `./install`
+1. `./install`
+2. press `y` if you want to backup config files
+3. put in your password to install system packages
+?. profit. 
 
 You may be prompted to press 'y' for some packages. First time installs will
 require you to interact with Oh-my-zsh, and exit the shell the first time.
 
-Then `source ~/.zshrc` to enable environment.
+Then `source ~/.zshrc` to enable environment, or just restart `zsh`
 
-## nvim setup
 
-_try starting nvim and just waiting. There's a first time install script that
-**should** bootstrap everything._
+## Custom Scripts
 
-Neovim should bootstrap itself ootb. If it doesn't, run these scripts. Currently,
-the paths it's trying to bootstrap itself from don't always exist, so critical
-errors are expected on a first time run.
-
-`:PackerSync`
-`:TSInstall tsx html`
-
-## scripts documentation
+Located in `./scripts/`, there's a handful of pretty useful scripts that I've 
+made. Here's some explanations on what they do. Most of them should give you 
+a help message if you use it wrong.
 
 | script          | function                                                                                                            |
 | --------------- | ------------------------------------------------------------------------------------------------------------------- |
@@ -93,14 +92,20 @@ errors are expected on a first time run.
                 -   [x] 3. Exit
         -   [ ] Do not force install things if possible
 
-## Bug Tracker
+# Beyond here, these things are no longer supported
+I'm keep this around for documentation.
 
--   [ ] git blame causing error when scrolling too fast
--   [ ] scripts are softlinked to git directory, not to local `~/.scripts` ( is this a bug? it saves time...)
+### nvim setup
 
-### no longer supported
+_try starting nvim and just waiting. There's a first time install script that
+**should** bootstrap everything._
 
-_leaving for documentation_
+Neovim should bootstrap itself ootb. If it doesn't, run these scripts. Currently,
+the paths it's trying to bootstrap itself from don't always exist, so critical
+errors are expected on a first time run.
+
+`:PackerSync`
+`:TSInstall tsx html`
 
 ### Testing
 
