@@ -359,6 +359,7 @@ _install(){
     _install_config_files
     _install_scripts
     _install_via_package_manager 
+    _title_card
 }
 _update(){
     echo "Updating..."
