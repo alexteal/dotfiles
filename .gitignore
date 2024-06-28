@@ -1,3 +1,4 @@
 nvim/lua/me/first_time_check
 nvim/lua/me/init_check
 nvim/plugin/packer_compiled.lua
+lvim/lazy-lock.json

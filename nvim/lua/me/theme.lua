@@ -1,2 +1,2 @@
-theme = 'frappe'
+theme = 'macchiato'
 return theme

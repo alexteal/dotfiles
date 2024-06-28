@@ -54,6 +54,8 @@ alias gpt4="gpt --model gpt-4"
 alias gpt45="gpt --model gpt-4-1106-preview"
 alias matlab="matlab -nodesktop"
 alias temp="sudo powermetrics --samplers smc |grep -i \"CPU die temperature\""
+alias mirror="xrandr --output HDMI-A-0 --mode "Mirror" --same-as DisplayPort-1"
+alias mirroroff="xrandr --output HDMI-A-0 --off"
 #alias x11-sudo="sudo xauth add $(xauth -f ~$(whoami)/.Xauthority list|tail -1)\" # retains x11 forwarding during a sudo session
 alias regex='echo "
 POSIX       REGEX           MEANING
