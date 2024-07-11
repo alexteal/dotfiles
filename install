@@ -132,6 +132,17 @@ prompted for your password."
     done
 }
 
+_error_out() {
+    RED='\033[0;31m'
+    NC='\033[0m' # No Color
+    echo -e "${RED}[ERROR] $1${NC}"
+    echo -e "Something went wrong. If this was expected and you would like to continue, press ${RED}[y]${NC}. Otherwise, press any other key to exit."
+    read -n 1 -s key
+    if [ "$key" != "y" ]; then
+        exit 1
+    fi
+}
+
 # I do not like this part.
 _install_via_package_manager(){
     # Determine package manager and install necessary dependencies
@@ -231,11 +242,14 @@ _install_via_package_manager(){
             echo "Python3 venv for neovim not found. Generating..."
             original_virtual_env="$VIRTUAL_ENV"
             python3 -m venv "$HOME/.config/nvim/venv"
+	    if [[ $? != 0 ]]; then
+		_error_out "Failed to create venv"
+	    fi
         fi
         # assuming that we can source this venv path
         source "$HOME/.config/nvim/venv/bin/activate"
         # install sed, and set proper nvim venv path
-        if [ -d $HOME/.path.zsh ] ; then 
+        if [ -d $HOME/.path.sh ] ; then 
             which sed &> /dev/null
             nvim_py_venv_path=$HOME/.config/nvim/venv/bin/python
             if [[ $? != 0 ]]; then
@@ -368,7 +382,7 @@ _update(){
     cp -v ~/.config/nvim/plugin/packer_compiled.lua nvim/plugin/packer_compiled.lua
 	cp -v -R ~/.config/nvim/lua nvim/
 	cp -v -R ~/.config/nvim/after nvim/
-	cp -v ~/.config/lvim/* lvim/
+	cp -v -R ~/.config/lvim/* lvim/
 	cp -v -R ~/.scripts ./scripts
 	cp -v ~/.tmux.conf tmux/tmux.conf
 	cp -v ~/.tmux.conf.local tmux/tmux.conf.local
