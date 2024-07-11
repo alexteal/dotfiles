@@ -128,6 +128,8 @@ fi
 [[ ! -f /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] || source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 [[ ! -d $HOME/google-cloud-sdk ]] || source $HOME/google-cloud-sdk/completion.zsh.inc
 [[ ! -d $HOME/google-cloud-sdk ]] || source $HOME/google-cloud-sdk/path.zsh.inc
+[[ ! -d $HOME/.local/bin ]] || export PATH="$HOME/.local/bin:$PATH"
+[[ ! -d $HOME/.cargo/bin ]] || export PATH="$HOME/.cargo/bin:$PATH"
 #pyenv
 if [[ -d $HOME/.pyenv ]]; 
 then 
