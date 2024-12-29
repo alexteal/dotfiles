@@ -79,3 +79,5 @@ POSIX       REGEX           MEANING
                                 character class.
 "
 '
+
+alias ha-start='/usr/bin/virsh --connect qemu:///system start haos'

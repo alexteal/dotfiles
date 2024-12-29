@@ -1,0 +1,9 @@
+[Unit]
+Description=Start haos VM on system startup
+After=network.target
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/virsh --connect qemu:///system start haos
+[Install]
+WantedBy=multi-user.target
+
